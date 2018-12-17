@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>登录页面</title>
+    <title>Login page</title>
 </head>
 <body>
-<h2>自定义登录页面</h2>
-<form action="/user/login"  method="post">
-    <table>
-        <tr>
-            <td>用户名：</td>
-            <td><input type="text" name="username"></td>
-        </tr>
-        <tr>
-            <td>密码：</td>
-            <td><input type="password" name="password"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><button type="submit">登录</button></td>
-        </tr>
-    </table>
+<h1>Login page</h1>
+<p th:if="${loginError}" class="error">用户名或密码错误</p>
+<form th:action="@{/login.html}" method="post">
+    <label for="username">Username</label>:
+    <input type="text" id="username" name="username" value="admin" autofocus="autofocus" /> <br />
+    <label for="password">Password</label>:
+    <input type="password" id="password" name="password" value="123456"/> <br />
+    <input type="submit" value="Login" />
 </form>
 </body>
 </html>
