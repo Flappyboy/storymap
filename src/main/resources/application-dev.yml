@@ -1,20 +1,6 @@
-server:
-  port: 8090
-
 spring:
   datasource:
     username: story_map
     password: story_mapqwe123456
     url: jdbc:mysql://172.19.240.117:3306/story_map?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
-
-mybatis:
-  mapper-locations: classpath:mapper/generate/system/*Mapper.xml
-  type-aliases-package: cn.edu.nju.software.storymapping.system.entity
-
-#showSql
-logging:
-  level:
-    com:
-      example:
-        mapper : debug
