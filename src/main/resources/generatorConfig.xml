@@ -13,8 +13,8 @@
 
         <!-- optional，旨在创建class时，对注释进行控制 -->
         <!--<commentGenerator>-->
-            <!--<property name="suppressDate" value="true"/>-->
-            <!--<property name="suppressAllComments" value="true"/>-->
+        <!--<property name="suppressDate" value="true"/>-->
+        <!--<property name="suppressAllComments" value="true"/>-->
         <!--</commentGenerator>-->
 
         <!--jdbc的数据库连接 -->
@@ -66,7 +66,22 @@
         </javaClientGenerator>
 
 
-        <table tableName="user" domainObjectName="User">
+        <!--<table tableName="user" domainObjectName="User">-->
+        <!--</table>-->
+        <table tableName="activity_card" domainObjectName="ActivityCard">
         </table>
+        <table tableName="image" domainObjectName="Image">
+        </table>
+        <table tableName="release" domainObjectName="Release">
+        </table>
+        <table tableName="role" domainObjectName="Role">
+        </table>
+        <table tableName="sub_task_card" domainObjectName="SubTaskCard">
+        </table>
+        <table tableName="task_card" domainObjectName="TaskCard">
+        </table>
+        <table tableName="work_space" domainObjectName="Workspace">
+        </table>
+
     </context>
 </generatorConfiguration>
