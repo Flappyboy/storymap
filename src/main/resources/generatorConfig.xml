@@ -66,22 +66,22 @@
         </javaClientGenerator>
 
 
-        <!--<table tableName="user" domainObjectName="User">-->
+        <table tableName="user" domainObjectName="User">
+        </table>
+        <!--<table tableName="activity_card" domainObjectName="ActivityCard">-->
         <!--</table>-->
-        <table tableName="activity_card" domainObjectName="ActivityCard">
-        </table>
-        <table tableName="image" domainObjectName="Image">
-        </table>
-        <table tableName="release" domainObjectName="Release">
-        </table>
-        <table tableName="role" domainObjectName="Role">
-        </table>
-        <table tableName="sub_task_card" domainObjectName="SubTaskCard">
-        </table>
-        <table tableName="task_card" domainObjectName="TaskCard">
-        </table>
-        <table tableName="work_space" domainObjectName="Workspace">
-        </table>
+        <!--<table tableName="image" domainObjectName="Image">-->
+        <!--</table>-->
+        <!--<table tableName="release" domainObjectName="Release">-->
+        <!--</table>-->
+        <!--<table tableName="role" domainObjectName="Role">-->
+        <!--</table>-->
+        <!--<table tableName="sub_task_card" domainObjectName="SubTaskCard">-->
+        <!--</table>-->
+        <!--<table tableName="task_card" domainObjectName="TaskCard">-->
+        <!--</table>-->
+        <!--<table tableName="work_space" domainObjectName="Workspace">-->
+        <!--</table>-->
 
     </context>
 </generatorConfiguration>
