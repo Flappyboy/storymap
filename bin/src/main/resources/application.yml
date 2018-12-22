@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8090
+
+mybatis:
+  mapper-locations: classpath:mapper/generate/system/*Mapper.xml
+  type-aliases-package: cn.edu.nju.software.storymapping.system.entity
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
