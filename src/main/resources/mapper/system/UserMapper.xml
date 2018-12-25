@@ -16,5 +16,11 @@
         create_time=#{createTime},
         image_id=#{imageId}
     </update>
+    <insert id="insertUser" parameterType="cn.edu.nju.software.storymapping.system.entity.User">
+        insert into user
+        (username,password,description,phone,email,create_time,image_id)
+        values
+        (#{username},#{password},#{description},#{phone},#{email},#{createTime},#{imageId})
+    </insert>
 
 </mapper>
