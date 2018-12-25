@@ -1,29 +1,30 @@
 package cn.edu.nju.software.storymapping.system.controller;
 
 
+import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-@Controller
+@RestController
 public class RegisterController {
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public String register(User user) {
+    public Response register(User user) {
         if(StringUtils.isEmpty(user.getUsername())){
-            return "error";
+            return Response.createDefaultResponse().fail("error");
         }
         user.setCreateTime(new Date());
         userService.insertUser(user);
-        return "ok";
+        return Response.createDefaultResponse().success("success");
     }
 
     @GetMapping("/validation")
