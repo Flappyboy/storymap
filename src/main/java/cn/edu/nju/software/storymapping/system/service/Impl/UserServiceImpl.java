@@ -26,4 +26,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password);
         userMapper.updateUser(user);
     }
+
+    public int insertUser(User user) {
+        int result = userMapper.insertUser(user);
+        return result;
+    }
 }

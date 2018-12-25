@@ -8,4 +8,7 @@ public interface UserMapper {
 
     public int updateUser(User user);
 
+    public int insertUser(User user);
+
+
 }

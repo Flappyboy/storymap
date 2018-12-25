@@ -8,4 +8,6 @@ public interface UserService {
     User queryByUsername(String username);
 
     void setPassword(String username, String password);
+
+    int insertUser(User user);
 }
