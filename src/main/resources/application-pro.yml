@@ -1,6 +1,6 @@
 spring:
   datasource:
     username: story_map
-    password: story_map123
+    password: story_map246
     url: jdbc:mysql://localhost:3306/story_map?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
