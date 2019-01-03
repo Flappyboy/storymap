@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**/*.js", "/lang/*.json", "/**/*.css", "/**/*.js", "/**/*.map",
-                "/**/*.png", "/**/*.ttf", "/**/*.eot", "/**/*.svg", "/**/*.woff", "/**/*.otf", "/**/*.ico");
+                "/**/*.png", "/**/*.jpg","/**/*.ttf", "/**/*.eot", "/**/*.svg", "/**/*.woff", "/**/*.otf", "/**/*.ico");
     }
 
     @Override
