@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    include: devdb
+  thymeleaf:
+    cache: false
+  session:
+    jdbc:
+      initialize-schema: ALWAYS
+    store-type: jdbc

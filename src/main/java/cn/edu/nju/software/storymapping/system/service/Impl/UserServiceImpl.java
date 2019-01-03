@@ -7,29 +7,28 @@ import cn.edu.nju.software.storymapping.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+
     @Override
     public User queryByUsername(String username) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUsernameEqualTo(username);
-        List<User> userList= userMapper.selectByExample(new UserExample());
-        if(userList.size()>0)
-            return userList.get(0);
-        else
-            return null;
+        User user = userMapper.selectUser(username);
+        System.out.println(user);
+        return user;
+
     }
 
     @Override
     public void setPassword(String username, String password) {
-        User user = new User();
+        User user = userMapper.selectUser(username);
         user.setPassword(password);
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUsernameEqualTo(username);
-        userMapper.updateByExampleSelective(user, userExample);
+        userMapper.updateUser(user);
+    }
+
+    public int insertUser(User user) {
+        int result = userMapper.insertUser(user);
+        return result;
     }
 }

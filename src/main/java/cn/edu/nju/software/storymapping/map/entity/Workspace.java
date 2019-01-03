@@ -1,6 +1,7 @@
 package cn.edu.nju.software.storymapping.map.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Workspace {
     /**
@@ -54,6 +55,17 @@ public class Workspace {
      *
      * @mbg.generated Sat Dec 22 16:48:12 CST 2018
      */
+
+    private List<StoryMap> storyMapList;
+
+    public List<StoryMap> getStoryMapList() {
+        return storyMapList;
+    }
+
+    public void setStoryMapList(List<StoryMap> storyMapList) {
+        this.storyMapList = storyMapList;
+    }
+
     public Workspace(Integer id, String name, Integer userId, String description, Date createTime) {
         this.id = id;
         this.name = name;
