@@ -1,28 +1,44 @@
 package cn.edu.nju.software.storymapping;
 
-import cn.edu.nju.software.storymapping.map.dao.ActivityCardMapper;
-import cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper;
-import cn.edu.nju.software.storymapping.map.dao.TaskCardMapper;
-import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
-import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
-import cn.edu.nju.software.storymapping.system.dao.UserMapper;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
+import cn.edu.nju.software.storymapping.map.dao.ReleaseMapper;
+import cn.edu.nju.software.storymapping.map.dao.StoryMapMapper;
+import cn.edu.nju.software.storymapping.map.entity.Release;
+import cn.edu.nju.software.storymapping.map.entity.StoryMap;
+import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class StorymappingApplicationTests {
 
-    @Autowired
-    private ActivityCardMapper activityCardMapper;
+	@Autowired
+	private StoryMapMapper storyMapMapper;
 
-    @Test
-    public void contextLoads() {
-        System.out.println(activityCardMapper.getActivityCardByStoryMapId(1));
-    }
+	@Autowired
+	private ReleaseMapper releaseMapper;
+
+	@Test
+	public void contextLoads() {
+		System.out.println("-------------------start--------------");
+		StoryMap sm = storyMapMapper.getById(1);
+		List<Release> listR = sm.getReleaseList();
+		System.out.println(listR.size());
+		for (Release release : listR) {
+			List<SubTaskCard> listS=release.getSubTaskCardList();
+			for (SubTaskCard subTaskCard : listS) {
+				System.out.println(subTaskCard.toString());
+			}
+			System.out.println();
+		}
+
+		System.out.println("-------------------end--------------");
+
+	}
 }

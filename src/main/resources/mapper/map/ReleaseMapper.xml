@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.storymapping.map.dao.ReleaseMapper">
+	<resultMap type="cn.edu.nju.software.storymapping.map.entity.Release"
+		id="ReleaseMap">
+		<id column="id" property="id" />
+		<result column="description" property="description" />
+		<result column="creator_id" property="creatorId" />
+		<result column="create_time" property="createTime" />
+		<result column="story_map_id" property="storyMapId" />
+		<result column="order" property="order" />	
+		<result column="name" property="name" />
+		<collection property="subTaskCardList" column="id" 
+			select="cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper.getSubTaskCardListByReleaseId" />		
+	</resultMap>
+	
+	<insert id="insert" parameterType="cn.edu.nju.software.storymapping.map.entity.Release"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into `release`(description,creator_id,create_time,story_map_id,`order`,name)
+		values
+		(#{description},#{creatorId},#{createTime},#{storyMapId},#{order},#{name})
+	</insert>
+
+	<delete id="delete" parameterType="_int">
+		delete from `release` where
+		id=#{id}
+	</delete>
+
+	<update id="update" parameterType="cn.edu.nju.software.storymapping.map.entity.Release">
+		update `release` set
+		name=#{name},
+		description=#{description},
+		creator_id=#{creatorId},
+		create_time=#{createTime},
+		story_map_id=#{storyMapId},
+		`order`=#{order} where id=#{id}
+	</update>
+
+	<select id="getById" parameterType="_int"
+		resultMap="ReleaseMap">
+		select *
+		from
+		`release` where id= #{id}
+	</select>
+
+	<select id="listAll" resultType="cn.edu.nju.software.storymapping.map.entity.Release">
+		select * from `release`
+	</select>
+
+	<select id="listByStoryMapId" parameterType="_int"
+		resultMap="ReleaseMap">
+		select * from `release` where story_map_id= #{id}
+	</select>
+
+</mapper>
