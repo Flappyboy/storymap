@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.storymapping.map.dao.RoleMapper">
+    <update id="updateRole" parameterType="cn.edu.nju.software.storymapping.map.entity.Role">
+        update role set
+        name = #{name},
+        image_id = #{imageId},
+        description = #{description},
+        story_map_id = #{storyMapId}
+        where id = #{id}
+    </update>
+    <insert id="insertRole" parameterType="cn.edu.nju.software.storymapping.map.entity.Role">
+        insert into role
+        (name,image_id,description,story_map_id)
+        values
+        (#{name},#{imageId},#{description},#{storyMapId})
+    </insert>
+    <delete id="deleteRole">
+        delete from  role where id = #{id}
+
+    </delete>
+</mapper>
