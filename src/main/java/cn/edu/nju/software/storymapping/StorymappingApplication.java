@@ -5,7 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("cn.edu.nju.software.storymapping.system.dao")
+@MapperScan({"cn.edu.nju.software.storymapping.system.dao", "cn.edu.nju.software.storymapping.map.dao"})
+
 public class StorymappingApplication {
 
     public static void main(String[] args) {

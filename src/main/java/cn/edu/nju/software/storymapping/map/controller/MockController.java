@@ -1,7 +1,18 @@
 package cn.edu.nju.software.storymapping.map.controller;
 
-import org.springframework.stereotype.Controller;
+import cn.edu.nju.software.storymapping.system.entity.User;
+import cn.edu.nju.software.storymapping.utils.UserUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequestMapping(value = "/mock")
 public class MockController {
+
+    @GetMapping(value = "/user")
+    public User getUser(){
+        User user = UserUtil.currentUser();
+        return user;
+    }
 }

@@ -304,4 +304,19 @@ public class TaskCard {
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
+
+    @Override
+    public String toString() {
+        return "TaskCard{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", creatorId=" + creatorId +
+                ", createTime=" + createTime +
+                ", color='" + color + '\'' +
+                ", activityId=" + activityId +
+                ", order='" + order + '\'' +
+                ", name='" + name + '\'' +
+                ", subTaskCardList=" + subTaskCardList +
+                '}';
+    }
 }

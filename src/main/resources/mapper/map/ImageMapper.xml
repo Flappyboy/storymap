@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.storymapping.map.dao.ImageMapper">
+
+	<insert id="insert" parameterType="cn.edu.nju.software.storymapping.map.entity.Image"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		image(url,category)
+		values
+		(#{url},#{category})
+	</insert>
+
+	<delete id="delete" parameterType="_int">
+		delete from image where
+		id=#{id}
+	</delete>
+
+	<update id="update" parameterType="cn.edu.nju.software.storymapping.map.entity.Image">
+		update image set
+		url=#{url},
+		category=#{category} where id=#{id}
+	</update>
+
+	<select id="getById" parameterType="_int"
+		resultType="cn.edu.nju.software.storymapping.map.entity.Image">
+		select *
+		from
+		image where id= #{id}
+	</select>
+
+	<select id="listAll" resultType="cn.edu.nju.software.storymapping.map.entity.Image">
+		select * from image
+	</select>
+
+</mapper>

@@ -14,7 +14,7 @@
         phone = #{phone},
         email = #{email},
         create_time=#{createTime},
-        image_id=#{imageId}
+        image_id=#{imageId} where id = #{id}
     </update>
     <insert id="insertUser" parameterType="cn.edu.nju.software.storymapping.system.entity.User">
         insert into user

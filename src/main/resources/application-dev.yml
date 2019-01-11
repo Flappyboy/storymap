@@ -7,3 +7,8 @@ spring:
     jdbc:
       initialize-schema: ALWAYS
     store-type: jdbc
+
+
+logging:
+  level:
+    cn.edu.nju.software.storymapping.map.dao: DEBUG

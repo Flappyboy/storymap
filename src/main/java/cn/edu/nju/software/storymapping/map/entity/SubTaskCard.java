@@ -361,4 +361,20 @@ public class SubTaskCard {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+
+    @Override
+    public String toString() {
+        return "SubTaskCard{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", creatorId=" + creatorId +
+                ", createTime=" + createTime +
+                ", color='" + color + '\'' +
+                ", taskId=" + taskId +
+                ", order='" + order + '\'' +
+                ", releaseId=" + releaseId +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -6,15 +6,19 @@ server:
   port: 8090
 
 mybatis:
-  mapper-locations: classpath:mapper/system/*Mapper.xml
-  type-aliases-package: cn.edu.nju.software.storymapping.system.entity
+
+  mapper-locations: classpath:mapper/map/*Mapper.xml,classpath:mapper/system/*Mapper.xml
+  #type-aliases-package: cn.edu.nju.software.storymapping.system.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
 
 #showSql
 logging:
   level:
     com:
       example:
-        mapper : debug
+        mapper: debug
 
 #启用内容版本策略 md5
 spring.resources.chain.strategy.content.enabled: true

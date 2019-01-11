@@ -13,7 +13,14 @@ public class StoryMap {
     private List<ActivityCard> activityCardList;
     private List<Release> releaseList;
 
-    public List<Role> getRoleList() {
+    @Override
+	public String toString() {
+		return "StoryMap [id=" + id + ", name=" + name + ", workSpaceId=" + workSpaceId + ", userId=" + userId
+				+ ", description=" + description + ", roleList=" + roleList + ", activityCardList=" + activityCardList
+				+ ", releaseList=" + releaseList + "]";
+	}
+
+	public List<Role> getRoleList() {
         return roleList;
     }
 

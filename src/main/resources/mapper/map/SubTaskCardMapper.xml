@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper">
+    <update id="updateSubTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        update sub_task_card set
+        description = #{description},
+        creator_id = #{creatorId},
+        create_time = #{createTime},
+        color = #{color},
+        task_id = #{taskId},
+        `order` = #{order},
+        release_id = #{releaseId},
+        `name` = #{name},
+        status = #{status} where id = #{id}        
+    </update>
+    <insert id="addSubTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        insert  into sub_task_card
+        (description,creator_id,create_time,color,task_id,`order`,release_id,`name`,status)
+        values
+        (#{description},#{creatorId},#{createTime},#{color},#{taskId},#{order},#{releaseId},#{name},#{status})
+    </insert>
+    <delete id="deleteSubTaskCard">
+        delete from sub_task_card where id = #{id}
+    </delete>
+    <select id="getSubTaskCardListByTaskId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where task_id = #{taskCardId}
+    </select>
+    <select id="getSubTaskCardListByReleaseId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where release_id = #{releaseId}
+    </select>
+</mapper>
