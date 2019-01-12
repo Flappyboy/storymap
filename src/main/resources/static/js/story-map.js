@@ -16,8 +16,7 @@ var storyMap = {
         },
         {
             title: 'a3',
-            tasks: [
-            ],
+            tasks: [],
         },
         {
             title: 'a2',
@@ -33,7 +32,7 @@ var storyMap = {
             title: 'release1',
             activities: [
                 {
-                    tasks:[
+                    tasks: [
                         {
                             subtasks: [
                                 {
@@ -54,10 +53,10 @@ var storyMap = {
                     ]
                 },
                 {
-                  tasks:[]
+                    tasks: []
                 },
                 {
-                    tasks:[
+                    tasks: [
                         {
                             subtasks: [
                                 {
@@ -73,7 +72,7 @@ var storyMap = {
             title: 'release2',
             activities: [
                 {
-                    tasks:[
+                    tasks: [
                         {
                             subtasks: [
                                 {
@@ -95,10 +94,10 @@ var storyMap = {
                 },
 
                 {
-                    tasks:[]
+                    tasks: []
                 },
                 {
-                    tasks:[
+                    tasks: [
                         {
                             subtasks: [
                                 {
@@ -115,9 +114,8 @@ var storyMap = {
 
 $(function () {
     init(storyMap);
-    initSortable();
-    initEditable();
-    initSortable();
+    //initEditable();
+    //initSortable();
 });
 
 function init(storyMap) {
@@ -184,7 +182,10 @@ function newBoardTasksOuter(tasks) {
 }
 
 function newBoardTasks(tasks) {
-    var element = $('<ul class="board-tasks"></ul>');
+    var element = $('<ul class="board-tasks ui-sortable"></ul>');
+    element.sortable({
+        connectWith: ".ui-sortable"
+    });
     if (tasks) {
         tasks.forEach(function (task, i) {
             element.append(newBoardTaskCard(task));
@@ -209,7 +210,7 @@ function newReleaseWithSubstasks(release) {
 }
 
 function newBoardRelease(release) {
-    var element = $('<div class="board-release">'+release.title+'</div>');
+    var element = $('<div class="board-release">' + release.title + '</div>');
     return element;
 }
 
@@ -246,7 +247,10 @@ function newBoardSubTaskTask(task) {
 }
 
 function newBoardSubTasks(subtasks) {
-    var element = $('<ul class="board-subtasks"></ul>');
+    var element = $('<ul class="board-subtasks ui-sortable"></ul>');
+    element.sortable({
+        connectWith: ".ui-sortable"
+    });
     if (subtasks) {
         subtasks.forEach(function (subtask, i) {
             element.append(newBoardSubtaskCard(subtask));
@@ -259,8 +263,13 @@ function newBoardSubtaskCard(subtask) {
     var element = newBoardCard_li(subtask);
     element.addClass('board-subtask-card');
     element.addClass('board-card-color-yellow');
+    element.children('.board-card-next-bottom').click(function () {
+        var newCard = newBoardSubtaskCard();
+        $(this).parent().after(newCard);
+    });
     return element;
 }
+
 
 function newBoardCard_div(card) {
     var element = $('<div></div>');
@@ -275,34 +284,78 @@ function newBoardCard_li(card) {
 }
 
 function newBoardCard(element, card) {
-    element.append(newCardTitleText(card.title));
-    if (card.title)
+    if (card && card.title) {
+        element.append(newCardTitleText(card.title));
         element.append(newCardEmptyTitle().hide());
-    else
+    }
+    else {
+        element.append(newCardTitleText().hide());
         element.append(newCardEmptyTitle().show());
+    }
     element.append(newCardTitleEditor().hide());
+    element.append(newBoardCardBlockBottom());
+    element.append(newBoardCardNextBottom());
+    element.mouseleave(function () {
+        $(this).children('.board-card-next-bottom').slideUp(50);
+        console.log("leave card")
+    });
+    return element;
+}
+function newBoardCardNextBottom() {
+    var element = $('<span class="board-card-next-bottom" style="display: none">+</span>');
+    element.mouseleave(function () {
+        $(this).slideUp(50);
+        console.log("leave bottom")
+    });
     return element;
 }
 
+function newBoardCardBlockBottom() {
+    var element = $('<span class="board-card-block-bottom"></span>');
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-next-bottom').slideDown(50);
+        console.log("enter")
+    });
+    return element;
+}
 function newCardTitleText(title) {
-    var element = $('<span class="board-card-title-text">' + title + '</span>');
+    var element = $('<span class="board-card-title-text">' + (title ? title : '') + '</span>');
+    element.click(function () {
+        var textarea = $(this).siblings("textarea");
+        textarea.val($(this).text());
+        $(this).hide();
+        textarea.show();
+        textarea.blur(function () {
+            var textBoard = $(this).siblings('.board-card-title-text');
+            textBoard.show();
+            textBoard.text($(this).val());
+            $(this).hide();
+        });
+        textarea.focus();
+    });
     return element;
 }
 
 function newCardEmptyTitle() {
     var element = $('<span class="board-card-empty-title">Empty card</span>');
+    element.click(function () {
+        var textarea = $(this).siblings("textarea");
+        $(this).hide();
+        textarea.show();
+        textarea.blur(function () {
+            var textBoard = $(this).siblings('.board-card-title-text');
+            textBoard.show();
+            textBoard.text($(this).val());
+            $(this).hide();
+        });
+        textarea.focus();
+    });
     return element;
 }
 
 function newCardTitleEditor() {
     var element = $('<textarea type="text" class="board-card-title-editor" data-editmode="false"></textarea>');
     return element;
-}
-
-
-function addActivity() {
-    addHead();
-    addContent();
 }
 
 
