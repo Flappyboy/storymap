@@ -1,3 +1,7 @@
+if (!CONTEXT_PATH) {
+    var CONTEXT_PATH = "\/";
+}
+
 var boardActivities;
 var boardSortableReleases;
 
@@ -114,8 +118,6 @@ var storyMap = {
 
 $(function () {
     init(storyMap);
-    //initEditable();
-    //initSortable();
 });
 
 function init(storyMap) {
@@ -131,29 +133,14 @@ function init(storyMap) {
     });
 }
 
-function initEditable() {
-    $(".board-card-title-text").click(function () {
-        var textarea = $(this).siblings("textarea");
-        var textBoard = $(this);
-        textarea.val(textBoard.text());
-        textBoard.hide();
-        textarea.show();
-        textarea.blur(function () {
-            textBoard.show();
-            textBoard.text($(this).val());
-            $(this).hide();
-        });
-        textarea.focus();
-    });
-}
-
-function initSortable() {
-    $(".board-subtasks").sortable({
-        connectWith: ".ui-sortable"
-    });
-    $(".board-tasks-outer .board-tasks").sortable({
-        connectWith: ".ui-sortable"
-    });
+function addTaskToReleases(activityIndex, taskIndex) {
+    var releases = boardSortableReleases.children();
+    for(var i=1; i<=releases.length; i++){
+        var release = boardSortableReleases.children(':nth-child('+i+')');
+        var activity = release.find('.board-subtasks-activities').children(':nth-child('+(activityIndex+1)+')');
+        var task = activity.children().children(':nth-child('+(taskIndex+1)+')');
+        task.after(newBoardTasks([]));
+    }
 }
 
 function newBoardActivity(activity) {
@@ -169,7 +156,18 @@ function newPersons() {
 }
 
 function newBoardActivityCard(activity) {
-    var element = newBoardCard_div(activity);
+    var nextBottomCallback = function (e) {
+        // TODO
+    };
+    var nextRightCallback = function (e) {
+        // TODO
+    };
+    var closeCallback = function (e) {
+        e.parent().remove();
+        // TODO
+    };
+    var element = newBoardCard($('<li></li>'), activity, closeCallback, null, nextRightCallback);
+
     element.addClass('board-activity-card');
     element.addClass('board-card-color-blue');
     return element;
@@ -195,7 +193,23 @@ function newBoardTasks(tasks) {
 }
 
 function newBoardTaskCard(task) {
-    var element = newBoardCard_li(task);
+    var nextBottomCallback = function (e) {
+        // TODO
+    };
+    var nextRightCallback = function (e) {
+        var newCard = newBoardTaskCard();
+        e.parent().after(newCard);
+        var taskIndex = e.parent().prevAll().length;
+        var activityIndex = e.parents('.board-activity').prevAll().length;
+        console.log('taskIndex ' + taskIndex);
+        console.log('activityIndex ' + activityIndex);
+        addTaskToReleases(activityIndex, taskIndex);
+    };
+    var closeCallback = function (e) {
+        e.parent().remove();
+        // TODO
+    };
+    var element = newBoardCard($('<li></li>'),task, closeCallback, null, nextRightCallback);
     element.addClass('board-task');
     element.addClass('board-task-card');
     element.addClass('board-card-color-green');
@@ -260,49 +274,60 @@ function newBoardSubTasks(subtasks) {
 }
 
 function newBoardSubtaskCard(subtask) {
-    var element = newBoardCard_li(subtask);
+    var closeCallBack = function (e) {
+        e.parent().remove();
+    };
+    var nextBottomCallBack = function (e) {
+        var newCard = newBoardSubtaskCard();
+        e.parent().after(newCard);
+    };
+    var element = newBoardCard( $('<li></li>'), subtask, closeCallBack, nextBottomCallBack);
     element.addClass('board-subtask-card');
     element.addClass('board-card-color-yellow');
-    element.children('.board-card-next-bottom').click(function () {
-        var newCard = newBoardSubtaskCard();
-        $(this).parent().after(newCard);
-    });
     return element;
 }
 
-
-function newBoardCard_div(card) {
-    var element = $('<div></div>');
-    element = newBoardCard(element, card);
-    return element;
-}
-
-function newBoardCard_li(card) {
-    var element = $('<li></li>');
-    element = newBoardCard(element, card);
-    return element;
-}
-
-function newBoardCard(element, card) {
+function newBoardCard(element, card, closeCallback, nextBottomCallback, nextRightCallback) {
     if (card && card.title) {
         element.append(newCardTitleText(card.title));
         element.append(newCardEmptyTitle().hide());
-    }
-    else {
+    } else {
         element.append(newCardTitleText().hide());
         element.append(newCardEmptyTitle().show());
     }
     element.append(newCardTitleEditor().hide());
-    element.append(newBoardCardBlockBottom());
-    element.append(newBoardCardNextBottom());
+    if (closeCallback) {
+        element.append(newBoardCardBlockClose());
+        element.append(newBoardCardClose());
+        element.children('.board-card-close').click(function () {
+            closeCallback($(this));
+        });
+    }
+    if (nextBottomCallback){
+        element.append(newBoardCardBlockBottom());
+        element.append(newBoardCardNextBottom());
+        element.children('.board-card-next-bottom').click(function () {
+            nextBottomCallback($(this));
+        });
+    }
+    if (nextRightCallback){
+        element.append(newBoardCardBlockRight());
+        element.append(newBoardCardNextRight());
+        element.children('.board-card-next-right').click(function () {
+            nextRightCallback($(this));
+        });
+    }
     element.mouseleave(function () {
         $(this).children('.board-card-next-bottom').slideUp(50);
+        $(this).children('.board-card-next-right').fadeOut(50);
+        $(this).children('.board-card-close').fadeOut(50);
         console.log("leave card")
     });
     return element;
 }
+
 function newBoardCardNextBottom() {
-    var element = $('<span class="board-card-next-bottom" style="display: none">+</span>');
+    var element = $('<span class="board-card-next-bottom" style="display: none"><img src="' + CONTEXT_PATH + 'img/story-map/icon_arrow_down.png"></span>');
     element.mouseleave(function () {
         $(this).slideUp(50);
         console.log("leave bottom")
@@ -318,6 +343,44 @@ function newBoardCardBlockBottom() {
     });
     return element;
 }
+
+function newBoardCardNextRight() {
+
+    var element = $('<span class="board-card-next-right" style="display: none"><img src="' + CONTEXT_PATH + 'img/story-map/icon_arrow_right.png"></span>');
+    element.mouseleave(function () {
+        $(this).fadeOut(50);
+        console.log("leave right")
+    });
+    return element;
+}
+
+function newBoardCardBlockRight() {
+    var element = $('<span class="board-card-block-right"></span>');
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-next-right').fadeIn(50);
+        console.log("enter")
+    });
+    return element;
+}
+
+function newBoardCardBlockClose() {
+    var element = $('<span class="board-card-block-close" ></span>');
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-close').fadeIn(50);
+        console.log("enter")
+    });
+    return element;
+}
+
+function newBoardCardClose() {
+    var element = $('<span class="board-card-close" style="display: none"><img src="' + CONTEXT_PATH + 'img/story-map/icon_close.png"></span>');
+    element.mouseleave(function () {
+        $(this).fadeOut(50);
+        console.log("leave close")
+    });
+    return element;
+}
+
 function newCardTitleText(title) {
     var element = $('<span class="board-card-title-text">' + (title ? title : '') + '</span>');
     element.click(function () {
@@ -332,6 +395,10 @@ function newCardTitleText(title) {
             $(this).hide();
         });
         textarea.focus();
+    });
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-next-bottom').slideUp(50);
+        console.log("enter")
     });
     return element;
 }
@@ -350,11 +417,19 @@ function newCardEmptyTitle() {
         });
         textarea.focus();
     });
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-next-bottom').slideUp(50);
+        console.log("enter")
+    });
     return element;
 }
 
 function newCardTitleEditor() {
     var element = $('<textarea type="text" class="board-card-title-editor" data-editmode="false"></textarea>');
+    element.mouseenter(function () {
+        $(this).siblings('.board-card-next-bottom').slideUp(50);
+        console.log("enter")
+    });
     return element;
 }
 

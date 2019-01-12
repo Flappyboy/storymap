@@ -37,6 +37,8 @@
                                         <span class="board-card-empty-title" style="display: none;">Empty card</span>
                                         <textarea type="text" style="display:none" class="board-card-title-editor"
                                                   data-editmode="false"></textarea>
+                                        <span class="board-card-block-right"></span>
+                                        <span class="board-card-next-right" style="display: none"><img th:src="@{/img/story-map/icon_arrow_right.png}"></span>
                                     </li>
                                     <li class="board-task board-task-card board-card-color-yellow">
                                         <span class="board-card-title-text">activity1-task2</span>
@@ -89,7 +91,9 @@
                                                                       class="board-card-title-editor"
                                                                       data-editmode="false"></textarea>
                                                             <span class="board-card-block-bottom"></span>
-                                                            <span class="board-card-next-bottom" style="display: none">+</span>
+                                                            <span class="board-card-next-bottom" style="display: none"><img th:src="@{/img/story-map/icon_arrow_down.png}"></span>
+                                                            <span class="board-card-block-close"></span>
+                                                            <span class="board-card-close" style="display: none"><img th:src="@{/img/story-map/icon_close.png}" /></span>
                                                         </li>
                                                         <li class="board-subtask-card board-card-color-blue">
                                                             <span class="board-card-title-text">activity1-task1-subtask2</span>
