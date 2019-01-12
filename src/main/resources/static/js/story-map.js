@@ -117,6 +117,7 @@ $(function () {
     init(storyMap);
     initSortable();
     initEditable();
+    initSortable();
 });
 
 function init(storyMap) {
