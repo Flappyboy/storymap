@@ -13,6 +13,9 @@
     <link th:href="@{/css/story-map.css}" rel="stylesheet"/>
 </head>
 <body>
+<div id="operate">
+
+</div>
 <div id="wrapper" class="board-zoom-28 wrapper-pinned">
     <div id="main" class="main-pinned">
         <!--<div id="board-boundaries" class="board-boundaries-pinned">-->
@@ -77,7 +80,16 @@
                         <span class="board-lines"></span>
                         <div id="board-sortable-releases">
                             <div class="release-with-subtasks">
-                                <div class="board-release"></div>
+                                <div class="board-release">
+                                    <div class="board-release-relative">
+                                        <div class="dropdown-menu">
+                                                <span class="board-release-prefix"></span>
+                                                <span class="board-release-name">
+                                                    Release 1
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div>
                                     <ul class="board-subtasks-activities data-release-content">
                                         <li class="board-activity">

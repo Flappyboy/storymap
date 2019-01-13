@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Story Map</title>
     <script th:src="@{/lib/js/jqueryui/jquery-ui.js}"></script>
+    <script th:src="@{/lib/js/jqueryplugin/jquery.mousewheel.js}"></script>
 
 
     <script th:inline="javascript">
@@ -21,24 +22,22 @@
     <link th:href="@{/css/story-map.css}" rel="stylesheet"/>
 </head>
 <body>
-<div id="wrapper" class="board-zoom-28 wrapper-pinned">
+<div id="operate">
+    <span>RELEASE</span>
+</div>
+<div id="right-content" class="board-zoom-28 wrapper-pinned">
     <div id="main" class="main-pinned">
-        <!--<div id="board-boundaries" class="board-boundaries-pinned">-->
-        <div>
-            <div id="board">
-                <div id="board-head">
-                    <ul id="board-activities">
-                    </ul>
-                </div>
-                <div id="board-body-container">
-                    <div id="board-body">
-                        <span class="board-lines"></span>
-                        <div id="board-sortable-releases">
-                        </div>
-                    </div>
-                </div>
+    <div id="board">
+        <div id="board-head">
+            <ul id="board-activities">
+            </ul>
+        </div>
+        <div id="board-body">
+            <span class="board-lines"></span>
+            <div id="board-sortable-releases">
             </div>
         </div>
+    </div>
     </div>
 </div>
 </body>
