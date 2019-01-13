@@ -18,9 +18,9 @@ ol, ul {
 }
 #right-content {
     /*margin-top: 4%;*/
-    width: 91%;
+    /*width: 91%;*/
     height: 100%;
-    float: left;
+    /*float: left;*/
 }
 #main{
     margin-left: 0px;
@@ -32,6 +32,8 @@ ol, ul {
     overflow: hidden;
     height: 100%;
     width: 9%;
+    min-width: 100px;
+    maxwidth: 170px;
     float: left;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -139,4 +141,12 @@ ol, ul {
     margin-top: 1.6%;
     border-radius: 5px;
     box-shadow: rgb(83, 253, 1) 0px 0px 18px inset;
+}
+
+.msg-danger{
+    color: red;
+    padding-right: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: ;
 }

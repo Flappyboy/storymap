@@ -4,6 +4,7 @@ if (!CONTEXT_PATH) {
 
 var boardActivities;
 var boardSortableReleases;
+var messagesDom;
 
 //用于标记发光的空card，避免在拖动整个map后触发其click事件。
 var lightDom;
@@ -44,7 +45,8 @@ var storyMap = {
     ],
     releases: [
         {
-            title: 'release1',
+            id: 0,
+            title: 'Release1',
             activities: [
                 {
                     tasks: [
@@ -88,7 +90,8 @@ var storyMap = {
             ]
         },
         {
-            title: 'release2',
+            id: 1,
+            title: 'Release2',
             activities: [
                 {
                     tasks: [
@@ -111,8 +114,7 @@ var storyMap = {
                 },
 
                 {
-                    tasks: [
-                    ]
+                    tasks: []
                 },
                 {
                     tasks: [
@@ -131,50 +133,55 @@ var storyMap = {
     ],
 };
 
-var zoom = 28; // 1 - 40
+
+var zoom = 21; // 1 - 40
 var zoomList = '';
 
-for(var i=0; i<40; i++){
-    zoomList = zoomList + 'board-zoom-' + (i+1) + ' ';
+for (var i = 0; i < 40; i++) {
+    zoomList = zoomList + 'board-zoom-' + (i + 1) + ' ';
 }
 
 
 $(function () {
+    for (var i = 0; i < storyMap.activities.length; i++) {
+        var tasks = storyMap.activities[i].tasks;
+        for (var j = 0; j < tasks.length; j++) {
+            tasks[j].task = [];
+        }
+    }
     init(storyMap);
 });
 
 function init(storyMap) {
-    // 1-40
-    $( "#board" ).draggable(
+    $("#board").draggable(
         {
-            //containment: "parent",
             scroll: false,
-            start: function() {
+            start: function () {
 
             },
-            drag: function() {
+            drag: function () {
             },
-            stop: function() {
-                if(lightDom) {
+            stop: function () {
+                if (lightDom) {
                     lightDom.removeClass('board-light-yellow board-light-blue board-light-green');
                 }
             }
         }
     );
     $("#right-content").bind("mousewheel",
-        function(event, delta, deltaX, deltaY) {
+        function (event, delta, deltaX, deltaY) {
             console.log(delta, deltaX, deltaY);
-            if(delta<0) {
-                if(zoom>1){
+            if (delta < 0) {
+                if (zoom > 1) {
                     zoom--;
                     $("#right-content").removeClass(zoomList);
-                    $("#right-content").addClass("board-zoom-"+zoom);
+                    $("#right-content").addClass("board-zoom-" + zoom);
                 }
-            }else{
-                if(zoom<40){
+            } else {
+                if (zoom < 40) {
                     zoom++;
                     $("#right-content").removeClass(zoomList);
-                    $("#right-content").addClass("board-zoom-"+zoom);
+                    $("#right-content").addClass("board-zoom-" + zoom);
                 }
             }
 
@@ -184,6 +191,7 @@ function init(storyMap) {
 
     boardActivities = $("#board-activities");
     boardSortableReleases = $("#board-sortable-releases");
+    messagesDom = $('#messagebox');
     var activities = storyMap.activities;
     activities.forEach(function (activity, i) {
         boardActivities.append(newBoardActivity(activity));
@@ -193,6 +201,18 @@ function init(storyMap) {
         boardSortableReleases.append(newReleaseWithSubstasks(release));
     });
 }
+
+function addRelease() {
+    console.log('add release');
+    var release = {
+        title: 'Release' + (boardSortableReleases.children().length + 1),
+        activities: storyMap.activities,
+    }
+    var element = newReleaseWithSubstasks(release);
+    boardSortableReleases.append(element);
+    requestAddRelease(release, boardSortableReleases.children().length, element);
+}
+
 
 /**
  *
@@ -259,16 +279,18 @@ function delTaskToReleases(activityIndex, taskIndex) {
     }
 }
 
-function newBoardActivity(activity) {
+function newBoardActivity(activity, insertIndex) {
     var element = $('<li class="board-activity"></li>');
     element.append(newPersons());
     element.append(newBoardActivityCard(activity));
     element.append(newBoardTasksOuter(activity.tasks));
-    if(activity && 'id' in activity){
-        console.log('init activity '+activity.id);
-        element.attr(CART_ID_ATTR_NAME,activity.id);
-    }else{
-        requestAddActivity(activity, element);
+    if (activity && 'id' in activity) {
+        console.log('init activity ' + activity.id);
+        element.attr(CART_ID_ATTR_NAME, activity.id);
+    } else if (insertIndex != undefined) {
+        requestAddActivity(activity, insertIndex, element);
+    } else {
+        console.error('newBoardActivity error');
     }
     return element;
 }
@@ -289,31 +311,35 @@ function newBoardActivityCard(activity) {
             tasks: [],
             preDom: e.parent(),
         };
-        var newElement = newBoardActivity(activity);
+        var newElement = newBoardActivity(activity, activityIndex + 1);
         e.parents('.board-activity').after(newElement);
         console.log(activityIndex);
         addActivityToReleases(activityIndex + 1, activity);
     };
     var closeCallback = function (e) {
-
         var activityIndex = e.parents('.board-activity').prevAll().length;
-        console.log(activityIndex);
+        var id = e.parents('.board-activity').attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
+        requestDelActivity(id, activityIndex);
+
         delActivityFromReleases(activityIndex);
         e.parents('.board-activity').remove();
         if (boardActivities.children().length === 0) {
             var activity = {
                 title: '',
                 tasks: [],
-                firstCard: true,
             };
-            boardActivities.append(newBoardActivity(activity));
+            boardActivities.append(newBoardActivity(activity, 0));
             addActivityToReleases(0, activity);
         }
     };
     var element = newBoardCard($('<li></li>'), activity, closeCallback, null, nextRightCallback);
     element.addClass('board-activity-card');
     element.addClass('board-card-color-blue');
-    element.attr('cardtype','activity');
+    element.attr('cardtype', 'activity');
     return element;
 }
 
@@ -326,7 +352,8 @@ function newBoardTasksOuter(tasks) {
 function newBoardTasks(tasks) {
     var element = $('<ul class="board-tasks ui-sortable"></ul>');
     element.sortable({
-        connectWith: ".ui-sortable"
+        connectWith: ".ui-sortable",
+        distance: 5,
     });
     if (tasks) {
         tasks.forEach(function (task, i) {
@@ -344,7 +371,7 @@ function newBoardTasks(tasks) {
     });
     element.click(function () {
         if (!$(this).hasClass('board-light-green') || $(this).children().length > 0) {
-            if($(this).children().length === 0) {
+            if ($(this).children().length === 0) {
                 $(this).addClass('board-light-green');
                 lightDom = $(this);
             }
@@ -354,17 +381,17 @@ function newBoardTasks(tasks) {
             title: '',
             subtasks: [],
         }
-        $(this).append(newBoardTaskCard(task));
+        var activityIndex = $(this).parents('.board-activity').prevAll().length;
+        $(this).append(newBoardTaskCard(task, $(this).parents('.board-activity'), 0));
         $(this).removeClass('board-light-green');
 
-        var activityIndex = $(this).parents('.board-activity').prevAll().length;
         console.log('activityIndex ' + activityIndex);
         addTaskToReleases(activityIndex, 0, task);
     });
     return element;
 }
 
-function newBoardTaskCard(task) {
+function newBoardTaskCard(task, activityDom, insertIndex) {
     var nextBottomCallback = function (e) {
         // TODO
     };
@@ -373,27 +400,47 @@ function newBoardTaskCard(task) {
             title: '',
             subtasks: []
         };
-        var newCard = newBoardTaskCard(task);
-        e.parent().after(newCard);
-        var taskIndex = e.parent().prevAll().length;
         var activityIndex = e.parents('.board-activity').prevAll().length;
+        var taskIndex = e.parent().prevAll().length;
+
+        var newCard = newBoardTaskCard(task, e.parents('.board-activity'), taskIndex + 1);
+        e.parent().after(newCard);
+
         console.log('taskIndex ' + taskIndex);
         console.log('activityIndex ' + activityIndex);
         addTaskToReleases(activityIndex, taskIndex + 1, task);
     };
     var closeCallback = function (e) {
+        var id = e.parent().attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
         var taskIndex = e.parent().prevAll().length;
         var activityIndex = e.parents('.board-activity').prevAll().length;
         console.log('taskIndex ' + taskIndex);
         console.log('activityIndex ' + activityIndex);
         delTaskToReleases(activityIndex, taskIndex);
+
+
+        requestDelTask(id, activityIndex, taskIndex);
+
         e.parent().remove();
     };
     var element = newBoardCard($('<li></li>'), task, closeCallback, null, nextRightCallback);
     element.addClass('board-task');
     element.addClass('board-task-card');
     element.addClass('board-card-color-green');
-    element.attr('cardtype','task');
+    element.attr('cardtype', 'task');
+
+    if (task && 'id' in task) {
+        console.log('init task ' + task.id);
+        element.attr(CART_ID_ATTR_NAME, task.id);
+    } else if (activityDom != undefined && insertIndex != undefined) {
+        requestAddTask(task, activityDom, insertIndex, element);
+    } else {
+        console.error('newBoardTaskCard error');
+    }
     return element;
 }
 
@@ -401,6 +448,7 @@ function newReleaseWithSubstasks(release) {
     var element = $('<div class="release-with-subtasks"></div>');
     element.append(newBoardRelease(release));
     element.append($('<div></div>').append(newBoardSubtaskActivities(release.activities)));
+    element.attr(CART_ID_ATTR_NAME, release.id);
     return element;
 }
 
@@ -468,7 +516,8 @@ function newBoardSubTaskTask(task) {
 function newBoardSubTasks(subtasks) {
     var element = $('<ul class="board-subtasks ui-sortable"></ul>');
     element.sortable({
-        connectWith: ".ui-sortable"
+        connectWith: ".ui-sortable",
+        distance: 5,
     });
     if (subtasks) {
         subtasks.forEach(function (subtask, i) {
@@ -485,8 +534,8 @@ function newBoardSubTasks(subtasks) {
         lightDom = null;
     });
     element.click(function () {
-        if (!$(this).hasClass('board-light-yellow') || $(this).children().length > 0){
-            if($(this).children().length === 0) {
+        if (!$(this).hasClass('board-light-yellow') || $(this).children().length > 0) {
+            if ($(this).children().length === 0) {
                 $(this).addClass('board-light-yellow');
                 lightDom = $(this);
             }
@@ -495,29 +544,62 @@ function newBoardSubTasks(subtasks) {
         var subtask = {
             title: '',
         };
-        $(this).append(newBoardSubtaskCard(subtask));
+        var activityIndex = $(this).parents('.board-activity').prevAll().length;
+        var taskIndex = $(this).parents('.board-task').prevAll().length;
+        var activityDom = boardActivities.children(':nth-child(' + (activityIndex + 1) + ')');
+        var taskDom = activityDom.find('.board-tasks').children(':nth-child(' + (taskIndex + 1) + ')');
+        var releaseDom = $(this).parents('.release-with-subtasks');
+        $(this).append(newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, 0));
         $(this).removeClass('board-light-yellow');
     });
     return element;
 }
 
-function newBoardSubtaskCard(subtask) {
+function newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, insertIndex) {
     var closeCallBack = function (e) {
+        var id = e.parent().attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
+        var activityIndex = e.parents('.board-activity').prevAll().length;
+        var taskIndex = e.parents('.board-task').prevAll().length;
+        var delIndex = e.parent().prevAll().length;
+        var releaseIndex = e.parents('.release-with-subtasks').prevAll().length;
+
+        requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex);
         e.parent().remove();
     };
     var nextBottomCallBack = function (e) {
-        var newCard = newBoardSubtaskCard();
+        var subtask = {
+            title: '',
+        };
+        var activityIndex = e.parents('.board-activity').prevAll().length;
+        var taskIndex = e.parents('.board-task').prevAll().length;
+        var activityDom = boardActivities.children(':nth-child(' + (activityIndex + 1) + ')');
+        var taskDom = activityDom.find('.board-tasks').children(':nth-child(' + (taskIndex + 1) + ')');
+        var releaseDom = e.parents('.release-with-subtasks');
+        var insertIndex = e.parent().prevAll().length;
+        var newCard = newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, insertIndex + 1);
         e.parent().after(newCard);
     };
     var element = newBoardCard($('<li></li>'), subtask, closeCallBack, nextBottomCallBack);
     element.addClass('board-subtask-card');
     element.addClass('board-card-color-yellow');
-    element.attr('cardtype','activity');
+    element.attr('cardtype', 'activity');
+    if (subtask && 'id' in subtask) {
+        console.log('init subtask ' + subtask.id);
+        element.attr(CART_ID_ATTR_NAME, subtask.id);
+    } else if (activityDom != undefined && insertIndex != undefined && releaseDom != undefined && taskDom != undefined) {
+        requestAddSubtask(subtask, activityDom, taskDom, releaseDom, insertIndex, element);
+    } else {
+        console.error('newBoardTaskCard error');
+    }
     return element;
 }
 
 function newBoardCard(element, card, closeCallback, nextBottomCallback, nextRightCallback) {
-    if (card && 'title' in card && card.title!=='') {
+    if (card && 'title' in card && card.title !== '') {
         element.append(newCardTitleText(card.title));
         element.append(newCardEmptyTitle().hide());
     } else {
@@ -662,40 +744,110 @@ function newCardTitleEditor() {
     return element;
 }
 
-function requestDelActivity(id) {
-
+function addMessage(msg, type, level) {
+    var max = parseInt($('#operate').width() / 18);
+    var rs;
+    if (msg < max) {
+        rs = [];
+        rs[0] = msg;
+        alert(rs);
+    } else {
+        // var reg=/.{5}/g;
+        var reg = eval("/.{" + max + "}/g");
+        rs = msg.match(reg);//注意如果s的长度小于4,那么rs=null
+        rs.push(msg.substring(rs.join('').length));
+        console.log(rs);
+    }
+    var div = $('<div></div>');
+    rs.forEach(function (value) {
+        div.append(newMessage(value, type, level));
+    });
+    var br = $('<br/>')
+    messagesDom.prepend(br);
+    messagesDom.prepend(div);
+    setTimeout(function () {
+        div.fadeOut(800, function () {
+            div.remove();
+            br.remove();
+        });
+    }, 3000);
 }
 
-function requestDelTask(id) {
+var MSG_TYPE_DEFAULT = 'default';
+var MSG_TYPE_PRIMARY = 'primary';
+var MSG_TYPE_SUCCESS = 'success';
+var MSG_TYPE_INFO = 'info';
+var MSG_TYPE_WARNING = 'warning';
+var MSG_TYPE_DANGER = 'danger';
 
+/**
+ *
+ * @param msg
+ * @param type default primary success info warning danger
+ * @param level 1-6
+ */
+function newMessage(msg, type, level) {
+    var h = $('<h' + level + '></h' + level + '>');
+    h.append($('<span class="label label-' + type + '">' + msg + '</span>'));
+    return h;
 }
 
-function requestDelSubtask(id) {
+function requestDelActivity(id, delIndex) {
+    storyMap.activities.splice(delIndex, 0, item);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities.splice(delIndex, 1);
+    }
+    console.log('del activity card id: ' + id + ' index:' + delIndex);
+}
 
+function requestDelTask(id, activityIndex, delIndex) {
+    storyMap.activities[activityIndex].tasks.splice(delIndex, 0);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities[activityIndex].tasks.splice(delIndex, 0);
+    }
+    console.log('del task card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex);
+}
+
+function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex) {
+    console.log('del subtask card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex + ' tIndex:' + taskIndex + ' rIndex:' + releaseIndex);
 }
 
 function requestDelRelease(id) {
 
 }
 
-function requestAddActivity(item, e) {
-    if('firstCard' in item){
-
-    }else{
-        item.preDom;
+function requestAddActivity(item, insertIndex, e) {
+    storyMap.activities.splice(insertIndex, 0, item);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities.splice(insertIndex, 0, item);
     }
-    // e.attr(CART_ID_ATTR_NAME,);
+    console.log('insert activity card index:' + insertIndex);
 }
 
-function requestAddTask(item, e) {
-
+function requestAddTask(item, activityDom, insertIndex, e) {
+    var activityIndex = activityDom.prevAll().length;
+    storyMap.activities[activityIndex].tasks.splice(insertIndex, 0, item);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities[activityIndex].tasks.splice(insertIndex, 0, item);
+    }
+    console.log('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestAddSubtask(item, e) {
-
+function requestAddSubtask(item, activityDom, taskDom, releaseDom, insertIndex, e) {
+    console.log('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestAddRelease(item, e) {
+function requestAddRelease(item, insertIndex, e) {
 
 }
 
@@ -715,5 +867,57 @@ function requestPutRelease(item) {
 
 }
 
+var minInterval = 600;
+var interval = 0;
+var mapStatus = '';
+var preStatus = mapStatus;
 
+function changeStatus(status) {
+    mapStatus = status;
+}
 
+var funcQueue = [];
+var isRequest = false;
+
+self.setInterval(function () {
+    if (!isRequest) {
+        if (funcQueue.length > 0) {
+            isRequest = true;
+            changeStatus('保存中。。。')
+            var func = funcQueue.shift();
+            var callback = function () {
+                isRequest = false;
+            };
+            func(callback);
+        } else {
+            if (!isRequest) {
+                if (mapStatus != '')
+                    changeStatus('保存成功');
+            }
+        }
+    }
+
+    if (interval <= 0) {
+        if (mapStatus != preStatus) {
+            preStatus = mapStatus;
+
+            if (mapStatus == '') {
+                console.log('fadeout');
+                $('#status').fadeOut(400);
+            } else {
+                $('#status').show();
+                $('#status').text(mapStatus);
+            }
+            if (mapStatus != '保存中。。。')
+                mapStatus = '';
+            interval = minInterval;
+        } else {
+            mapStatus = '';
+        }
+    }
+    interval -= 200;
+}, 200);
+
+var MESSAGE_WAIT_DELETE_COMPLETE = '请等待上一操作保存完成。。。。。';
+var MESSAGE_WAIT_DELETE_COMPLETE_TYPE = MSG_TYPE_DANGER;
+var MESSAGE_WAIT_DELETE_COMPLETE_LEVEL = 6;
