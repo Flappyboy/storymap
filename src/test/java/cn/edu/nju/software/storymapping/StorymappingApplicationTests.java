@@ -29,17 +29,17 @@ public class StorymappingApplicationTests {
 
 	@Autowired
 	private ImageService imageService;
-	
+
 	@Autowired
 	private ReleaseService releaseService;
-	
+
 	@Autowired
 	private RoleService roleService;
 
 	@Test
 	public void contextLoads() {
 		System.out.println("-------------------start--------------");
-		ActivityCard activityCard=new ActivityCard();
+		ActivityCard activityCard = new ActivityCard();
 		activityCard.setColor("green");
 		activityCard.setCreateTime(new Date());
 		activityCard.setCreatorId(1);
@@ -48,9 +48,8 @@ public class StorymappingApplicationTests {
 		activityCard.setOrder("3");
 		activityCard.setStoryMapId(2);
 		activityCard.setId(6);
-		
-		
-		List<ActivityCard> r=activityCardService.getActivityCardByStoryMapId(2);
+
+		List<ActivityCard> r = activityCardService.getActivityCardByStoryMapId(2);
 		for (ActivityCard activityCard2 : r) {
 			System.out.println(activityCard2.toString());
 		}
