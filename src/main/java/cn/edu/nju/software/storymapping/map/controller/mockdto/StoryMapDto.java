@@ -6,7 +6,7 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@ToString
+@ToString(callSuper = true)
 public class StoryMapDto extends ItemDto{
     List<ActivityDto> activities;
     List<ReleaseDto> releases;

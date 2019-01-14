@@ -6,7 +6,7 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@ToString
+@ToString(callSuper = true)
 public class SubtaskDto extends ItemDto implements Cloneable{
     Long releaseId;
 

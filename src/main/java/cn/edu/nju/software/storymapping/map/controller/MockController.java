@@ -1,13 +1,12 @@
 package cn.edu.nju.software.storymapping.map.controller;
 
 import cn.edu.nju.software.storymapping.map.controller.mockdto.*;
+import cn.edu.nju.software.storymapping.map.entity.Release;
 import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,8 +23,9 @@ public class MockController {
         return user;
     }
 
-    @GetMapping(value = "/storymap")
-    public Response getStoryMap(){
+    @GetMapping(value = "/storymap/{id}")
+    public Response getStoryMap(@PathVariable Long id){
+        System.out.println(id);
 
         List<SubtaskDto> subtaskList = new ArrayList<>();
         for(int i=0; i<1000; i++){
@@ -63,6 +63,36 @@ public class MockController {
 
         Response response = new Response();
         response.success(storyMapDto);
+
+        return response;
+    }
+
+
+    @PostMapping(value = "/activity")
+    public Response addActivity(ActivityDto dto){
+        System.out.println(dto);
+        Response response = new Response().success(null);
+
+        return response;
+    }
+    @PostMapping(value = "/task")
+    public Response addTask(TaskDto dto){
+        System.out.println(dto);
+        Response response = new Response().success(null);
+
+        return response;
+    }
+    @PostMapping(value = "/subtask")
+    public Response addSubtask(SubtaskDto dto){
+        System.out.println(dto);
+        Response response = new Response().success(null);
+
+        return response;
+    }
+    @PostMapping(value = "/release")
+    public Response addRelease(ReleaseDto dto){
+        System.out.println(dto);
+        Response response = new Response().success(null);
 
         return response;
     }

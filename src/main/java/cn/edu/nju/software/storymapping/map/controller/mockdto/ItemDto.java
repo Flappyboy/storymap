@@ -7,9 +7,14 @@ import lombok.ToString;
 
 @Data
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
     Long id;
     String title;
+    Long order;
+
+    public ItemDto(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 }

@@ -2,6 +2,11 @@ if (!CONTEXT_PATH) {
     var CONTEXT_PATH = "\/";
 }
 
+var STORY_MAP_ID = getUrlParam('id');
+if(STORY_MAP_ID === null){
+    window.location.href = CONTEXT_PATH+"";
+}
+
 var boardActivities;
 var boardSortableReleases;
 var messagesDom;
@@ -272,19 +277,26 @@ for (var i = 0; i < 40; i++) {
     zoomList = zoomList + 'board-zoom-' + (i + 1) + ' ';
 }
 
+// 请求的基本url
+var apiBase = CONTEXT_PATH + 'mock';
 
 $(function () {
-    $.get(CONTEXT_PATH + apiBase + "/storymap", function (data, status) {
-        alert("数据: " + data + "\n状态: " + status);
-    });
-    // 预处理storyMap对象
-    for (var i = 0; i < storyMap.activities.length; i++) {
-        var tasks = storyMap.activities[i].tasks;
-        for (var j = 0; j < tasks.length; j++) {
-            tasks[j].task = [];
+    $.getJSON(apiBase + "/storymap/"+STORY_MAP_ID, function (data, status) {
+        console.log('status: '+status);
+        if(status=="success"){
+            if(data.status==0) {
+                storyMap = data.result;
+                // 预处理storyMap对象
+                for (var i = 0; i < storyMap.activities.length; i++) {
+                    var tasks = storyMap.activities[i].tasks;
+                    for (var j = 0; j < tasks.length; j++) {
+                        tasks[j].task = [];
+                    }
+                }
+                init(storyMap);
+            }
         }
-    }
-    init(storyMap);
+    });
 });
 
 function init(storyMap) {
@@ -975,8 +987,6 @@ function newMessage(msg, type, level) {
     return h;
 }
 
-var apiBase = CONTEXT_PATH + 'mock';
-
 function requestDelActivity(id, delIndex) {
     storyMap.activities.splice(delIndex, 0);
     for (var i = 0; i < storyMap.releases.length; i++) {
@@ -1029,7 +1039,23 @@ function requestAddActivity(item, insertIndex, e) {
     }
     console.log('insert activity card index:' + insertIndex);
     var func = function (callback) {
-        console.log('run func');
+        console.log('request insert activity card index:' + insertIndex);
+        $.post(apiBase + "/activity", function (data, status) {
+            console.log('status: '+status);
+            if(status=="success"){
+                if(data.status==0) {
+                    storyMap = data.result;
+                    // 预处理storyMap对象
+                    for (var i = 0; i < storyMap.activities.length; i++) {
+                        var tasks = storyMap.activities[i].tasks;
+                        for (var j = 0; j < tasks.length; j++) {
+                            tasks[j].task = [];
+                        }
+                    }
+                    init(storyMap);
+                }
+            }
+        });
         callback();
     };
     funcQueue.push(func);
@@ -1159,3 +1185,10 @@ self.setInterval(function () {
 var MESSAGE_WAIT_DELETE_COMPLETE = '请等待上一操作保存完成。。。。。';
 var MESSAGE_WAIT_DELETE_COMPLETE_TYPE = MSG_TYPE_DANGER;
 var MESSAGE_WAIT_DELETE_COMPLETE_LEVEL = 6;
+
+
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+}

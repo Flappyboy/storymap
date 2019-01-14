@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString
+@ToString(callSuper = true)
 public class ActivityDto extends ItemDto implements Cloneable{
     List<TaskDto> tasks;
 

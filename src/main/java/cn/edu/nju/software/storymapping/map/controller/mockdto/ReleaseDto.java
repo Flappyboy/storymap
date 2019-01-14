@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString
+@ToString(callSuper = true)
 public class ReleaseDto extends ItemDto{
     List<ActivityDto> activities;
 
