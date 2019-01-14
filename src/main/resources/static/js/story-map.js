@@ -133,6 +133,137 @@ var storyMap = {
     ],
 };
 
+var model = {
+    "status": 0, "message": "success", "result": {
+        "id": 1,
+        "title": "story map",
+        "activities": [{"id": 0, "title": "activity 0", "tasks": []}, {
+            "id": 1,
+            "title": "activity 1",
+            "tasks": [{
+                "id": 0,
+                "title": "task 0",
+                "subtasks": [{"id": 0, "title": "subtask 0", "releaseId": 0}, {
+                    "id": 1,
+                    "title": "subtask 1",
+                    "releaseId": 0
+                }, {"id": 2, "title": "subtask 2", "releaseId": 1}, {
+                    "id": 3,
+                    "title": "subtask 3",
+                    "releaseId": 0
+                }, {"id": 4, "title": "subtask 4", "releaseId": 0}]
+            }, {"id": 1, "title": "task 1", "subtasks": []}]
+        }, {
+            "id": 2,
+            "title": "activity 2",
+            "tasks": [{
+                "id": 2,
+                "title": "task 2",
+                "subtasks": [{"id": 5, "title": "subtask 5", "releaseId": 1}, {
+                    "id": 6,
+                    "title": "subtask 6",
+                    "releaseId": 0
+                }, {"id": 7, "title": "subtask 7", "releaseId": 1}, {
+                    "id": 8,
+                    "title": "subtask 8",
+                    "releaseId": 0
+                }, {"id": 9, "title": "subtask 9", "releaseId": 1}]
+            }, {
+                "id": 3,
+                "title": "task 3",
+                "subtasks": [{"id": 10, "title": "subtask 10", "releaseId": 1}, {
+                    "id": 11,
+                    "title": "subtask 11",
+                    "releaseId": 0
+                }, {"id": 12, "title": "subtask 12", "releaseId": 0}]
+            }, {
+                "id": 4,
+                "title": "task 4",
+                "subtasks": [{"id": 13, "title": "subtask 13", "releaseId": 1}, {
+                    "id": 14,
+                    "title": "subtask 14",
+                    "releaseId": 0
+                }, {"id": 15, "title": "subtask 15", "releaseId": 0}]
+            }]
+        }],
+        "releases": [{
+            "id": 0,
+            "title": "Release1",
+            "activities": [{"id": 0, "title": "activity 0", "tasks": []}, {
+                "id": 1,
+                "title": "activity 1",
+                "tasks": [{
+                    "id": 0,
+                    "title": "task 0",
+                    "subtasks": [{"id": 0, "title": "subtask 0", "releaseId": 0}, {
+                        "id": 1,
+                        "title": "subtask 1",
+                        "releaseId": 0
+                    }, {"id": 3, "title": "subtask 3", "releaseId": 0}, {"id": 4, "title": "subtask 4", "releaseId": 0}]
+                }, {"id": 1, "title": "task 1", "subtasks": []}]
+            }, {
+                "id": 2,
+                "title": "activity 2",
+                "tasks": [{
+                    "id": 2,
+                    "title": "task 2",
+                    "subtasks": [{"id": 6, "title": "subtask 6", "releaseId": 0}, {
+                        "id": 8,
+                        "title": "subtask 8",
+                        "releaseId": 0
+                    }]
+                }, {
+                    "id": 3,
+                    "title": "task 3",
+                    "subtasks": [{"id": 11, "title": "subtask 11", "releaseId": 0}, {
+                        "id": 12,
+                        "title": "subtask 12",
+                        "releaseId": 0
+                    }]
+                }, {
+                    "id": 4,
+                    "title": "task 4",
+                    "subtasks": [{"id": 14, "title": "subtask 14", "releaseId": 0}, {
+                        "id": 15,
+                        "title": "subtask 15",
+                        "releaseId": 0
+                    }]
+                }]
+            }]
+        }, {
+            "id": 1,
+            "title": "Release2",
+            "activities": [{"id": 0, "title": "activity 0", "tasks": []}, {
+                "id": 1,
+                "title": "activity 1",
+                "tasks": [{
+                    "id": 0,
+                    "title": "task 0",
+                    "subtasks": [{"id": 2, "title": "subtask 2", "releaseId": 1}]
+                }, {"id": 1, "title": "task 1", "subtasks": []}]
+            }, {
+                "id": 2,
+                "title": "activity 2",
+                "tasks": [{
+                    "id": 2,
+                    "title": "task 2",
+                    "subtasks": [{"id": 5, "title": "subtask 5", "releaseId": 1}, {
+                        "id": 7,
+                        "title": "subtask 7",
+                        "releaseId": 1
+                    }, {"id": 9, "title": "subtask 9", "releaseId": 1}]
+                }, {
+                    "id": 3,
+                    "title": "task 3",
+                    "subtasks": [{"id": 10, "title": "subtask 10", "releaseId": 1}]
+                }, {"id": 4, "title": "task 4", "subtasks": [{"id": 13, "title": "subtask 13", "releaseId": 1}]}]
+            }]
+        }]
+    }
+};
+
+storyMap = model.result;
+
 
 var zoom = 21; // 1 - 40
 var zoomList = '';
@@ -143,6 +274,10 @@ for (var i = 0; i < 40; i++) {
 
 
 $(function () {
+    $.get(CONTEXT_PATH + apiBase + "/storymap", function (data, status) {
+        alert("数据: " + data + "\n状态: " + status);
+    });
+    // 预处理storyMap对象
     for (var i = 0; i < storyMap.activities.length; i++) {
         var tasks = storyMap.activities[i].tasks;
         for (var j = 0; j < tasks.length; j++) {
@@ -155,6 +290,7 @@ $(function () {
 function init(storyMap) {
     $("#board").draggable(
         {
+            distance: 5,
             scroll: false,
             start: function () {
 
@@ -448,7 +584,8 @@ function newReleaseWithSubstasks(release) {
     var element = $('<div class="release-with-subtasks"></div>');
     element.append(newBoardRelease(release));
     element.append($('<div></div>').append(newBoardSubtaskActivities(release.activities)));
-    element.attr(CART_ID_ATTR_NAME, release.id);
+    if (release && 'id' in release)
+        element.attr(CART_ID_ATTR_NAME, release.id);
     return element;
 }
 
@@ -461,13 +598,32 @@ function newBoardRelease(release) {
 function newBoardReleaseRelative(release) {
     var element = $('<div class="board-release-relative"></div>');
     element.append(newDropdownMenu(release));
+
     return element;
 }
+
 
 function newDropdownMenu(release) {
     var element = $('<div class="dropdown-menu"></div>');
     element.append(newBoardReleasePrefix(release));
     element.append(newBoardReleaseName(release));
+    element.append(newReleaseDel(release));
+    return element;
+}
+
+function newReleaseDel(release) {
+    var element = $('<span class="board-release-del"></span>');
+    element.click(function () {
+        var e = $(this).parents('.release-with-subtasks');
+        var id = e.attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
+        var delIndex = e.prevAll().length;
+        e.remove();
+        requestDelRelease(id, delIndex);
+    });
     return element;
 }
 
@@ -702,8 +858,21 @@ function newCardTitleText(title) {
         textarea.blur(function () {
             var textBoard = $(this).siblings('.board-card-title-text');
             textBoard.show();
-            textBoard.text($(this).val());
+            var value = $(this).val()
+            textBoard.text(value);
             $(this).hide();
+            if ($(this).parent().hasClass('board-subtask-card')) {
+                var dom = $(this).parent();
+                requestChangeTitleSubtask(dom, value, dom.prevAll().length);
+            } else if ($(this).parent().hasClass('board-task-card')) {
+                var dom = $(this).parent();
+                requestChangeTitleTask(dom, value, dom.prevAll().length);
+            } else if ($(this).parent().hasClass('board-activity-card')) {
+                var dom = $(this).parents('.board-activity');
+                requestChangeTitleActivity(dom, value, dom.prevAll().length);
+            } else {
+                console.error('文本编辑出错！！！');
+            }
         });
         textarea.focus();
     });
@@ -723,8 +892,22 @@ function newCardEmptyTitle() {
         textarea.blur(function () {
             var textBoard = $(this).siblings('.board-card-title-text');
             textBoard.show();
-            textBoard.text($(this).val());
+
+            var value = $(this).val()
+            textBoard.text(value);
             $(this).hide();
+            if ($(this).parent().hasClass('board-subtask-card')) {
+                var dom = $(this).parent();
+                requestChangeTitleSubtask(dom, value, dom.prevAll().length);
+            } else if ($(this).parent().hasClass('board-task-card')) {
+                var dom = $(this).parent();
+                requestChangeTitleTask(dom, value, dom.prevAll().length);
+            } else if ($(this).parent().hasClass('board-activity-card')) {
+                var dom = $(this).parents('.board-activity');
+                requestChangeTitleActivity(dom, value, dom.prevAll().length);
+            } else {
+                console.error('文本编辑出错！！！');
+            }
         });
         textarea.focus();
     });
@@ -792,12 +975,19 @@ function newMessage(msg, type, level) {
     return h;
 }
 
+var apiBase = CONTEXT_PATH + 'mock';
+
 function requestDelActivity(id, delIndex) {
-    storyMap.activities.splice(delIndex, 0, item);
+    storyMap.activities.splice(delIndex, 0);
     for (var i = 0; i < storyMap.releases.length; i++) {
         storyMap.releases[i].activities.splice(delIndex, 1);
     }
     console.log('del activity card id: ' + id + ' index:' + delIndex);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
 function requestDelTask(id, activityIndex, delIndex) {
@@ -806,14 +996,30 @@ function requestDelTask(id, activityIndex, delIndex) {
         storyMap.releases[i].activities[activityIndex].tasks.splice(delIndex, 0);
     }
     console.log('del task card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
 function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex) {
     console.log('del subtask card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex + ' tIndex:' + taskIndex + ' rIndex:' + releaseIndex);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestDelRelease(id) {
-
+function requestDelRelease(id, delIndex) {
+    storyMap.releases.splice(delIndex, 0);
+    console.log('del subtask card id: ' + id + ' index:' + delIndex);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
 function requestAddActivity(item, insertIndex, e) {
@@ -822,6 +1028,11 @@ function requestAddActivity(item, insertIndex, e) {
         storyMap.releases[i].activities.splice(insertIndex, 0, item);
     }
     console.log('insert activity card index:' + insertIndex);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
 function requestAddTask(item, activityDom, insertIndex, e) {
@@ -848,23 +1059,50 @@ function requestAddSubtask(item, activityDom, taskDom, releaseDom, insertIndex, 
 }
 
 function requestAddRelease(item, insertIndex, e) {
-
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestPutActivity(item) {
-
+function requestChangeTitleActivity(dom, value, index) {
+    console.log('change title activity card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestPutTask(item) {
-
+function requestChangeTitleTask(dom, value, index) {
+    console.log('change title task card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestPutSubtask(item) {
-
+function requestChangeTitleSubtask(dom, value, index) {
+    console.log('change title subtask card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
-function requestPutRelease(item) {
-
+function requestChangeTitleRelease(dom, value, index) {
+    console.log('change title release card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    var func = function (callback) {
+        console.log('run func');
+        callback();
+    };
+    funcQueue.push(func);
 }
 
 var minInterval = 600;
