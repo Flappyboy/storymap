@@ -142,11 +142,16 @@ ol, ul {
     border-radius: 5px;
     box-shadow: rgb(83, 253, 1) 0px 0px 18px inset;
 }
+.board-release-del:before{
+    content: "\2716";
+    opacity: 0;
+    margin-left: 5px;
+}
+.board-release-del:hover:before{
+    content: "\2716";
+    opacity: 1;
+}
 
-.msg-danger{
-    color: red;
-    padding-right: 12px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: ;
+.board-release-del{
+    width: 20px;
 }
