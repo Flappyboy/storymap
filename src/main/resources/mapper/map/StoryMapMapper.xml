@@ -1,59 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.storymapping.map.dao.StoryMapMapper">
-	<resultMap type="cn.edu.nju.software.storymapping.map.entity.StoryMap"
-		id="StoryMapMap">
-		<id column="id" property="id" />
-		<result column="name" property="name" />
-		<result column="work_space_id" property="workSpaceId" />
-		<result column="user_id" property="userId" />
-		<result column="description" property="description" />
-<!-- 	<collection property="roleList" column="id"
-			select="cn.edu.nju.software.storymapping.map.dao.RoleMapper.*****" />-->
-		<collection property="activityCardList" column="id"
-			select="cn.edu.nju.software.storymapping.map.dao.ActivityCardMapper.getActivityCardByStoryMapId" /> 
-		<collection property="releaseList" column="id" 
-			select="cn.edu.nju.software.storymapping.map.dao.ReleaseMapper.listByStoryMapId" />		
-	</resultMap>
+    <resultMap type="cn.edu.nju.software.storymapping.map.entity.StoryMap"
+               id="StoryMapMap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="work_space_id" property="workSpaceId"/>
+        <result column="user_id" property="userId"/>
+        <result column="description" property="description"/>
+        <!-- 	<collection property="roleList" column="id"
+                    select="cn.edu.nju.software.storymapping.map.dao.RoleMapper.*****" />-->
+        <collection property="activityCardList" column="id"
+                    select="cn.edu.nju.software.storymapping.map.dao.ActivityCardMapper.getActivityCardByStoryMapId"/>
+        <collection property="releaseList" column="id"
+                    select="cn.edu.nju.software.storymapping.map.dao.ReleaseMapper.listByStoryMapId"/>
+    </resultMap>
 
-	<select id="getById" resultMap="StoryMapMap" parameterType="Integer" >
+    <select id="getById" resultMap="StoryMapMap" parameterType="Integer">
 		select *
 		from
 		story_map where id=
 		#{id}
 	</select>
 
-	<insert id="insert"
-		parameterType="cn.edu.nju.software.storymapping.map.entity.StoryMap"
-		useGeneratedKeys="true" keyProperty="id">
-		insert into
-		story_map(name,work_space_id,user_id,description)
-		values
-		(#{name},#{workSpaceId},#{userId},#{description})
-	</insert>
+    <insert id="insert"
+            parameterType="cn.edu.nju.software.storymapping.map.entity.StoryMap"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into
+        story_map(name,work_space_id,user_id,description)
+        values
+        (#{name},#{workSpaceId},#{userId},#{description})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
 
-	<delete id="delete" parameterType="Integer">
+    <delete id="delete" parameterType="Integer">
 		delete from story_map where
 		id=#{id}
 	</delete>
 
-	<update id="update"
-		parameterType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
-		update story_map set
-		name=#{name},
-		work_space_id=#{workSpaceId},
-		user_id=#{userId},
-		description=#{description} where id=#{id}
-	</update>
+    <update id="update"
+            parameterType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
+        update story_map
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">name=#{name},</if>
+            <if test="work_space_id!=null">work_space_id=#{workSpaceId},</if>
+            <if test="user_id!=null">user_id=#{userId},</if>
+            <if test="description!=null">description=#{description}</if>
+        </trim>
+        where id=#{id}
+    </update>
 
-	<select id="listAll"
-		resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
+    <select id="listAll"
+            resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
 		select * from story_map
 	</select>
 
-	<select id="listByWorkSpaceId" parameterType="Integer"
-		resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
+    <select id="listByWorkSpaceId" parameterType="Integer"
+            resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
 		select * from story_map where work_space_id= #{id}
 	</select>
 
+    <select id="listByUserId" resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
+		select * from story_map where user_id = #{userId}
+	</select>
 </mapper>

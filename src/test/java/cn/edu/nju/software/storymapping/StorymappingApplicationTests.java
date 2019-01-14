@@ -3,6 +3,8 @@ package cn.edu.nju.software.storymapping;
 import java.util.Date;
 import java.util.List;
 
+import cn.edu.nju.software.storymapping.system.dao.UserMapper;
+import cn.edu.nju.software.storymapping.system.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +26,15 @@ import cn.edu.nju.software.storymapping.map.service.RoleService;
 @SpringBootTest
 public class StorymappingApplicationTests {
 
-	@Autowired
-	private ActivityCardService activityCardService;
+    @Autowired
+    UserMapper userMapper;
 
-	@Autowired
-	private ImageService imageService;
-
-	@Autowired
-	private ReleaseService releaseService;
-
-	@Autowired
-	private RoleService roleService;
-
-	@Test
-	public void contextLoads() {
-		System.out.println("-------------------start--------------");
-		ActivityCard activityCard = new ActivityCard();
-		activityCard.setColor("green");
-		activityCard.setCreateTime(new Date());
-		activityCard.setCreatorId(1);
-		activityCard.setDescription("sss");
-		activityCard.setName("test1");
-		activityCard.setOrder("3");
-		activityCard.setStoryMapId(2);
-		activityCard.setId(6);
-
-		List<ActivityCard> r = activityCardService.getActivityCardByStoryMapId(2);
-		for (ActivityCard activityCard2 : r) {
-			System.out.println(activityCard2.toString());
-		}
-
-		System.out.println("-------------------end--------------");
-
-	}
+    @Test
+    public void contextLoads() {
+        User user = new User();
+        user.setUsername("jinsiye");
+        user.setPassword("123456");
+        userMapper.insertUser(user);
+        System.out.println(user.getId());
+    }
 }

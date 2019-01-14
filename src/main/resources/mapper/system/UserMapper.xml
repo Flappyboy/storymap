@@ -21,6 +21,9 @@
         (username,password,description,phone,email,create_time,image_id)
         values
         (#{username},#{password},#{description},#{phone},#{email},#{createTime},#{imageId})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
     </insert>
 
 </mapper>

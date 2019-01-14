@@ -7,15 +7,18 @@ import java.util.List;
 
 @Data
 @ToString(callSuper = true)
-public class SubtaskDto extends ItemDto implements Cloneable{
+public class SubtaskDto extends ItemDto implements Cloneable {
     Long releaseId;
+    Long taskId;
 
-    public SubtaskDto(Long id, String title, Long releaseId) {
+
+    public SubtaskDto(Long id, String title, Long releaseId, Long taskId) {
         super(id, title);
         this.releaseId = releaseId;
+        this.taskId = taskId;
     }
 
-    public SubtaskDto clone(){
-        return new SubtaskDto(new Long(getId()), getTitle(), new Long(getReleaseId()));
+    public SubtaskDto clone() {
+        return new SubtaskDto(new Long(getId()), getTitle(), new Long(getReleaseId()), taskId);
     }
 }

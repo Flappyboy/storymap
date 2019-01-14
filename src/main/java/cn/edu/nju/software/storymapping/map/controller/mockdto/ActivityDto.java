@@ -9,19 +9,21 @@ import java.util.List;
 
 @Data
 @ToString(callSuper = true)
-public class ActivityDto extends ItemDto implements Cloneable{
+public class ActivityDto extends ItemDto implements Cloneable {
     List<TaskDto> tasks;
+    Integer storyMapId;
 
-    public ActivityDto(Long id, String title, List<TaskDto> tasks) {
+    public ActivityDto(Long id, String title, List<TaskDto> tasks, Integer storyMapId) {
         super(id, title);
         this.tasks = tasks;
+        this.storyMapId = storyMapId;
     }
 
-    public ActivityDto clone(){
+    public ActivityDto clone() {
         List<TaskDto> list = new ArrayList<>();
-        for (TaskDto task: tasks) {
+        for (TaskDto task : tasks) {
             list.add(task.clone());
         }
-        return new ActivityDto(new Long(getId()), getTitle(), list);
+        return new ActivityDto(new Long(getId()), getTitle(), list, storyMapId);
     }
 }
