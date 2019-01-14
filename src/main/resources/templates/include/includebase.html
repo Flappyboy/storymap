@@ -1,6 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <script>
     // console.log = function() {}
+    var headers = {};
+    headers['X-CSRF-TOKEN'] = "[[${_csrf.token}]]";
 </script>
 <link th:href="@{/lib/css/bootstrap.min.css}" rel="stylesheet"/>
 <link th:href="@{/lib/css/bootstrap-table.css}" rel="stylesheet"/>

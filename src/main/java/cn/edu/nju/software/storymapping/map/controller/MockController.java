@@ -69,31 +69,26 @@ public class MockController {
 
 
     @PostMapping(value = "/activity")
-    public Response addActivity(ActivityDto dto){
-        System.out.println(dto);
-        Response response = new Response().success(null);
-
-        return response;
+    public Response addActivity(@ModelAttribute ActivityDto dto){
+        return mockAddResponse(dto);
     }
     @PostMapping(value = "/task")
     public Response addTask(TaskDto dto){
-        System.out.println(dto);
-        Response response = new Response().success(null);
-
-        return response;
+        return mockAddResponse(dto);
     }
     @PostMapping(value = "/subtask")
     public Response addSubtask(SubtaskDto dto){
-        System.out.println(dto);
-        Response response = new Response().success(null);
-
-        return response;
+        return mockAddResponse(dto);
     }
     @PostMapping(value = "/release")
     public Response addRelease(ReleaseDto dto){
-        System.out.println(dto);
+        return mockAddResponse(dto);
+    }
+    private Response mockAddResponse(ItemDto dto){
         Response response = new Response().success(null);
-
+        dto.setId((long)(Math.random()*100000000));
+        response.setResult(dto);
+        System.out.println(dto);
         return response;
     }
 }

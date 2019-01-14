@@ -3,8 +3,8 @@ if (!CONTEXT_PATH) {
 }
 
 var STORY_MAP_ID = getUrlParam('id');
-if(STORY_MAP_ID === null){
-    window.location.href = CONTEXT_PATH+"";
+if (STORY_MAP_ID === null) {
+    window.location.href = CONTEXT_PATH + "";
 }
 
 var boardActivities;
@@ -281,10 +281,12 @@ for (var i = 0; i < 40; i++) {
 var apiBase = CONTEXT_PATH + 'mock';
 
 $(function () {
-    $.getJSON(apiBase + "/storymap/"+STORY_MAP_ID, function (data, status) {
-        console.log('status: '+status);
-        if(status=="success"){
-            if(data.status==0) {
+    if (STORY_MAP_ID === null)
+        return;
+    $.getJSON(apiBase + "/storymap/" + STORY_MAP_ID, function (data, status) {
+        console.log('status: ' + status);
+        if (status == "success") {
+            if (data.status == 0) {
                 storyMap = data.result;
                 // 预处理storyMap对象
                 for (var i = 0; i < storyMap.activities.length; i++) {
@@ -867,25 +869,6 @@ function newCardTitleText(title) {
         textarea.val($(this).text());
         $(this).hide();
         textarea.show();
-        textarea.blur(function () {
-            var textBoard = $(this).siblings('.board-card-title-text');
-            textBoard.show();
-            var value = $(this).val()
-            textBoard.text(value);
-            $(this).hide();
-            if ($(this).parent().hasClass('board-subtask-card')) {
-                var dom = $(this).parent();
-                requestChangeTitleSubtask(dom, value, dom.prevAll().length);
-            } else if ($(this).parent().hasClass('board-task-card')) {
-                var dom = $(this).parent();
-                requestChangeTitleTask(dom, value, dom.prevAll().length);
-            } else if ($(this).parent().hasClass('board-activity-card')) {
-                var dom = $(this).parents('.board-activity');
-                requestChangeTitleActivity(dom, value, dom.prevAll().length);
-            } else {
-                console.error('文本编辑出错！！！');
-            }
-        });
         textarea.focus();
     });
     element.mouseenter(function () {
@@ -901,26 +884,7 @@ function newCardEmptyTitle() {
         var textarea = $(this).siblings("textarea");
         $(this).hide();
         textarea.show();
-        textarea.blur(function () {
-            var textBoard = $(this).siblings('.board-card-title-text');
-            textBoard.show();
 
-            var value = $(this).val()
-            textBoard.text(value);
-            $(this).hide();
-            if ($(this).parent().hasClass('board-subtask-card')) {
-                var dom = $(this).parent();
-                requestChangeTitleSubtask(dom, value, dom.prevAll().length);
-            } else if ($(this).parent().hasClass('board-task-card')) {
-                var dom = $(this).parent();
-                requestChangeTitleTask(dom, value, dom.prevAll().length);
-            } else if ($(this).parent().hasClass('board-activity-card')) {
-                var dom = $(this).parents('.board-activity');
-                requestChangeTitleActivity(dom, value, dom.prevAll().length);
-            } else {
-                console.error('文本编辑出错！！！');
-            }
-        });
         textarea.focus();
     });
     element.mouseenter(function () {
@@ -935,6 +899,29 @@ function newCardTitleEditor() {
     element.mouseenter(function () {
         $(this).siblings('.board-card-next-bottom').slideUp(50);
         // console.log("enter")
+    });
+    element.blur(function () {
+        var textBoard = $(this).siblings('.board-card-title-text');
+        textBoard.show();
+        var value = $(this).val();
+        var text = textBoard.text();
+        $(this).hide();
+        if (value == text) {
+            return;
+        }
+        textBoard.text(value);
+        if ($(this).parent().hasClass('board-subtask-card')) {
+            var dom = $(this).parent();
+            requestChangeTitleSubtask(dom, value, dom.prevAll().length);
+        } else if ($(this).parent().hasClass('board-task-card')) {
+            var dom = $(this).parent();
+            requestChangeTitleTask(dom, value, dom.prevAll().length);
+        } else if ($(this).parent().hasClass('board-activity-card')) {
+            var dom = $(this).parents('.board-activity');
+            requestChangeTitleActivity(dom, value, dom.prevAll().length);
+        } else {
+            console.error('文本编辑出错！！！');
+        }
     });
     return element;
 }
@@ -1032,33 +1019,48 @@ function requestDelRelease(id, delIndex) {
     funcQueue.push(func);
 }
 
+function requestBaseAdd(api, e, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if(postdata == null)
+            return;
+        $.ajax({
+                url: apiBase + api,
+                data: postdata,
+                type: "POST",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        if (data.status == 0) {
+                            result = data.result;
+                            e.attr(CART_ID_ATTR_NAME, result.id);
+                        }
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.log(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
+}
+
 function requestAddActivity(item, insertIndex, e) {
     storyMap.activities.splice(insertIndex, 0, item);
     for (var i = 0; i < storyMap.releases.length; i++) {
         storyMap.releases[i].activities.splice(insertIndex, 0, item);
     }
     console.log('insert activity card index:' + insertIndex);
-    var func = function (callback) {
-        console.log('request insert activity card index:' + insertIndex);
-        $.post(apiBase + "/activity", function (data, status) {
-            console.log('status: '+status);
-            if(status=="success"){
-                if(data.status==0) {
-                    storyMap = data.result;
-                    // 预处理storyMap对象
-                    for (var i = 0; i < storyMap.activities.length; i++) {
-                        var tasks = storyMap.activities[i].tasks;
-                        for (var j = 0; j < tasks.length; j++) {
-                            tasks[j].task = [];
-                        }
-                    }
-                    init(storyMap);
-                }
-            }
-        });
-        callback();
-    };
-    funcQueue.push(func);
+
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+        };
+        return postdata;
+    });
 }
 
 function requestAddTask(item, activityDom, insertIndex, e) {
@@ -1068,28 +1070,53 @@ function requestAddTask(item, activityDom, insertIndex, e) {
         storyMap.releases[i].activities[activityIndex].tasks.splice(insertIndex, 0, item);
     }
     console.log('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseAdd('/task', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+            activityId: activityDom.attr(CART_ID_ATTR_NAME),
+        };
+        if(postdata.activityId==undefined){
+            console.error('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
+        }
+        return postdata;
+    });
 }
 
 function requestAddSubtask(item, activityDom, taskDom, releaseDom, insertIndex, e) {
     console.log('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
-    var func = function (callback) {
-        console.log('run func');
-        callback();
+    var postdata = {
+        title: item.title,
+        order: insertIndex,
     };
-    funcQueue.push(func);
+    requestBaseAdd('/subtask', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+            activityId: activityDom.attr(CART_ID_ATTR_NAME),
+            taskId: taskDom.attr(CART_ID_ATTR_NAME),
+            releaseId: releaseDom.attr(CART_ID_ATTR_NAME),
+        };
+        if(postdata.activityId==undefined || postdata.taskId==undefined || postdata.releaseId==undefined){
+            console.error('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
+            return null;
+        }
+        return postdata;
+    });
 }
 
 function requestAddRelease(item, insertIndex, e) {
-    var func = function (callback) {
-        console.log('run func');
-        callback();
+    var postdata = {
+        title: item.title,
+        order: insertIndex,
     };
-    funcQueue.push(func);
+    requestBaseAdd('release', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleActivity(dom, value, index) {
@@ -1152,7 +1179,12 @@ self.setInterval(function () {
             var callback = function () {
                 isRequest = false;
             };
-            func(callback);
+            try {
+                func(callback);
+            } catch (e) {
+                isRequest = false;
+                console.error(e);
+            }
         } else {
             if (!isRequest) {
                 if (mapStatus != '')
@@ -1190,5 +1222,6 @@ var MESSAGE_WAIT_DELETE_COMPLETE_LEVEL = 6;
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-    if (r != null) return unescape(r[2]); return null; //返回参数值
+    if (r != null) return unescape(r[2]);
+    return null; //返回参数值
 }
