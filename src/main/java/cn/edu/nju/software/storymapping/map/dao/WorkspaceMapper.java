@@ -4,15 +4,15 @@ import java.util.List;
 import cn.edu.nju.software.storymapping.map.entity.Workspace;
 
 public interface WorkspaceMapper {
-	public void insert(Workspace Workspace);
+	public void insert(Workspace workspace);
 
-	public void delete(int id);
+	public void delete(Integer id);
 	
-	public void update(Workspace Workspace);
+	public void update(Workspace workspace);
 	
-	public Workspace getById(int id);
+	public Workspace getById(Integer id);
 
 	public List<Workspace> listAll();
 
-	public List<Workspace> listByUserId(int id);
+	public List<Workspace> listByUserId(Integer id);
 }

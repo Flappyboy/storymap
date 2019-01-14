@@ -5,15 +5,15 @@ import java.util.List;
 import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 
 public interface StoryMapMapper {
-	public void insert(StoryMap StoryMap);
+	public void insert(StoryMap storyMap);
 
-	public StoryMap getById(int id);
+	public StoryMap getById(Integer id);
 
-	public void update(StoryMap StoryMap);
+	public void update(StoryMap storyMap);
 	
-	public void delete(int id);
+	public void delete(Integer id);
 
 	public List<StoryMap> listAll();
 	
-	public List<StoryMap> listByWorkSpaceId(int id);
+	public List<StoryMap> listByWorkSpaceId(Integer id);
 }

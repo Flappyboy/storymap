@@ -10,7 +10,7 @@
 		(#{url},#{category})
 	</insert>
 
-	<delete id="delete" parameterType="_int">
+	<delete id="delete" parameterType="Integer">
 		delete from image where
 		id=#{id}
 	</delete>
@@ -21,7 +21,7 @@
 		category=#{category} where id=#{id}
 	</update>
 
-	<select id="getById" parameterType="_int"
+	<select id="getById" parameterType="Integer"
 		resultType="cn.edu.nju.software.storymapping.map.entity.Image">
 		select *
 		from

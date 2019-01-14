@@ -15,8 +15,8 @@
         values
         (#{name},#{imageId},#{description},#{storyMapId})
     </insert>
-    <delete id="deleteRole">
-        delete from  role where id = #{id}
+    <delete id="deleteRole" parameterType="Integer">
+        delete from role where id = #{id}
 
     </delete>
 </mapper>

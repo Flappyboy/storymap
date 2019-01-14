@@ -16,7 +16,7 @@
 			select="cn.edu.nju.software.storymapping.map.dao.ReleaseMapper.listByStoryMapId" />		
 	</resultMap>
 
-	<select id="getById" resultMap="StoryMapMap" parameterType="_int" >
+	<select id="getById" resultMap="StoryMapMap" parameterType="Integer" >
 		select *
 		from
 		story_map where id=
@@ -32,7 +32,7 @@
 		(#{name},#{workSpaceId},#{userId},#{description})
 	</insert>
 
-	<delete id="delete" parameterType="_int">
+	<delete id="delete" parameterType="Integer">
 		delete from story_map where
 		id=#{id}
 	</delete>
@@ -51,7 +51,7 @@
 		select * from story_map
 	</select>
 
-	<select id="listByWorkSpaceId" parameterType="_int"
+	<select id="listByWorkSpaceId" parameterType="Integer"
 		resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
 		select * from story_map where work_space_id= #{id}
 	</select>
