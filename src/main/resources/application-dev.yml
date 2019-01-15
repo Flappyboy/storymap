@@ -10,8 +10,8 @@ spring:
 server:
   session:
     cookie:
-      max-age: -1
-    timeout: -1
+      max-age: 10000
+    timeout: 10000
 
 
 logging:
