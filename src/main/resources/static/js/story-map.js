@@ -1045,7 +1045,7 @@ function requestBaseDel(api, dataCallback) {
             return;
         postdata.storyMapId = STORY_MAP_ID;
         $.ajax({
-                url: apiBase + api,
+                url: apiBase + api + '/'+postdata.id,
                 data: postdata,
                 type: "DELETE",
                 headers: headers,
