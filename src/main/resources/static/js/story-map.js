@@ -279,6 +279,7 @@ for (var i = 0; i < 40; i++) {
 
 // 请求的基本url
 var apiBase = CONTEXT_PATH + 'mock';
+var apiBase = CONTEXT_PATH + 'api';
 
 $(function () {
     if (STORY_MAP_ID === null)
@@ -974,17 +975,44 @@ function newMessage(msg, type, level) {
     return h;
 }
 
+function requestBaseDel(api, e, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if(postdata == null)
+            return;
+        postdata.storyMapId = STORY_MAP_ID;
+        $.ajax({
+                url: apiBase + api,
+                data: postdata,
+                type: "DELETE",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        console.log(data);
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.log(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
+}
+
 function requestDelActivity(id, delIndex) {
     storyMap.activities.splice(delIndex, 0);
     for (var i = 0; i < storyMap.releases.length; i++) {
         storyMap.releases[i].activities.splice(delIndex, 1);
     }
     console.log('del activity card id: ' + id + ' index:' + delIndex);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
 function requestDelTask(id, activityIndex, delIndex) {
@@ -993,30 +1021,33 @@ function requestDelTask(id, activityIndex, delIndex) {
         storyMap.releases[i].activities[activityIndex].tasks.splice(delIndex, 0);
     }
     console.log('del task card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
 function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex) {
     console.log('del subtask card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex + ' tIndex:' + taskIndex + ' rIndex:' + releaseIndex);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
 function requestDelRelease(id, delIndex) {
     storyMap.releases.splice(delIndex, 0);
     console.log('del subtask card id: ' + id + ' index:' + delIndex);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
 function requestBaseAdd(api, e, dataCallback) {
@@ -1024,6 +1055,7 @@ function requestBaseAdd(api, e, dataCallback) {
         var postdata = dataCallback();
         if(postdata == null)
             return;
+        postdata.storyMapId = STORY_MAP_ID;
         $.ajax({
                 url: apiBase + api,
                 data: postdata,
@@ -1119,43 +1151,80 @@ function requestAddRelease(item, insertIndex, e) {
     });
 }
 
+function requestBaseChangeTitle(api, e, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if(postdata == null)
+            return;
+        postdata.storyMapId = STORY_MAP_ID;
+        $.ajax({
+                url: apiBase + api,
+                data: postdata,
+                type: "PUT",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        if (data.status == 0) {
+                            result = data.result;
+                            console.log(result);
+                        }
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.log(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
+}
+
 function requestChangeTitleActivity(dom, value, index) {
     console.log('change title activity card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
     console.log('change value ' + value);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseChangeTitle('/activity', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleTask(dom, value, index) {
     console.log('change title task card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
     console.log('change value ' + value);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseChangeTitle('/task', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleSubtask(dom, value, index) {
     console.log('change title subtask card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
     console.log('change value ' + value);
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseChangeTitle('/subtask', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleRelease(dom, value, index) {
     console.log('change title release card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
-    var func = function (callback) {
-        console.log('run func');
-        callback();
-    };
-    funcQueue.push(func);
+    requestBaseChangeTitle('/release', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 var minInterval = 600;

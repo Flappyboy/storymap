@@ -8,6 +8,7 @@ import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class ActivityController {
         dto.setId(new Long(activityCard.getId()));
         return Response.createDefaultResponse().success(dto);
     }
-
+    @PutMapping(value = "/activity")
     public Response updateActivity(ActivityDto dto) {
         ActivityCard activityCard = wrapActivityDto(dto);
         activityCardService.updateActivity(activityCard);
