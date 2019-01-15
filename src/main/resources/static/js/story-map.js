@@ -1205,7 +1205,7 @@ function requestAddRelease(item, insertIndex, e) {
         title: item.title,
         order: insertIndex,
     };
-    requestBaseAdd('release', e, function () {
+    requestBaseAdd('/release', e, function () {
         var postdata = {
             title: item.title,
             order: insertIndex,
