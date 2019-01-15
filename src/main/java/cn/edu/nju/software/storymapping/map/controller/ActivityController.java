@@ -8,12 +8,14 @@ import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.print.attribute.ResolutionSyntax;
 import java.util.Date;
 
 @RestController
+@RequestMapping(value = "/api")
 public class ActivityController {
 
     @Autowired
