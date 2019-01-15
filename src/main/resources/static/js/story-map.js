@@ -3,7 +3,8 @@ if (!CONTEXT_PATH) {
 }
 
 var STORY_MAP_ID = getUrlParam('id');
-if (STORY_MAP_ID === null) {
+var TOURISTS_MODE = getUrlParam('tourists');
+if (STORY_MAP_ID === null && !TOURISTS_MODE) {
     window.location.href = CONTEXT_PATH + "";
 }
 
@@ -20,7 +21,7 @@ var storyMap = {
     activities: [
         {
             id: 0,
-            title: 'a1',
+            title: 'This is an activity card',
             tasks: [
                 {
                     id: 0,
@@ -281,7 +282,32 @@ for (var i = 0; i < 40; i++) {
 var apiBase = CONTEXT_PATH + 'mock';
 var apiBase = CONTEXT_PATH + 'api';
 
+var storyMap = {
+    activities: [
+        {
+            id: 0,
+            title: 'This is an activity card',
+            tasks: [],
+        }
+    ],
+    releases: [
+        {
+            id: 0,
+            title: 'Release1',
+            activities: [
+                {
+                    tasks: []
+                },
+            ]
+        },
+    ],
+};
 $(function () {
+    console.log(TOURISTS_MODE)
+    if(TOURISTS_MODE){
+        init(storyMap);
+        return;
+    }
     if (STORY_MAP_ID === null)
         return;
     $.getJSON(apiBase + "/storymap/" + STORY_MAP_ID, function (data, status) {
@@ -465,6 +491,7 @@ function newBoardActivityCard(activity) {
         var newElement = newBoardActivity(activity, activityIndex + 1);
         e.parents('.board-activity').after(newElement);
         console.log(activityIndex);
+        newElement.find('.board-card-empty-title').click();
         addActivityToReleases(activityIndex + 1, activity);
     };
     var closeCallback = function (e) {
@@ -533,7 +560,9 @@ function newBoardTasks(tasks) {
             subtasks: [],
         }
         var activityIndex = $(this).parents('.board-activity').prevAll().length;
-        $(this).append(newBoardTaskCard(task, $(this).parents('.board-activity'), 0));
+        var card = newBoardTaskCard(task, $(this).parents('.board-activity'), 0);
+        $(this).append(card);
+        card.children('.board-card-empty-title').click();
         $(this).removeClass('board-light-green');
 
         console.log('activityIndex ' + activityIndex);
@@ -556,7 +585,7 @@ function newBoardTaskCard(task, activityDom, insertIndex) {
 
         var newCard = newBoardTaskCard(task, e.parents('.board-activity'), taskIndex + 1);
         e.parent().after(newCard);
-
+        newCard.children('.board-card-empty-title').click();
         console.log('taskIndex ' + taskIndex);
         console.log('activityIndex ' + activityIndex);
         addTaskToReleases(activityIndex, taskIndex + 1, task);
@@ -720,7 +749,9 @@ function newBoardSubTasks(subtasks) {
         var activityDom = boardActivities.children(':nth-child(' + (activityIndex + 1) + ')');
         var taskDom = activityDom.find('.board-tasks').children(':nth-child(' + (taskIndex + 1) + ')');
         var releaseDom = $(this).parents('.release-with-subtasks');
-        $(this).append(newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, 0));
+        var card = newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, 0);
+        $(this).append(card);
+        card.children('.board-card-empty-title').click();
         $(this).removeClass('board-light-yellow');
     });
     return element;
@@ -753,11 +784,12 @@ function newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, insertIn
         var insertIndex = e.parent().prevAll().length;
         var newCard = newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, insertIndex + 1);
         e.parent().after(newCard);
+        newCard.children('.board-card-empty-title').click();
     };
     var element = newBoardCard($('<li></li>'), subtask, closeCallBack, nextBottomCallBack);
     element.addClass('board-subtask-card');
     element.addClass('board-card-color-yellow');
-    element.attr('cardtype', 'activity');
+    element.attr('cardtype', 'subtask');
     if (subtask && 'id' in subtask) {
         console.log('init subtask ' + subtask.id);
         element.attr(CART_ID_ATTR_NAME, subtask.id);
@@ -903,9 +935,16 @@ function newCardTitleEditor() {
     });
     element.blur(function () {
         var textBoard = $(this).siblings('.board-card-title-text');
-        textBoard.show();
+        var emptyBoard = $(this).siblings('.board-card-empty-title');
+
         var value = $(this).val();
         var text = textBoard.text();
+        if(value!=undefined && value!=null && value!=''){
+            textBoard.show();
+        }else{
+            emptyBoard.show();
+        }
+
         $(this).hide();
         if (value == text) {
             return;
@@ -1249,7 +1288,10 @@ self.setInterval(function () {
                 isRequest = false;
             };
             try {
-                func(callback);
+                if(!TOURISTS_MODE) {
+                    func(callback);
+                    callback();
+                }
             } catch (e) {
                 isRequest = false;
                 console.error(e);
@@ -1261,26 +1303,28 @@ self.setInterval(function () {
             }
         }
     }
+    if(!TOURISTS_MODE) {
+        if (interval <= 0) {
+            if (mapStatus != preStatus) {
+                preStatus = mapStatus;
 
-    if (interval <= 0) {
-        if (mapStatus != preStatus) {
-            preStatus = mapStatus;
-
-            if (mapStatus == '') {
-                console.log('fadeout');
-                $('#status').fadeOut(400);
+                if (mapStatus == '') {
+                    console.log('fadeout');
+                    $('#status').fadeOut(400);
+                } else {
+                    $('#status').show();
+                    $('#status').text(mapStatus);
+                }
+                if (mapStatus != '保存中。。。')
+                    mapStatus = '';
+                interval = minInterval;
             } else {
-                $('#status').show();
-                $('#status').text(mapStatus);
-            }
-            if (mapStatus != '保存中。。。')
                 mapStatus = '';
-            interval = minInterval;
-        } else {
-            mapStatus = '';
+            }
         }
+
+        interval -= 200;
     }
-    interval -= 200;
 }, 200);
 
 var MESSAGE_WAIT_DELETE_COMPLETE = '请等待上一操作保存完成。。。。。';
