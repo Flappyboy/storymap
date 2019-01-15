@@ -5,7 +5,7 @@ import cn.edu.nju.software.storymapping.map.entity.TaskCard;
 import java.util.List;
 
 public interface TaskCardService {
-    public void deleteById(Integer taskCardId, Integer activityId);
+    public void deleteById(Integer taskCardId);
 
     public void createTaskCard(TaskCard taskCard);
 

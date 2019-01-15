@@ -29,15 +29,17 @@ public class TaskCardServiceImpl implements TaskCardService {
     }
 
     //删除,删除之后需要进行重排序
-    public void deleteById(Integer taskCardId, Integer activityId) {
+    @Override
+    public void deleteById(Integer taskCardId) {
 
-        taskCardMapper.deleteTaskCard(taskCardId);
         //将对象从数据库中删除
-        List<TaskCard> taskCardList = getTaskCardByActivityId(activityId);
+        Integer activityCardId = taskCardMapper.getActivityCardId(taskCardId);
+        taskCardMapper.deleteTaskCard(taskCardId);
+        List<TaskCard> taskCardList = getTaskCardByActivityId(activityCardId);
         //将指定的对象从list中删除，并将他们重新排序
-        ReorderUtil.reOrder(taskCardList);
+        List<TaskCard> needToUpdate = ReorderUtil.reOrderAfterDelete(taskCardList);
         //更新order
-        for (TaskCard taskCard : taskCardList) {
+        for (TaskCard taskCard : needToUpdate) {
             taskCardMapper.updateOrder(taskCard.getOrder(), taskCard.getId());
         }
 
@@ -45,7 +47,11 @@ public class TaskCardServiceImpl implements TaskCardService {
 
     //创建一个taskCard
     public void createTaskCard(TaskCard taskCard) {
-
+        List<TaskCard> taskCardList = taskCardMapper.getTaskCardByActivityId(taskCard.getActivityId());
+        List<TaskCard> needToUpdate = ReorderUtil.reOrderBeforeInsert(taskCardList, taskCard.getOrder());
+        for (TaskCard item : needToUpdate) {
+            taskCardMapper.updateOrder(item.getOrder(), item.getId());
+        }
         taskCardMapper.addTaskCard(taskCard);
     }
 

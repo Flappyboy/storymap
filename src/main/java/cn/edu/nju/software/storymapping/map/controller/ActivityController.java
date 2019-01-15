@@ -7,10 +7,7 @@ import cn.edu.nju.software.storymapping.map.service.ActivityCardService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.ResolutionSyntax;
 import java.util.Date;
@@ -29,6 +26,7 @@ public class ActivityController {
         dto.setId(new Long(activityCard.getId()));
         return Response.createDefaultResponse().success(dto);
     }
+
     @PutMapping(value = "/activity")
     public Response updateActivity(ActivityDto dto) {
         ActivityCard activityCard = wrapActivityDto(dto);
@@ -37,10 +35,17 @@ public class ActivityController {
 
     }
 
+    @DeleteMapping("/activity/{id}")
+    public Response deleteActivity(@PathVariable Integer id) {
+        activityCardService.deleteActivity(id);
+        return Response.createDefaultResponse().success(null);
+    }
+
     public ActivityCard wrapActivityDto(ActivityDto dto) {
         ActivityCard activityCard = new ActivityCard();
         if (dto.getId() != null)
             activityCard.setId(dto.getId().intValue());
+        else activityCard.setCreateTime(new Date());
         activityCard.setOrder(dto.getOrder() + "");
         activityCard.setName(dto.getTitle());
         activityCard.setCreateTime(new Date());

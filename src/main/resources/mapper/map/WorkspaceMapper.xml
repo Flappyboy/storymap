@@ -2,44 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.storymapping.map.dao.WorkspaceMapper">
 
-	<insert id="insert"
-		parameterType="cn.edu.nju.software.storymapping.map.entity.Workspace"
-		useGeneratedKeys="true" keyProperty="id">
-		insert into
-		work_space(name,user_id,description,create_time)
-		values
-		(#{name},#{userId},#{description},#{createTime})
-	</insert>
+    <insert id="insert"
+            parameterType="cn.edu.nju.software.storymapping.map.entity.Workspace"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into
+        work_space(name,user_id,description,create_time)
+        values
+        (#{name},#{userId},#{description},#{createTime})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
 
-	<delete id="delete" parameterType="Integer">
+    <delete id="delete" parameterType="Integer">
 		delete from work_space where
 		id=#{id}
 	</delete>
 
-	<update id="update"
-		parameterType="cn.edu.nju.software.storymapping.map.entity.Workspace">
+    <update id="update"
+            parameterType="cn.edu.nju.software.storymapping.map.entity.Workspace">
 		update work_space set
 		name=#{name},
-		user_id=#{userId},
+		userId=#{userId},
 		description=#{description},
-		create_time=#{createTime} where id=#{id}
+		createTime=#{createTime} where id=#{id}
 	</update>
 
-	<select id="getById" parameterType="Integer"
-		resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
+    <select id="getById" parameterType="Integer"
+            resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
 
 		select *
 		from
 		work_space where id= #{id}
 	</select>
 
-	<select id="listAll"
-		resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
+    <select id="listAll"
+            resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
 		select * from work_space
 	</select>
 
-	<select id="listByUserId" parameterType="Integer"
-		resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
+    <select id="listByUserId" parameterType="Integer"
+            resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
 		select * from work_space where user_id= #{id}
 	</select>
 

@@ -34,9 +34,9 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="name!=null">name=#{name},</if>
             <if test="description!=null">description=#{description},</if>
-            <if test="creator_id!=null">creator_id=#{creatorId},</if>
-            <if test="create_time!=null">create_time=#{createTime},</if>
-            <if test="story_map_id!=null">story_map_id=#{storyMapId},</if>
+            <if test="creatorId!=null">creator_id=#{creatorId},</if>
+            <if test="createTime!=null">create_time=#{createTime},</if>
+            <if test="storyMapId!=null">story_map_id=#{storyMapId},</if>
             <if test="order!=null">`order`=#{order}</if>
         </trim>
         where id=#{id}
@@ -50,12 +50,20 @@
 	</select>
 
     <select id="listAll" resultType="cn.edu.nju.software.storymapping.map.entity.Release">
-		select * from `release`
+		select * from `release` order by `order`
 	</select>
 
     <select id="listByStoryMapId" parameterType="Integer"
             resultMap="ReleaseMap">
-		select * from `release` where story_map_id= #{id}
+		select * from `release` where story_map_id= #{id} order by `order`
 	</select>
+    <update id="updateOrder">
+        update `release` set
+        `order` = #{order}
+        where id = #{id}
+    </update>
+    <select id="getStoryMapId" resultType="integer">
+        select story_map_id from `release` where id = #{releaseId}
+    </select>
 
 </mapper>

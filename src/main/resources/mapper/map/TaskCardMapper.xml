@@ -36,12 +36,14 @@
     </resultMap>
 
     <select id="getTaskCardByActivityId" resultMap="getTaskCardByActivityIdResultMap">
-        select * from task_card where activity_id = #{activityId}
+        select * from task_card where activity_id = #{activityId} order by `order`
     </select>
     <update id="updateOrder">
         update task_card set
         `order` = #{order}
         where id = #{taskCardId}
-
     </update>
+    <select id="getActivityCardId" resultType="integer">
+        select activity_id from task_card where id = #{taskCardId}
+    </select>
 </mapper>

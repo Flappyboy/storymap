@@ -34,12 +34,14 @@ public class SubTaskCardServiceImpl implements SubTaskCardService {
 
     //根据SubTaskCardId删除SubTaskCard
     //在删除之后需要进行重排序
-    public void deleteSubTaskCardBySubTaskCardID(Integer subTaskCardId, Integer taskCardId) {
+    @Override
+    public void deleteSubTaskCardBySubTaskCardID(Integer subTaskCardId) {
         //数据库中删除数据
+        Integer taskCardId = subTaskCardMapper.getTaskCardId(subTaskCardId);
         subTaskCardMapper.deleteSubTaskCard(subTaskCardId);
         List<SubTaskCard> subTaskCardList = getSubTaskCardByTaskId(taskCardId);
-        ReorderUtil.reOrder(subTaskCardList);
-        for (SubTaskCard subTaskCard : subTaskCardList) {
+        List<SubTaskCard> needToUpdate = ReorderUtil.reOrderAfterDelete(subTaskCardList);
+        for (SubTaskCard subTaskCard : needToUpdate) {
             subTaskCardMapper.updateOrder(subTaskCard.getOrder(), subTaskCard.getId());
         }
     }
@@ -51,6 +53,11 @@ public class SubTaskCardServiceImpl implements SubTaskCardService {
 
     @Override
     public void addSubTaskCard(SubTaskCard subTaskCard) {
+        List<SubTaskCard> subTaskCardList = subTaskCardMapper.getSubTaskCardListByTaskId(subTaskCard.getTaskId());
+        List<SubTaskCard> needToUpdate = ReorderUtil.reOrderBeforeInsert(subTaskCardList, subTaskCard.getOrder());
+        for (SubTaskCard item : needToUpdate) {
+            subTaskCardMapper.updateOrder(item.getOrder(), item.getId());
+        }
         subTaskCardMapper.addSubTaskCard(subTaskCard);
     }
 }

@@ -9,7 +9,7 @@ public interface SubTaskCardService {
 
     public List<SubTaskCard> getSubTaskCardByReleaseId(Integer releaseId);
 
-    public void deleteSubTaskCardBySubTaskCardID(Integer subTaskCardId, Integer taskCardId);
+    public void deleteSubTaskCardBySubTaskCardID(Integer subTaskCardId);
 
     public void updateSubTaskCard(SubTaskCard subTaskCard);
 

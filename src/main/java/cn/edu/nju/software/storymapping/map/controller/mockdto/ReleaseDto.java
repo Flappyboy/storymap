@@ -12,9 +12,14 @@ public class ReleaseDto extends ItemDto {
     List<ActivityDto> activities;
     Integer storyMapId;
 
+    public ReleaseDto() {
+    }
+
     public ReleaseDto(Long id, String title, List<ActivityDto> activities, Integer storyMapId) {
         super(id, title);
-        this.activities = extractActivities(activities);
+        if (activities == null)
+            activities = new ArrayList<>();
+        else this.activities = extractActivities(activities);
     }
 
     public List<ActivityDto> extractActivities(List<ActivityDto> activities) {

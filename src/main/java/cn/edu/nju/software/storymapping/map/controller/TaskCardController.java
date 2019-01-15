@@ -6,10 +6,7 @@ import cn.edu.nju.software.storymapping.map.service.TaskCardService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -34,12 +31,19 @@ public class TaskCardController {
         return Response.createDefaultResponse().success(dto);
     }
 
+    @DeleteMapping("/task/{id}")
+    public Response deleteTaskCard(@PathVariable Integer id) {
+        taskCardService.deleteById(id);
+        return Response.createDefaultResponse().success(null);
+    }
 
     public TaskCard wrapTaskDto(TaskDto dto) {
 
         TaskCard taskCard = new TaskCard();
         if (dto.getId() != null)
             taskCard.setId(dto.getId().intValue());
+        else taskCard.setCreateTime(new Date());
+        taskCard.setName(dto.getTitle());
         taskCard.setCreateTime(new Date());
         taskCard.setCreatorId(UserUtil.currentUser().getId());
         taskCard.setActivityId(dto.getActivityId());

@@ -18,4 +18,5 @@ public interface SubTaskCardMapper {
 
     public void updateOrder(@Param("order") String order, @Param("subTaskCardId") Integer subTaskCardId);
 
+    public Integer getTaskCardId(Integer subTaskCardId);
 }

@@ -6,10 +6,7 @@ import cn.edu.nju.software.storymapping.map.service.ReleaseService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -25,7 +22,6 @@ public class ReleaseController {
         releaseService.addRelease(release);
         dto.setId(release.getId().longValue());
         return Response.createDefaultResponse().success(dto);
-
     }
 
     @PutMapping("/release")
@@ -35,10 +31,18 @@ public class ReleaseController {
         return Response.createDefaultResponse().success(dto);
     }
 
+    @DeleteMapping("/release/{id}")
+    public Response deleteRelease(@PathVariable Integer id) {
+        releaseService.deleteRelease(id);
+        return Response.createDefaultResponse().success(null);
+    }
+
+
     public Release wrapRelease(ReleaseDto dto) {
         Release release = new Release();
         if (dto.getId() != null)
             release.setId(dto.getId().intValue());
+        else release.setCreateTime(new Date());
         release.setCreateTime(new Date());
         release.setCreatorId(UserUtil.currentUser().getId());
         release.setStoryMapId(dto.getStoryMapId());

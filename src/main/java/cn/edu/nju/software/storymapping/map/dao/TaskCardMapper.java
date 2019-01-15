@@ -17,4 +17,6 @@ public interface TaskCardMapper {
 
     public List<TaskCard> getTaskCardByActivityId(Integer activityId);
 
+    public Integer getActivityCardId(Integer taskCardId);
+
 }

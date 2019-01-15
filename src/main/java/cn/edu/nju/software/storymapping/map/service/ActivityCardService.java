@@ -5,11 +5,11 @@ import java.util.List;
 import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
 
 public interface ActivityCardService {
-	void addActivity(ActivityCard activityCard);
+    void addActivity(ActivityCard activityCard);
 
-	void deleteActivity(Integer id);
+    void deleteActivity(Integer id);
 
-	public void updateActivity(ActivityCard activityCard);
+    public void updateActivity(ActivityCard activityCard);
 
-	public List<ActivityCard> getActivityCardByStoryMapId(Integer storyMapId);
+    public List<ActivityCard> getActivityCardByStoryMapId(Integer storyMapId);
 }

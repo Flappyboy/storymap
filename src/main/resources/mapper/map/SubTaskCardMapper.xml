@@ -29,14 +29,18 @@
         delete from sub_task_card where id = #{id}
     </delete>
     <select id="getSubTaskCardListByTaskId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        select * from sub_task_card where task_id = #{taskCardId}
+        select * from sub_task_card where task_id = #{taskCardId} order by `order`
     </select>
     <select id="getSubTaskCardListByReleaseId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        select * from sub_task_card where release_id = #{releaseId}
+        select * from sub_task_card where release_id = #{releaseId} order by `order`
     </select>
     <update id="updateOrder">
         update sub_task_card set
         `order` = #{order}
         where id = #{subTaskCardId}
     </update>
+    <select id="getTaskCardId" resultType="integer">
+        select task_id from sub_task_card where id =#{subTaskCardId}
+    </select>
+
 </mapper>
