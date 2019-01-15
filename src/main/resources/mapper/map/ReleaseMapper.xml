@@ -37,7 +37,7 @@
             <if test="creatorId!=null">creator_id=#{creatorId},</if>
             <if test="createTime!=null">create_time=#{createTime},</if>
             <if test="storyMapId!=null">story_map_id=#{storyMapId},</if>
-            <if test="order!=null">`order`=#{order}</if>
+            <if test="`order`!=null">`order`=#{order}</if>
         </trim>
         where id=#{id}
     </update>

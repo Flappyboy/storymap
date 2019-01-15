@@ -19,7 +19,7 @@
             <if test="createTime!=null">create_time = #{createTime},</if>
             <if test="color!=null">color = #{color},</if>
             <if test="storyMapId!=null">story_map_id = #{storyMapId},</if>
-            <if test="order!=null">`order` = #{order},</if>
+            <if test="`order`!=null">`order` = #{order},</if>
             <if test="name!=null">`name` = #{name}</if>
         </trim>
         where id = #{id}
@@ -43,6 +43,8 @@
     <select id="getStoryMapId" resultType="integer">
         select story_map_id from activity_card where id = #{activityId}
     </select>
-
+    <select id="getActivityOrder" resultType="string">
+        select `order` from activity_card where id = #{activityId}
+    </select>
 
 </mapper>

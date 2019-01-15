@@ -304,7 +304,7 @@ var storyMap = {
 };
 $(function () {
     console.log(TOURISTS_MODE)
-    if(TOURISTS_MODE){
+    if (TOURISTS_MODE) {
         init(storyMap);
         return;
     }
@@ -382,13 +382,13 @@ function init(storyMap) {
 function addRelease() {
     console.log('add release');
     var activitiesDom = boardActivities.children();
-    var activities =  [];
+    var activities = [];
     for (var i = 1; i <= activitiesDom.length; i++) {
         var activityDom = boardActivities.children(':nth-child(' + i + ')');
-        var activity={tasks:[]};
+        var activity = {tasks: []};
         var len = activityDom.find('.board-tasks').children().length;
-        for(var j=0; j<len; j++){
-            activity.tasks.push({subtasks:[]});
+        for (var j = 0; j < len; j++) {
+            activity.tasks.push({subtasks: []});
         }
         activities.push(activity);
     }
@@ -399,7 +399,7 @@ function addRelease() {
     }
     var element = newReleaseWithSubstasks(release);
     boardSortableReleases.append(element);
-    requestAddRelease(release, boardSortableReleases.children().length, element);
+    requestAddRelease(release, boardSortableReleases.children().length-1, element);
 }
 
 
@@ -541,7 +541,7 @@ function newBoardTasksOuter(tasks) {
 
 function newBoardTasks(tasks) {
     var element = $('<ul class="board-tasks ui-sortable"></ul>');
-    if(TOURISTS_MODE){
+    if (TOURISTS_MODE) {
         element.sortable({
             connectWith: ".board-tasks",
             distance: 5,
@@ -733,7 +733,7 @@ function newBoardSubTaskTask(task) {
 
 function newBoardSubTasks(subtasks) {
     var element = $('<ul class="board-subtasks ui-sortable"></ul>');
-    if(TOURISTS_MODE){
+    if (TOURISTS_MODE) {
         element.sortable({
             connectWith: ".board-subtasks",
             distance: 5,
@@ -963,9 +963,9 @@ function newCardTitleEditor() {
 
         var value = $(this).val();
         var text = textBoard.text();
-        if(value!=undefined && value!=null && value!=''){
+        if (value != undefined && value != null && value != '') {
             textBoard.show();
-        }else{
+        } else {
             emptyBoard.show();
         }
 
@@ -1041,11 +1041,11 @@ function newMessage(msg, type, level) {
 function requestBaseDel(api, dataCallback) {
     var func = function (callback) {
         var postdata = dataCallback();
-        if(postdata == null)
+        if (postdata == null)
             return;
         postdata.storyMapId = STORY_MAP_ID;
         $.ajax({
-                url: apiBase + api + '/'+postdata.id,
+                url: apiBase + api + '/' + postdata.id,
                 data: postdata,
                 type: "DELETE",
                 headers: headers,
@@ -1116,7 +1116,7 @@ function requestDelRelease(id, delIndex) {
 function requestBaseAdd(api, e, dataCallback) {
     var func = function (callback) {
         var postdata = dataCallback();
-        if(postdata == null)
+        if (postdata == null)
             return;
         postdata.storyMapId = STORY_MAP_ID;
         $.ajax({
@@ -1171,7 +1171,7 @@ function requestAddTask(item, activityDom, insertIndex, e) {
             order: insertIndex,
             activityId: activityDom.attr(CART_ID_ATTR_NAME),
         };
-        if(postdata.activityId==undefined){
+        if (postdata.activityId == undefined) {
             console.error('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
         }
         return postdata;
@@ -1192,7 +1192,7 @@ function requestAddSubtask(item, activityDom, taskDom, releaseDom, insertIndex, 
             taskId: taskDom.attr(CART_ID_ATTR_NAME),
             releaseId: releaseDom.attr(CART_ID_ATTR_NAME),
         };
-        if(postdata.activityId==undefined || postdata.taskId==undefined || postdata.releaseId==undefined){
+        if (postdata.activityId == undefined || postdata.taskId == undefined || postdata.releaseId == undefined) {
             console.error('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
             return null;
         }
@@ -1205,7 +1205,7 @@ function requestAddRelease(item, insertIndex, e) {
         title: item.title,
         order: insertIndex,
     };
-    requestBaseAdd('release', e, function () {
+    requestBaseAdd('/release', e, function () {
         var postdata = {
             title: item.title,
             order: insertIndex,
@@ -1217,7 +1217,7 @@ function requestAddRelease(item, insertIndex, e) {
 function requestBaseChangeTitle(api, e, dataCallback) {
     var func = function (callback) {
         var postdata = dataCallback();
-        if(postdata == null)
+        if (postdata == null)
             return;
         postdata.storyMapId = STORY_MAP_ID;
         $.ajax({
@@ -1312,7 +1312,7 @@ self.setInterval(function () {
                 isRequest = false;
             };
             try {
-                if(!TOURISTS_MODE) {
+                if (!TOURISTS_MODE) {
                     func(callback);
                     callback();
                 }
@@ -1327,7 +1327,7 @@ self.setInterval(function () {
             }
         }
     }
-    if(!TOURISTS_MODE) {
+    if (!TOURISTS_MODE) {
         if (interval <= 0) {
             if (mapStatus != preStatus) {
                 preStatus = mapStatus;

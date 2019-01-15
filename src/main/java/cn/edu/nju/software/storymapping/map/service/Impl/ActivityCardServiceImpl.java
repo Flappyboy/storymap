@@ -63,4 +63,8 @@ public class ActivityCardServiceImpl implements ActivityCardService {
         return result;
     }
 
+    public String getActivityOrder(Integer activityId) {
+        return activityCardMapper.getActivityOrder(activityId);
+    }
+
 }

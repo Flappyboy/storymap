@@ -1,6 +1,7 @@
 package cn.edu.nju.software.storymapping.map.dao;
 
 import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,8 +10,10 @@ import java.util.List;
 public interface ActivityCardMapper {
     //增加
     public void addActivity(ActivityCard activityCard);
+
     //删除
     public void deleteActivity(Integer id);
+
     //改
     public void updateActivity(ActivityCard activityCard);
 
@@ -19,5 +22,7 @@ public interface ActivityCardMapper {
     public void updateOrder(@Param("id") Integer id, @Param("order") String order);
 
     public Integer getStoryMapId(Integer activityId);
+
+    public String getActivityOrder(Integer activityId);
 
 }

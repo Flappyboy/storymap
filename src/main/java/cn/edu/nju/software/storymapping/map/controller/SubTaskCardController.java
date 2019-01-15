@@ -19,6 +19,10 @@ public class SubTaskCardController {
 
     @PostMapping(value = "/subtask")
     public Response addSubtask(SubtaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getTaskId() == null)
+            return Response.createDefaultResponse().fail("dto中taskId为null");
         SubTaskCard subTaskCard = wrapSubTaskDto(dto);
         subTaskCardService.addSubTaskCard(subTaskCard);
         dto.setId(subTaskCard.getId().longValue());
@@ -28,6 +32,10 @@ public class SubTaskCardController {
 
     @PutMapping("/subtask")
     public Response updateSubTask(SubtaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getId() == null)
+            return Response.createDefaultResponse().fail("dto中Id为null");
         SubTaskCard subTaskCard = wrapSubTaskDto(dto);
         subTaskCardService.updateSubTaskCard(subTaskCard);
         System.out.println("加入完毕");
@@ -41,17 +49,18 @@ public class SubTaskCardController {
     }
 
     public SubTaskCard wrapSubTaskDto(SubtaskDto dto) {
-
         SubTaskCard subTaskCard = new SubTaskCard();
         if (dto.getId() != null)
             subTaskCard.setId(dto.getId().intValue());
         else
             subTaskCard.setCreateTime(new Date());
         subTaskCard.setCreatorId(UserUtil.currentUser().getId());
-        subTaskCard.setTaskId(dto.getTaskId().intValue());
+        if (dto.getTaskId() != null)
+            subTaskCard.setTaskId(dto.getTaskId().intValue());
         subTaskCard.setName(dto.getTitle());
         subTaskCard.setOrder(dto.getOrder() + "");
-        subTaskCard.setReleaseId(dto.getReleaseId().intValue());
+        if (dto.getReleaseId() != null)
+            subTaskCard.setReleaseId(dto.getReleaseId().intValue());
         return subTaskCard;
     }
 }

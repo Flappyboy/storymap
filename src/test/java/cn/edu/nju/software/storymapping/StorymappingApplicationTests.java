@@ -34,7 +34,7 @@ public class StorymappingApplicationTests {
 
     @Test
     public void contextLoads() {
-        taskCardService.deleteById(33);
+        System.out.println(activityCardService.getActivityOrder(33));
     }
 
 

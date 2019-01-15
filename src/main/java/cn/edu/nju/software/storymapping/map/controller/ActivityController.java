@@ -21,6 +21,10 @@ public class ActivityController {
 
     @PostMapping(value = "/activity")
     public Response addActivity(ActivityDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getStoryMapId() == null)
+            return Response.createDefaultResponse().fail("dto中storyMapId为null");
         ActivityCard activityCard = wrapActivityDto(dto);
         activityCardService.addActivity(activityCard);
         dto.setId(new Long(activityCard.getId()));
@@ -29,6 +33,13 @@ public class ActivityController {
 
     @PutMapping(value = "/activity")
     public Response updateActivity(ActivityDto dto) {
+        if (dto == null) {
+            return Response.createDefaultResponse().fail("dto为null");
+        }
+        if (dto.getId() == null)
+            return Response.createDefaultResponse().fail("dto的id为null");
+        String activityOrder = activityCardService.getActivityOrder(dto.getId().intValue());
+        dto.setOrder((long) Integer.parseInt(activityOrder));
         ActivityCard activityCard = wrapActivityDto(dto);
         activityCardService.updateActivity(activityCard);
         return Response.createDefaultResponse().success(dto);

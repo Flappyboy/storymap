@@ -9,7 +9,7 @@
             <if test="createTime!=null">create_time = #{createTime},</if>
             <if test="color!=null">color = #{color},</if>
             <if test="taskId!=null">task_id = #{taskId},</if>
-            <if test="order!=null">`order` = #{order},</if>
+            <if test="`order`!=null">`order` = #{order},</if>
             <if test="releaseId!=null">release_id = #{releaseId},</if>
             <if test="name!=null">`name` = #{name},</if>
             <if test="status!=null">status = #{status},</if>

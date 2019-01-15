@@ -18,6 +18,10 @@ public class TaskCardController {
 
     @PostMapping(value = "/task")
     public Response addTask(TaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getActivityId() == null)
+            return Response.createDefaultResponse().fail("dto中ActivityId为null");
         TaskCard taskCard = wrapTaskDto(dto);
         taskCardService.createTaskCard(taskCard);
         dto.setId(taskCard.getId().longValue());
@@ -26,6 +30,10 @@ public class TaskCardController {
 
     @PutMapping("/task")
     public Response updateTask(TaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getId() == null)
+            return Response.createDefaultResponse().fail("dto中id为null");
         TaskCard taskCard = wrapTaskDto(dto);
         taskCardService.updateTaskCard(taskCard);
         return Response.createDefaultResponse().success(dto);
