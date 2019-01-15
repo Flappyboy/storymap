@@ -975,7 +975,7 @@ function newMessage(msg, type, level) {
     return h;
 }
 
-function requestBaseDel(api, e, dataCallback) {
+function requestBaseDel(api, dataCallback) {
     var func = function (callback) {
         var postdata = dataCallback();
         if(postdata == null)
@@ -995,7 +995,7 @@ function requestBaseDel(api, e, dataCallback) {
                 dataType: "json"
             }
         ).fail(function (e) {
-            console.log(e);
+            console.error(e);
         }).always(callback);
     };
     funcQueue.push(func);
@@ -1007,7 +1007,7 @@ function requestDelActivity(id, delIndex) {
         storyMap.releases[i].activities.splice(delIndex, 1);
     }
     console.log('del activity card id: ' + id + ' index:' + delIndex);
-    requestBaseAdd('/activity', e, function () {
+    requestBaseDel('/activity', function () {
         var postdata = {
             id: id
         };
@@ -1021,7 +1021,7 @@ function requestDelTask(id, activityIndex, delIndex) {
         storyMap.releases[i].activities[activityIndex].tasks.splice(delIndex, 0);
     }
     console.log('del task card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex);
-    requestBaseAdd('/activity', e, function () {
+    requestBaseDel('/task', function () {
         var postdata = {
             id: id
         };
@@ -1031,7 +1031,7 @@ function requestDelTask(id, activityIndex, delIndex) {
 
 function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex) {
     console.log('del subtask card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex + ' tIndex:' + taskIndex + ' rIndex:' + releaseIndex);
-    requestBaseAdd('/activity', e, function () {
+    requestBaseDel('/subtask', function () {
         var postdata = {
             id: id
         };
@@ -1042,7 +1042,7 @@ function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex)
 function requestDelRelease(id, delIndex) {
     storyMap.releases.splice(delIndex, 0);
     console.log('del subtask card id: ' + id + ' index:' + delIndex);
-    requestBaseAdd('/activity', e, function () {
+    requestBaseDel('/release', function () {
         var postdata = {
             id: id
         };
@@ -1073,7 +1073,7 @@ function requestBaseAdd(api, e, dataCallback) {
                 dataType: "json"
             }
         ).fail(function (e) {
-            console.log(e);
+            console.error(e);
         }).always(callback);
     };
     funcQueue.push(func);
@@ -1174,7 +1174,7 @@ function requestBaseChangeTitle(api, e, dataCallback) {
                 dataType: "json"
             }
         ).fail(function (e) {
-            console.log(e);
+            console.error(e);
         }).always(callback);
     };
     funcQueue.push(func);
