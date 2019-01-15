@@ -381,9 +381,21 @@ function init(storyMap) {
 
 function addRelease() {
     console.log('add release');
+    var activitiesDom = boardActivities.children();
+    var activities =  [];
+    for (var i = 1; i <= activitiesDom.length; i++) {
+        var activityDom = boardActivities.children(':nth-child(' + i + ')');
+        var activity={tasks:[]};
+        var len = activityDom.find('.board-tasks').children().length;
+        for(var j=0; j<len; j++){
+            activity.tasks.push({subtasks:[]});
+        }
+        activities.push(activity);
+    }
+    console.log(activities);
     var release = {
         title: 'Release' + (boardSortableReleases.children().length + 1),
-        activities: storyMap.activities,
+        activities: activities,
     }
     var element = newReleaseWithSubstasks(release);
     boardSortableReleases.append(element);
@@ -529,10 +541,16 @@ function newBoardTasksOuter(tasks) {
 
 function newBoardTasks(tasks) {
     var element = $('<ul class="board-tasks ui-sortable"></ul>');
-    element.sortable({
-        connectWith: ".ui-sortable",
-        distance: 5,
-    });
+    if(TOURISTS_MODE){
+        element.sortable({
+            connectWith: ".board-tasks",
+            distance: 5,
+        });
+    }
+    // element.sortable({
+    //     connectWith: ".ui-sortable",
+    //     distance: 5,
+    // });
     if (tasks) {
         tasks.forEach(function (task, i) {
             element.append(newBoardTaskCard(task));
@@ -715,10 +733,16 @@ function newBoardSubTaskTask(task) {
 
 function newBoardSubTasks(subtasks) {
     var element = $('<ul class="board-subtasks ui-sortable"></ul>');
-    element.sortable({
-        connectWith: ".ui-sortable",
-        distance: 5,
-    });
+    if(TOURISTS_MODE){
+        element.sortable({
+            connectWith: ".board-subtasks",
+            distance: 5,
+        });
+    }
+    // element.sortable({
+    //     connectWith: ".ui-sortable",
+    //     distance: 5,
+    // });
     if (subtasks) {
         subtasks.forEach(function (subtask, i) {
             element.append(newBoardSubtaskCard(subtask));
