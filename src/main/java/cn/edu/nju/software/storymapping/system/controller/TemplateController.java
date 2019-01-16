@@ -53,8 +53,10 @@ public class TemplateController {
 
     private void setModel(ModelAndView modelAndView) {
         User user = UserUtil.currentUser();
-        modelAndView.addObject("username", user.getUsername());
-        modelAndView.addObject("phone", user.getPassword());
-        modelAndView.addObject("emial", user.getEmail());
+        if(user!=null) {
+            modelAndView.addObject("username", user.getUsername());
+            modelAndView.addObject("phone", user.getPassword());
+            modelAndView.addObject("email", user.getEmail());
+        }
     }
 }
