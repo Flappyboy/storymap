@@ -32,7 +32,7 @@ public class RegisterController {
     @Autowired
     private ActivityCardService activityCardService;
 
-    @PostMapping("/register")
+    @PostMapping("/pub/api/register")
     public Response register(User user) {
         if (StringUtils.isEmpty(user.getUsername())) {
             return Response.createDefaultResponse().fail("用户名不能为空！");
@@ -52,7 +52,7 @@ public class RegisterController {
         return Response.createDefaultResponse().success("注册成功！");
     }
 
-    @GetMapping("/validation")
+    @GetMapping("/pub/api/validation")
     public Response validation(String username) {
         if (username == null || "".equals(username.trim()))
             return Response.createDefaultResponse().fail("用户名不能为空！");

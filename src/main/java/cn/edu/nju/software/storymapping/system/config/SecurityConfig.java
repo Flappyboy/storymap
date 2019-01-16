@@ -20,13 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/lib/**", "/css/**", "/js/**", "/img/**", "/**/*.js", "/lang/*.json", "/**/*.css", "/**/*.js", "/**/*.map",
-                "/**/*.png", "/**/*.jpg","/**/*.ttf", "/**/*.eot", "/**/*.svg", "/**/*.woff", "/**/*.otf", "/**/*.ico", "/template/story-map/story-map.html?tourists=true");
+                "/**/*.png", "/**/*.jpg","/**/*.ttf", "/**/*.eot", "/**/*.svg", "/**/*.woff", "/**/*.otf", "/**/*.ico");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/index.html","/register", "/template/register.html","/mock/**", "/touristsmode/**").permitAll()
+                .antMatchers("/", "/index.html", "/pub/**", "/template/register.html", "/mock/**", "/touristsmode/**").permitAll()
                 .antMatchers("/trace/users/**","/swagger-ui.html","/swagger-resources/**","/images/**","/webjars/**","/v2/api-docs","/configuration/ui",
                         "/configuration/security").permitAll()
                 .anyRequest().authenticated()   // 其他地址的访问均需验证权限
