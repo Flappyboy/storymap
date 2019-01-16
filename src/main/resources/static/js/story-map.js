@@ -1314,6 +1314,7 @@ self.setInterval(function () {
             try {
                 if (!TOURISTS_MODE) {
                     func(callback);
+                }else{
                     callback();
                 }
             } catch (e) {
