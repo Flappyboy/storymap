@@ -70,4 +70,8 @@ public class ReleaseServiceImpl implements ReleaseService {
         return result;
     }
 
+    public String getReleaseOrder(Integer releaseId) {
+        return releaseMapper.getReleaseOrder(releaseId);
+    }
+
 }

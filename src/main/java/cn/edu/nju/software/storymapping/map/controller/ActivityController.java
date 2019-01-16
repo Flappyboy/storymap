@@ -23,8 +23,8 @@ public class ActivityController {
     public Response addActivity(ActivityDto dto) {
         if (dto == null)
             return Response.createDefaultResponse().fail("dto为null");
-        if (dto.getStoryMapId() == null)
-            return Response.createDefaultResponse().fail("dto中storyMapId为null");
+        if (dto.getStoryMapId() == null|| dto.getOrder() == null)
+            return Response.createDefaultResponse().fail("storyMapId或order为null");
         ActivityCard activityCard = wrapActivityDto(dto);
         activityCardService.addActivity(activityCard);
         dto.setId(new Long(activityCard.getId()));

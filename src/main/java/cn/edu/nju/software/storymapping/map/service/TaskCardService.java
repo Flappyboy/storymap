@@ -13,4 +13,6 @@ public interface TaskCardService {
 
     public List<TaskCard> getTaskCardByActivityId(Integer activityId);
 
+    public String getTaskOrder(Integer taskId);
+
 }

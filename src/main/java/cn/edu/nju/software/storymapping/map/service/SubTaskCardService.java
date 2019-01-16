@@ -5,7 +5,7 @@ import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 import java.util.List;
 
 public interface SubTaskCardService {
-    public List<SubTaskCard> getSubTaskCardByTaskId(Integer taskId);
+    public List<SubTaskCard> getSubTaskCardByTaskIdAndReleaseId(Integer taskId, Integer releaseId);
 
     public List<SubTaskCard> getSubTaskCardByReleaseId(Integer releaseId);
 
@@ -14,5 +14,7 @@ public interface SubTaskCardService {
     public void updateSubTaskCard(SubTaskCard subTaskCard);
 
     public void addSubTaskCard(SubTaskCard subTaskCard);
+
+    public String getSubTaskCardOrder(Integer subTaskCardId);
 
 }

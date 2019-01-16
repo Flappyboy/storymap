@@ -6,19 +6,21 @@ import cn.edu.nju.software.storymapping.map.entity.Release;
 import org.apache.ibatis.annotations.Param;
 
 public interface ReleaseMapper {
-	public void insert(Release release);
+    public void insert(Release release);
 
-	public void delete(Integer id);
-	
-	public void update(Release release);
-	
-	public Release getById(Integer id);
+    public void delete(Integer id);
 
-	public List<Release> listAll();
+    public void update(Release release);
 
-	public List<Release> listByStoryMapId(Integer id);
+    public Release getById(Integer id);
 
-	public void updateOrder(@Param("id") Integer id, @Param("order") String order);
+    public List<Release> listAll();
 
-	public Integer getStoryMapId(Integer releaseId);
+    public List<Release> listByStoryMapId(Integer id);
+
+    public void updateOrder(@Param("id") Integer id, @Param("order") String order);
+
+    public Integer getStoryMapId(Integer releaseId);
+
+    public String getReleaseOrder(Integer releaseId);
 }

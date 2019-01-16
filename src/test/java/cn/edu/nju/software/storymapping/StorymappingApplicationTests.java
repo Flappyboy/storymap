@@ -34,7 +34,7 @@ public class StorymappingApplicationTests {
 
     @Test
     public void contextLoads() {
-        System.out.println(activityCardService.getActivityOrder(33));
+        subTaskCardService.getSubTaskCardByTaskIdAndReleaseId(95,13);
     }
 
 

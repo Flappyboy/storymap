@@ -28,7 +28,12 @@
     <delete id="deleteSubTaskCard">
         delete from sub_task_card where id = #{id}
     </delete>
-    <select id="getSubTaskCardListByTaskId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+    <select id="getSubTaskCardListByTaskIdAndReleaseId"
+            resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where task_id = #{taskCardId} and release_id = #{releaseId} order by `order`
+    </select>
+    <select id="getSubTaskCardListByTaskId"
+            resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
         select * from sub_task_card where task_id = #{taskCardId} order by `order`
     </select>
     <select id="getSubTaskCardListByReleaseId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
@@ -41,6 +46,12 @@
     </update>
     <select id="getTaskCardId" resultType="integer">
         select task_id from sub_task_card where id =#{subTaskCardId}
+    </select>
+    <select id="getSubTaskCardOrder" resultType="string">
+        select `order` from sub_task_card where id = #{subTaskCardId}
+    </select>
+    <select id="getSubTaskCardById" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where id = #{subtaskCardId}
     </select>
 
 </mapper>

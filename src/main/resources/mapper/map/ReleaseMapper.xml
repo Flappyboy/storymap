@@ -65,5 +65,8 @@
     <select id="getStoryMapId" resultType="integer">
         select story_map_id from `release` where id = #{releaseId}
     </select>
+    <select id="getReleaseOrder" resultType="string">
+        select `order` from `release` where id = #{releaseId}
+     </select>
 
 </mapper>

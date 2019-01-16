@@ -46,4 +46,7 @@
     <select id="getActivityCardId" resultType="integer">
         select activity_id from task_card where id = #{taskCardId}
     </select>
+    <select id="getTaskOrder" resultType="string">
+        select `order` from task_card where id = #{taskId}
+    </select>
 </mapper>

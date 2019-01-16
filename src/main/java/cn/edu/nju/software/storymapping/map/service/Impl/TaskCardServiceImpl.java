@@ -23,6 +23,11 @@ public class TaskCardServiceImpl implements TaskCardService {
         return list;
     }
 
+    @Override
+    public String getTaskOrder(Integer taskId) {
+        return taskCardMapper.getTaskOrder(taskId);
+    }
+
     //更新taskcard
     public void updateTaskCard(TaskCard taskCard) {
         taskCardMapper.updateTaskCard(taskCard);

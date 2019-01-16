@@ -65,4 +65,5 @@
     <select id="listByUserId" resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
 		select * from story_map where user_id = #{userId}
 	</select>
+
 </mapper>

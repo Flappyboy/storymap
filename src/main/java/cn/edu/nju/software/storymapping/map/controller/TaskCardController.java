@@ -20,8 +20,8 @@ public class TaskCardController {
     public Response addTask(TaskDto dto) {
         if (dto == null)
             return Response.createDefaultResponse().fail("dto为null");
-        if (dto.getActivityId() == null)
-            return Response.createDefaultResponse().fail("dto中ActivityId为null");
+        if (dto.getActivityId() == null||dto.getOrder() == null)
+            return Response.createDefaultResponse().fail("ActivityId或order为null");
         TaskCard taskCard = wrapTaskDto(dto);
         taskCardService.createTaskCard(taskCard);
         dto.setId(taskCard.getId().longValue());
@@ -34,6 +34,8 @@ public class TaskCardController {
             return Response.createDefaultResponse().fail("dto为null");
         if (dto.getId() == null)
             return Response.createDefaultResponse().fail("dto中id为null");
+        String order = taskCardService.getTaskOrder(dto.getId().intValue());
+        dto.setOrder((long) Integer.parseInt(order));
         TaskCard taskCard = wrapTaskDto(dto);
         taskCardService.updateTaskCard(taskCard);
         return Response.createDefaultResponse().success(dto);

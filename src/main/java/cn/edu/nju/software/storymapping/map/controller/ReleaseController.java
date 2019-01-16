@@ -20,8 +20,8 @@ public class ReleaseController {
     public Response addRelease(ReleaseDto dto) {
         if (dto == null)
             return Response.createDefaultResponse().fail("dto为null");
-        if (dto.getStoryMapId() == null)
-            return Response.createDefaultResponse().fail("dto中storyMapId为null");
+        if (dto.getStoryMapId() == null || dto.getOrder() == null)
+            return Response.createDefaultResponse().fail("storyMapId或order为null");
         Release release = wrapRelease(dto);
         releaseService.addRelease(release);
         dto.setId(release.getId().longValue());
@@ -34,6 +34,8 @@ public class ReleaseController {
             return Response.createDefaultResponse().fail("dto为null");
         if (dto.getId() == null)
             return Response.createDefaultResponse().fail("Id为null");
+        String order = releaseService.getReleaseOrder(dto.getId().intValue());
+        dto.setOrder((long) Integer.parseInt(order));
         Release release = wrapRelease(dto);
         releaseService.updateRelease(release);
         return Response.createDefaultResponse().success(dto);

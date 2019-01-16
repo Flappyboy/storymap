@@ -21,8 +21,8 @@ public class SubTaskCardController {
     public Response addSubtask(SubtaskDto dto) {
         if (dto == null)
             return Response.createDefaultResponse().fail("dto为null");
-        if (dto.getTaskId() == null)
-            return Response.createDefaultResponse().fail("dto中taskId为null");
+        if (dto.getTaskId() == null || dto.getOrder() == null)
+            return Response.createDefaultResponse().fail("taskId或order为null");
         SubTaskCard subTaskCard = wrapSubTaskDto(dto);
         subTaskCardService.addSubTaskCard(subTaskCard);
         dto.setId(subTaskCard.getId().longValue());
@@ -36,6 +36,8 @@ public class SubTaskCardController {
             return Response.createDefaultResponse().fail("dto为null");
         if (dto.getId() == null)
             return Response.createDefaultResponse().fail("dto中Id为null");
+        String order = subTaskCardService.getSubTaskCardOrder(dto.getId().intValue());
+        dto.setOrder((long) Integer.parseInt(order));
         SubTaskCard subTaskCard = wrapSubTaskDto(dto);
         subTaskCardService.updateSubTaskCard(subTaskCard);
         System.out.println("加入完毕");

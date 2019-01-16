@@ -18,5 +18,7 @@ public interface ReleaseService {
 
     List<Release> listReleaseByStoryMapId(int id);
 
+    String getReleaseOrder(Integer releaseId);
+
 
 }
