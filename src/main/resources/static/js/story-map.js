@@ -327,8 +327,15 @@ $(function () {
         }
     });
 });
-
+function refresh() {
+    location.reload();
+}
 function init(storyMap) {
+    if(!storyMap.title){
+        storyMap.title="Story Map";
+    }
+    $('title').text(storyMap.title);
+    $('#title').text(storyMap.title);
     $("#board").draggable(
         {
             distance: 5,

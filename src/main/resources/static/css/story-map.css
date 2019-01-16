@@ -1,6 +1,10 @@
 ol, ul {
     list-style: none;
 }
+#title{
+    min-width: 70%;
+    min-height: 33px;
+}
 /*#wrapper {*/
     /*position: unset;*/
     /*!*top: 60px;*!*/

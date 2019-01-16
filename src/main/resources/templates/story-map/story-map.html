@@ -23,9 +23,20 @@
 </head>
 <body>
 <div id="operate">
+
+    <br>
+    <div type="margin=5px;">
+        <center>
+            <h1 id="title" class="btn btn-default" onclick="refresh()">
+                <i class="fa fa-spinner fa-spin"></i>
+                Loading....
+            </h1>
+        </center>
+    </div>
+    <br>
     <br>
     <div class="btn-group-vertical" type="margin=5px;" role="group" aria-label="...">
-        <button type="button" class="btn btn-default" onclick="addRelease()">添加Release</button>
+        <button type="button" class="btn btn-primary" onclick="addRelease()">添加Release</button>
     </div>
     <br>
     <br>
@@ -41,17 +52,17 @@
 </div>
 <div id="right-content" class="board-zoom-21 wrapper-pinned">
     <div id="main" class="main-pinned">
-    <div id="board">
-        <div id="board-head">
-            <ul id="board-activities">
-            </ul>
-        </div>
-        <div id="board-body">
-            <span class="board-lines"></span>
-            <div id="board-sortable-releases">
+        <div id="board">
+            <div id="board-head">
+                <ul id="board-activities">
+                </ul>
+            </div>
+            <div id="board-body">
+                <span class="board-lines"></span>
+                <div id="board-sortable-releases">
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 </body>
