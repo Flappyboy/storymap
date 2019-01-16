@@ -1,7 +1,11 @@
 package cn.edu.nju.software.storymapping.system.controller;
 
 
+import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
+import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 import cn.edu.nju.software.storymapping.map.entity.Workspace;
+import cn.edu.nju.software.storymapping.map.service.ActivityCardService;
+import cn.edu.nju.software.storymapping.map.service.StoryMapService;
 import cn.edu.nju.software.storymapping.map.service.WorkspaceService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.system.entity.User;
@@ -22,6 +26,12 @@ public class RegisterController {
     @Autowired
     private WorkspaceService workspaceService;
 
+    @Autowired
+    private StoryMapService storyMapService;
+
+    @Autowired
+    private ActivityCardService activityCardService;
+
     @PostMapping("/register")
     public Response register(User user) {
         if (StringUtils.isEmpty(user.getUsername())) {
@@ -38,9 +48,7 @@ public class RegisterController {
         //插入角色
         userService.insertUser(user);
         //初始化一个workspace
-        Workspace workspace = new Workspace();
-        initWorkSpace(workspace, user.getId());
-        workspaceService.CreateWorkSapce(workspace);
+        initWorkSpace(user.getId());
         return Response.createDefaultResponse().success("注册成功！");
     }
 
@@ -59,11 +67,26 @@ public class RegisterController {
         return user == null ? false : true;
     }
 
-    public void initWorkSpace(Workspace workspace, Integer userId) {
+    public void initWorkSpace(Integer userId) {
+        Workspace workspace = new Workspace();
         workspace.setDescription("default");
         workspace.setCreateTime(new Date());
         workspace.setName("default workspace");
         workspace.setUserId(userId);
+        //创建workspace
+        workspaceService.CreateWorkSapce(workspace);
+        //在workspace里面需要创建一个storyMap
+        StoryMap storyMap = new StoryMap();
+        storyMap.setWorkSpaceId(workspace.getId());
+        storyMap.setUserId(userId);
+        storyMapService.createStoryMap(storyMap);
+        //StoryMap中需要创建一个activity
+        ActivityCard activityCard = new ActivityCard();
+        activityCard.setCreateTime(new Date());
+        activityCard.setCreatorId(userId);
+        activityCard.setStoryMapId(storyMap.getId());
+        activityCard.setOrder("0");
+        activityCardService.addActivity(activityCard);
     }
 
 }

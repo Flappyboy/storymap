@@ -16,4 +16,6 @@ public interface StoryMapService {
     public void createStoryMap(StoryMap storyMap);
 
     public void updateStoryMap(StoryMap storyMap);
+
+
 }

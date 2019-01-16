@@ -20,6 +20,5 @@
     </insert>
     <delete id="deleteRole" parameterType="Integer">
         delete from role where id = #{id}
-
     </delete>
 </mapper>

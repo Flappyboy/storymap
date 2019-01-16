@@ -66,4 +66,15 @@
 		select * from story_map where user_id = #{userId}
 	</select>
 
+    <insert id="addUserStoryMapReleation">
+        insert into user_storymap
+        (user_id,story_map_id,authority)
+        values
+        (#{userId},#{storyMapId},#{authority})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
+
+
 </mapper>

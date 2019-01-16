@@ -48,7 +48,9 @@ public class StoryMapServiceImpl implements StoryMapService {
     public void createStoryMap(StoryMap storyMap) {
         //创建一个storymap
         storyMapMapper.insert(storyMap);
-        //
+        //记录user和storyMap一一对应的关系，创建者的权限就是""
+        storyMapMapper.addUserStoryMapReleation(storyMap.getUserId(), storyMap.getId(), StoryMap.AUTHORITY_READ_WRITE);
+
     }
 
     //更新StoryMap
