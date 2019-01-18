@@ -1,15 +1,22 @@
 package cn.edu.nju.software.storymapping.system.controller;
 
+import cn.edu.nju.software.storymapping.map.entity.Workspace;
+import cn.edu.nju.software.storymapping.map.service.WorkspaceService;
 import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 public class TemplateController {
+    @Autowired
+    WorkspaceService workspaceService;
 
     @RequestMapping(value = "/template/{page}.html", method = RequestMethod.GET)
     public ModelAndView template(@PathVariable String page) {
@@ -53,10 +60,12 @@ public class TemplateController {
 
     private void setModel(ModelAndView modelAndView) {
         User user = UserUtil.currentUser();
-        if(user!=null) {
+        if (user != null) {
+            List<Workspace> workspaceList = workspaceService.getWorkSpaceById(user.getId());
             modelAndView.addObject("username", user.getUsername());
             modelAndView.addObject("phone", user.getPassword());
             modelAndView.addObject("email", user.getEmail());
+            modelAndView.addObject("workspaceList", workspaceList);
         }
     }
 }

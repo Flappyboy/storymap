@@ -23,6 +23,6 @@ public class TaskDto extends ItemDto implements Cloneable {
         for (SubtaskDto subtask : subtasks) {
             list.add(subtask.clone());
         }
-        return new TaskDto(new Long(getId()), getTitle(), list, activityId);
+        return new TaskDto(getId(), getTitle(), list, activityId);
     }
 }

@@ -24,6 +24,6 @@ public class ActivityDto extends ItemDto implements Cloneable {
         for (TaskDto task : tasks) {
             list.add(task.clone());
         }
-        return new ActivityDto(new Long(getId()), getTitle(), list, storyMapId);
+        return new ActivityDto(getId(), getTitle(), list, storyMapId);
     }
 }

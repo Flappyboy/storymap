@@ -19,6 +19,6 @@ public class SubtaskDto extends ItemDto implements Cloneable {
     }
 
     public SubtaskDto clone() {
-        return new SubtaskDto(new Long(getId()), getTitle(), new Long(getReleaseId()), taskId);
+        return new SubtaskDto(getId(), getTitle(), new Long(getReleaseId()), taskId);
     }
 }
