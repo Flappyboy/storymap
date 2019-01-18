@@ -63,7 +63,7 @@ public class TemplateController {
         if (user != null) {
             List<Workspace> workspaceList = workspaceService.getWorkSpaceById(user.getId());
             modelAndView.addObject("username", user.getUsername());
-            modelAndView.addObject("phone", user.getPassword());
+            modelAndView.addObject("phone", user.getPhone());
             modelAndView.addObject("email", user.getEmail());
             modelAndView.addObject("workspaceList", workspaceList);
         }

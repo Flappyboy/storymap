@@ -19,7 +19,7 @@ padding : 108px 0;
 .login-sec h2:after{content:" "; width:100px; height:5px; background:#FEB58A; display:block; margin-top:20px; border-radius:3px; margin-left:auto;margin-right:auto}
 .btn-login{background: #DE6262; color:#fff; font-weight:600;float:right;}
 .btn-register{position: relative;}
-.btn-tourist{position: relative;float:right;}
+.btn-tourist{position: relative;margin-top:90px;float:right;}
 .banner-text{width:70%; position:absolute; bottom:40px; padding-left:20px;}
 .banner-text h2{color:#fff; font-weight:600;}
 .banner-text h2:after{content:" "; width:100px; height:5px; background:#FFF; display:block; margin-top:20px; border-radius:3px;}
