@@ -50,7 +50,9 @@ public class UserController {
 
     @PostMapping("/update")
     public String update(User user) {
+        User currentUser = UserUtil.currentUser();
+        user.setId(currentUser.getId());
         userService.update(user);
-        return "workspaces";
+        return "redirect:/template/workspaces.html";
     }
 }

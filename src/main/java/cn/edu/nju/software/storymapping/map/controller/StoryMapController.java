@@ -36,6 +36,11 @@ public class StoryMapController {
     @GetMapping("/storymap/{id}")
     public Response getStoryMapById(@PathVariable("id") int id) {
         StoryMap storyMap = storyMapService.getStoryMapById(id);
+        StoryMapDto storyMapDto = transferToStoryMapDto(storyMap);
+        return Response.createDefaultResponse().success(storyMapDto);
+    }
+
+    public StoryMapDto transferToStoryMapDto(StoryMap storyMap) {
         //数据库中的格式
         List<ActivityCard> activityCardList = storyMap.getActivityCardList();
         List<Release> releaseList = storyMap.getReleaseList();
@@ -64,9 +69,20 @@ public class StoryMapController {
             releaseDtoList.add(new ReleaseDto(new Long(release.getId()), release.getName(), activityDtoList, release.getStoryMapId()));
         }
         StoryMapDto storyMapDto = new StoryMapDto(new Long(storyMap.getId()), storyMap.getName(), activityDtoList, releaseDtoList, storyMap.getWorkSpaceId());
-
-        return Response.createDefaultResponse().success(storyMapDto);
+        return storyMapDto;
     }
+
+    @GetMapping("/storymap/workspace/{workspaceId}")
+    public Response getStoryMapByWorkSpaceId(@PathVariable("workspaceId") int workspaceId) {
+        List<StoryMap> storyMapList = storyMapService.getStoryMapByWorkSpaceId(workspaceId);
+        List<StoryMapDto> storyMapDtoList = new ArrayList<>();
+        for (StoryMap storyMap : storyMapList) {
+            storyMapDtoList.add(transferToStoryMapDto(storyMap));
+        }
+        WorkspaceDto workspaceDto = new WorkspaceDto(new Integer(workspaceId).longValue(), null, storyMapDtoList);
+        return Response.createDefaultResponse().success(workspaceDto);
+    }
+
 
 }
 

@@ -36,14 +36,12 @@ public class StorymappingApplicationTests {
     @Autowired
     UserService userService;
 
+    @Autowired
+    StoryMapMapper storyMapMapper;
+
     @Test
     public void contextLoads() {
-        User user = new User();
-        user.setId(14);
-        user.setUsername("ddd");
-        user.setPassword("ccc");
-        user.setEmail("abc@qq.com");
-        userService.update(user);
+        System.out.println(storyMapMapper.listByWorkSpaceId(1));
 
     }
 

@@ -58,7 +58,7 @@
 	</select>
 
     <select id="listByWorkSpaceId" parameterType="Integer"
-            resultType="cn.edu.nju.software.storymapping.map.entity.StoryMap">
+            resultMap="StoryMapMap">
 		select * from story_map where work_space_id= #{id}
 	</select>
 
