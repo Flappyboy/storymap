@@ -7,15 +7,16 @@
     <title>userInfo</title>
 </head>
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         $("#myModal").modal({
             keyboard: true
         });
     });
 </script>
 <body>
- <!-- Modal -->
-    <form method="post" th:action="@{/sys/user}" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<!-- Modal -->
+<form method="post" th:action="@{/sys/update}" class="form-horizontal" role="form" id="form_data"
+      onsubmit="return check_form()" style="margin: 20px;">
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -28,13 +29,14 @@
                         <div class="form-group">
                             <label for="username" class="col-sm-3 control-label">用户名</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="username" id="username" th:value="${username}">
+                                <input type="text" class="form-control" name="username" id="username"
+                                       th:value="${username}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="phone" class="col-sm-3 control-label">联系电话</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="phone"  id="phone" th:value="${phone}">
+                                <input type="text" class="form-control" name="phone" id="phone" th:value="${phone}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -48,13 +50,12 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <input type="hidden" name="_method" value="PUT"/>
                     <input type="submit" class="btn btn-primary" value="提交"><span id="tip"> </span>
                 </div>
             </div>
         </div>
     </div>
-    </form>
+</form>
 </body>
 
 </html>

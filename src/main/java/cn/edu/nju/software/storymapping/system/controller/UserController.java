@@ -48,7 +48,7 @@ public class UserController {
         return "user/index";
     }
 
-    @PutMapping("/user")
+    @PostMapping("/update")
     public String update(User user) {
         userService.update(user);
         return "workspaces";
