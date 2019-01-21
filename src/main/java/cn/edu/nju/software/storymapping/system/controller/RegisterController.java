@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
 
@@ -40,7 +41,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(User user) {
+    public ModelAndView register(User user, ModelAndView modelAndView) {
         String error=null;
         if (StringUtils.isEmpty(user.getUsername())) {
             error="用户名不能为空！";
@@ -52,7 +53,9 @@ public class RegisterController {
             error="用户名已存在！";
         }
         if(error!=null) {
-            return "register";
+            modelAndView.setViewName("register");
+            modelAndView.addObject("error",error);
+            return modelAndView;
         }
         //创建角色
         user.setCreateTime(new Date());
@@ -60,7 +63,9 @@ public class RegisterController {
         userService.insertUser(user);
         //初始化一个workspace
         initWorkSpace(user.getId());
-        return "login";
+        modelAndView.setViewName("login");
+        modelAndView.addObject("register","success");
+        return modelAndView;
     }
 
     @GetMapping("/pub/api/validation")
