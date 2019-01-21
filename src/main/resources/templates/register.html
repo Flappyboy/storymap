@@ -15,6 +15,7 @@
         <div class="row">
             <div class="col-md-4 register-sec">
                 <h2 class="text-center">Register Now</h2>
+                <p class="error" th:text="${error}"></p>
                 <form class="register-form" id="form-test" th:action="@{/register}"  method="post">
                     <div class="form-group">
                         <label for="username" class="text-uppercase">Username</label>
