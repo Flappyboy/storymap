@@ -6,6 +6,7 @@ import java.util.List;
 import cn.edu.nju.software.storymapping.map.service.*;
 import cn.edu.nju.software.storymapping.system.dao.UserMapper;
 import cn.edu.nju.software.storymapping.system.entity.User;
+import cn.edu.nju.software.storymapping.system.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,18 @@ public class StorymappingApplicationTests {
     @Autowired
     TaskCardService taskCardService;
 
+    @Autowired
+    UserService userService;
+
     @Test
     public void contextLoads() {
-        subTaskCardService.getSubTaskCardByTaskIdAndReleaseId(95,13);
+        User user = new User();
+        user.setId(14);
+        user.setUsername("ddd");
+        user.setPassword("ccc");
+        user.setEmail("abc@qq.com");
+        userService.update(user);
+
     }
 
 

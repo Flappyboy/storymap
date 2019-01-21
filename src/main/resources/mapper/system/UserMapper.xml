@@ -7,14 +7,17 @@
     </select>
 
     <update id="updateUser" parameterType="cn.edu.nju.software.storymapping.system.entity.User">
-        update user set
-        username = #{username},
-        password = #{password},
-        description = #{description},
-        phone = #{phone},
-        email = #{email},
-        create_time=#{createTime},
-        image_id=#{imageId} where id = #{id}
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username!=null">username = #{username},</if>
+            <if test="password!=null">password = #{password},</if>
+            <if test="description!=null">description = #{description},</if>
+            <if test="phone!=null">phone = #{phone},</if>
+            <if test="email!=null">email = #{email},</if>
+            <if test="createTime!=null">create_time=#{createTime},</if>
+            <if test="imageId!=null">image_id=#{imageId},</if>
+        </trim>
+        where id = #{id}
     </update>
     <insert id="insertUser" parameterType="cn.edu.nju.software.storymapping.system.entity.User">
         insert into user

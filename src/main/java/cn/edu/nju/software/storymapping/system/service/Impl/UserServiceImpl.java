@@ -37,4 +37,14 @@ public class UserServiceImpl implements UserService {
         int result = userMapper.insertUser(user);
         return result;
     }
+
+    @Override
+    public void update(User user) {
+        if (user.getPassword() != null) {
+            //加密
+            String encodePassword = encoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
+        }
+        userMapper.updateUser(user);
+    }
 }

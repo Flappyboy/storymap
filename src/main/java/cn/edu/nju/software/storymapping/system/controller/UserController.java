@@ -1,22 +1,26 @@
 package cn.edu.nju.software.storymapping.system.controller;
 
+import cn.edu.nju.software.storymapping.system.dao.UserMapper;
 import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.system.service.UserService;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/sys")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @ResponseBody
     @GetMapping("/getUser")
-    public User GetUser(){
+    public User GetUser() {
         //MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.queryByUsername(UserUtil.currentUserName());
     }
@@ -27,6 +31,7 @@ public class UserController {
      * @param id
      * @return
      */
+    @ResponseBody
     @GetMapping("/users/{id}")
     @ApiOperation(value = "获取用户详细信息", notes = "根据url的id来获取用户详细信息")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long", paramType = "path")
@@ -37,9 +42,15 @@ public class UserController {
     /**
      * 个人中心
      */
+    @ResponseBody
     @GetMapping("/index")
     public String index() {
         return "user/index";
     }
 
+    @PutMapping("/user")
+    public String update(User user) {
+        userService.update(user);
+        return "workspaces";
+    }
 }
