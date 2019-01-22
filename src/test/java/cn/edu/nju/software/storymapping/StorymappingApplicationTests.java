@@ -17,6 +17,7 @@ import cn.edu.nju.software.storymapping.map.dao.ReleaseMapper;
 import cn.edu.nju.software.storymapping.map.dao.StoryMapMapper;
 import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
 import cn.edu.nju.software.storymapping.map.entity.Release;
+import cn.edu.nju.software.storymapping.map.entity.Role;
 import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 
@@ -39,10 +40,18 @@ public class StorymappingApplicationTests {
     @Autowired
     StoryMapMapper storyMapMapper;
 
+    @Autowired
+    RoleService roleService;
     @Test
     public void contextLoads() {
-        System.out.println(storyMapMapper.listByWorkSpaceId(1));
-
+        System.out.println("-------------start---------");
+        Role role=new Role();
+        role.setImageId(1);
+        role.setName("b");
+        role.setStoryMapId(1);
+        
+        roleService.insertRole(role);
+        System.out.println("-------------end---------");
     }
 
 

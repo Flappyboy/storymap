@@ -8,4 +8,8 @@ public interface RoleService {
     void deleteRole(Integer id);
 
     void insertRole(Role role);
+    
+    void addRole_Activity(Integer rid,Integer aid);
+
+    void deleteRole_Activity(Integer id);
 }

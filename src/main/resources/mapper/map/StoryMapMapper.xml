@@ -8,8 +8,8 @@
         <result column="work_space_id" property="workSpaceId"/>
         <result column="user_id" property="userId"/>
         <result column="description" property="description"/>
-        <!-- 	<collection property="roleList" column="id"
-                    select="cn.edu.nju.software.storymapping.map.dao.RoleMapper.*****" />-->
+        <collection property="roleList" column="id"
+                    select="cn.edu.nju.software.storymapping.map.dao.RoleMapper.listByStoryMapId" />
         <collection property="activityCardList" column="id"
                     select="cn.edu.nju.software.storymapping.map.dao.ActivityCardMapper.getActivityCardByStoryMapId"/>
         <collection property="releaseList" column="id"

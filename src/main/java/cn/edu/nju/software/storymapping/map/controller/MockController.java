@@ -50,7 +50,7 @@ public class MockController {
             for (int j = 0; j < num; j++) {
                 list.add(iteratorTask.next());
             }
-            activityList.add(new ActivityDto((long) i, "activity " + i, list, 1));
+//            activityList.add(new ActivityDto((long) i, "activity " + i, list, 1));
         }
 
         List<ReleaseDto> releases = new ArrayList<>();
@@ -59,10 +59,10 @@ public class MockController {
         releases.add(releaseDto0);
         releases.add(releaseDto1);
 
-        StoryMapDto storyMapDto = new StoryMapDto(1l, "story map", activityList, releases, 1);
+//        StoryMapDto storyMapDto = new StoryMapDto(1l, "story map", activityList, releases, 1);
 
         Response response = new Response();
-        response.success(storyMapDto);
+//        response.success(storyMapDto);
 
         return response;
     }

@@ -8,4 +8,10 @@ public interface RoleMapper {
     public void deleteRole(Integer id);
 
     public void insertRole(Role role);
+    
+    public void addRole_Activity(Integer rid,Integer aid);
+    
+    public void deleteRole_Activity(Integer id);
+    
+    public void listByStoryMapId(Integer id);
 }
