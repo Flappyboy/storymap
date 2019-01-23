@@ -30,10 +30,10 @@
     </div>
 </nav>
 <div class="list-group">
-    <a href="/template/storymap.html" class="list-group-item active">
-        <h4 class="list-group-item-heading">工作空间名称</h4>
-        <p class="list-group-item-text">story-map数量</p>
-    </a>
+    <a th:each="m : ${workspaceList}" class="list-group-item active" th:href='@{/template/storymap.html(workspaceId=${m.id})}'>
+		<h4 th:text="${m.name}" class="list-group-item-heading"/>
+		<p th:text="${m.description}" class="list-group-item-text"/>
+	</a>
 </div>
 <div id="userInfo"></div>
 </body>
@@ -44,7 +44,6 @@ $(document).ready(function(){
           $('#myModal').on('hide.bs.modal', function () {//模态框关闭时触发,刷新父页面
             window.location.reload()
           })
-        //window.location.reload()
       });
     })
 });

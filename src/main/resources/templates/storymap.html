@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Story maps</title>
+    <script th:src="@{/js/storymap.js}"></script>
     <link rel="stylesheet" th:href="@{/css/storymap.css}">
 </head>
+
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
@@ -19,7 +21,6 @@
                     <a href="#" class="dropdown-toggle account" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a  href="/template/workspaces.html">workspaces</a></li>
-                        <li><a id="pro">Profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Logout</a></li>
                     </ul>
@@ -29,23 +30,8 @@
     </div>
 </nav>
 <div class="list-group">
-    <a href="#" class="list-group-item active">
-        <h4 class="list-group-item-heading">story map名称</h4>
-        <p class="list-group-item-text">story数量</p>
-    </a>
+
 </div>
 <div id="userInfo"></div>
 </body>
-<script>
-$(document).ready(function(){
-    $("#pro").click(function(){
-      $("#userInfo").load('/template/user-Info.html',function() {
-          $('#myModal').on('hide.bs.modal', function () {//模态框关闭时触发,刷新父页面
-            window.location.reload()
-          })
-        //window.location.reload()
-      });
-    })
-});
-</script>
 </html>
