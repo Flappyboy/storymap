@@ -18,6 +18,14 @@ public class TemplateController {
     @Autowired
     WorkspaceService workspaceService;
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView defaultPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("workspaces");
+        setModel(modelAndView);
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/template/{page}.html", method = RequestMethod.GET)
     public ModelAndView template(@PathVariable String page) {
         ModelAndView modelAndView = new ModelAndView();
