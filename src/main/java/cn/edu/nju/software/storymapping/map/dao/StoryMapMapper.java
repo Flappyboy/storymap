@@ -21,4 +21,6 @@ public interface StoryMapMapper {
     public List<StoryMap> listByUserId(Integer userId);
 
     public void addUserStoryMapReleation(@Param("userId") Integer userId, @Param("storyMapId") Integer storyMapId, @Param("authority") String authority);
+
+    public String getAuthorityForStorymap(@Param("userId") Integer userId, @Param("storyMapId") Integer storyMapId);
 }

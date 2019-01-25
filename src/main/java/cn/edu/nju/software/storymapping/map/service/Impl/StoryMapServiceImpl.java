@@ -58,5 +58,10 @@ public class StoryMapServiceImpl implements StoryMapService {
         storyMapMapper.update(storyMap);
     }
 
+    @Override
+    public String getAuthorityForStorymap(Integer userId, Integer storyMapId) {
+        return storyMapMapper.getAuthorityForStorymap(userId, storyMapId);
+    }
+
 
 }

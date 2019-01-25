@@ -42,16 +42,10 @@ public class StorymappingApplicationTests {
 
     @Autowired
     RoleService roleService;
+
     @Test
     public void contextLoads() {
-        System.out.println("-------------start---------");
-        Role role=new Role();
-        role.setImageId(1);
-        role.setName("b");
-        role.setStoryMapId(1);
-        
-        roleService.insertRole(role);
-        System.out.println("-------------end---------");
+        System.out.println(storyMapMapper.getAuthorityForStorymap(1, 1));
     }
 
 
