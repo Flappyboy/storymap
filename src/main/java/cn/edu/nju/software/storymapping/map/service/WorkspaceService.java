@@ -5,14 +5,16 @@ import cn.edu.nju.software.storymapping.map.entity.Workspace;
 import java.util.List;
 
 public interface WorkspaceService {
-    public void deleteWorkSpaceById(Integer id);
+    void deleteWorkSpaceById(Integer id);
 
-    public List<Workspace> getWorkSpaceById(Integer userId);
+    List<Workspace> getWorkSpaceById(Integer userId);
 
-    public void updateWorkSapce(Workspace workspace);
+    void updateWorkSapce(Workspace workspace);
 
-    public void CreateWorkSapce(Workspace workspace);
+    void createWorkSpace(Workspace workspace);
 
-    public int getWorkspaceCount(Integer userId, Integer workspaceId);
+    void createWorkSpace(Integer userId);
+
+    int getWorkspaceCount(Integer userId, Integer workspaceId);
 
 }

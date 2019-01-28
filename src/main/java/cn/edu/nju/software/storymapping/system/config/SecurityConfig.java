@@ -2,6 +2,7 @@ package cn.edu.nju.software.storymapping.system.config;
 
 import cn.edu.nju.software.storymapping.system.support.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,12 +11,18 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -39,7 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds(1209600)
+                //指定记住登录信息所使用的数据源
+                .tokenRepository(tokenRepository());
     }
 
     @Override
@@ -50,5 +62,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JdbcTokenRepositoryImpl tokenRepository(){
+        JdbcTokenRepositoryImpl j=new JdbcTokenRepositoryImpl();
+        j.setDataSource(dataSource);
+        return j;
     }
 }

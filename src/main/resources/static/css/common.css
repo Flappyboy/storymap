@@ -1,0 +1,31 @@
+.navbar {
+    border-radius: 0px;
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.storymap-close{
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    cursor: pointer;
+}
+.storymap-close:hover{
+    color: #fc6767;
+}
+
+.storymap-skip{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 90%;
+    height: 100%;
+}

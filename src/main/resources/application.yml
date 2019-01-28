@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: dev
+  session:
+    jdbc:
+      initialize-schema: ALWAYS
+    store-type: jdbc
 
 server:
   port: 8090

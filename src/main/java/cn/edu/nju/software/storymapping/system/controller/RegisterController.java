@@ -29,12 +29,6 @@ public class RegisterController {
     @Autowired
     private WorkspaceService workspaceService;
 
-    @Autowired
-    private StoryMapService storyMapService;
-
-    @Autowired
-    private ActivityCardService activityCardService;
-
     @GetMapping("/register")
     public String registerPage(){
         return "register";
@@ -62,7 +56,8 @@ public class RegisterController {
         //插入角色
         userService.insertUser(user);
         //初始化一个workspace
-        initWorkSpace(user.getId());
+//        initWorkSpace(user.getId());
+        workspaceService.createWorkSpace(user.getId());
         modelAndView.setViewName("login");
         modelAndView.addObject("register","success");
         return modelAndView;
@@ -84,27 +79,27 @@ public class RegisterController {
         return user == null ? false : true;
     }
 
-    public void initWorkSpace(Integer userId) {
-        Workspace workspace = new Workspace();
-        workspace.setDescription("default");
-        workspace.setCreateTime(new Date());
-        workspace.setName("default workspace");
-        workspace.setUserId(userId);
-        //创建workspace
-        workspaceService.CreateWorkSapce(workspace);
-        //在workspace里面需要创建一个storyMap
-        StoryMap storyMap = new StoryMap();
-        storyMap.setWorkSpaceId(workspace.getId());
-        storyMap.setUserId(userId);
-        storyMap.setName("storymap");
-        storyMapService.createStoryMap(storyMap);
-        //StoryMap中需要创建一个activity
-        ActivityCard activityCard = new ActivityCard();
-        activityCard.setCreateTime(new Date());
-        activityCard.setCreatorId(userId);
-        activityCard.setStoryMapId(storyMap.getId());
-        activityCard.setOrder("0");
-        activityCardService.addActivity(activityCard);
-    }
+//    public void initWorkSpace(Integer userId) {
+//        Workspace workspace = new Workspace();
+//        workspace.setDescription("default");
+//        workspace.setCreateTime(new Date());
+//        workspace.setName("default workspace");
+//        workspace.setUserId(userId);
+//        //创建workspace
+//        workspaceService.CreateWorkSapce(workspace);
+//        //在workspace里面需要创建一个storyMap
+//        StoryMap storyMap = new StoryMap();
+//        storyMap.setWorkSpaceId(workspace.getId());
+//        storyMap.setUserId(userId);
+//        storyMap.setName("storymap");
+//        storyMapService.createStoryMap(storyMap);
+//        //StoryMap中需要创建一个activity
+//        ActivityCard activityCard = new ActivityCard();
+//        activityCard.setCreateTime(new Date());
+//        activityCard.setCreatorId(userId);
+//        activityCard.setStoryMapId(storyMap.getId());
+//        activityCard.setOrder("0");
+//        activityCardService.addActivity(activityCard);
+//    }
 
 }

@@ -12,8 +12,9 @@ import java.util.List;
 public class WorkspaceDto extends ItemDto {
     List<StoryMapDto> storyMaps;
 
-    public WorkspaceDto(Long id, String title, List<StoryMapDto> storyMaps) {
-        super(id, title);
+    public WorkspaceDto(Long id, String title, String desc, List<StoryMapDto> storyMaps) {
+        super(id, title, desc);
+        setDesc(desc);
         this.storyMaps = storyMaps;
     }
 }

@@ -11,10 +11,17 @@ import lombok.ToString;
 public class ItemDto {
     Long id;
     String title;
+    String desc;
     Long order;
 
     public ItemDto(Long id, String title) {
         this.id = id;
         this.title = title;
+    }
+
+    public ItemDto(Long id, String title, String desc) {
+        this.id = id;
+        this.title = title;
+        this.desc = desc;
     }
 }

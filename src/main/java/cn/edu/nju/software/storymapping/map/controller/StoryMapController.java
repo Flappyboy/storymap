@@ -138,7 +138,7 @@ public class StoryMapController {
         for (StoryMap storyMap : storyMapList) {
             storyMapDtoList.add(transferToStoryMapDto(storyMap));
         }
-        WorkspaceDto workspaceDto = new WorkspaceDto(new Integer(workspaceId).longValue(), null, storyMapDtoList);
+        WorkspaceDto workspaceDto = new WorkspaceDto(new Integer(workspaceId).longValue(),null, null, storyMapDtoList);
         return Response.createDefaultResponse().success(workspaceDto);
     }
 

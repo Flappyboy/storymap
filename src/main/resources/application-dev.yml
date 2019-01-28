@@ -3,10 +3,6 @@ spring:
     include: devdb
   thymeleaf:
     cache: false
-  session:
-    jdbc:
-      initialize-schema: ALWAYS
-    store-type: jdbc
 
 
 logging:
