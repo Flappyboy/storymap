@@ -23,14 +23,12 @@
             parameterType="cn.edu.nju.software.storymapping.map.entity.Workspace">
 		update work_space set
 		name=#{name},
-		userId=#{userId},
-		description=#{description},
-		createTime=#{createTime} where id=#{id}
+		description=#{description}
+		where id=#{id}
 	</update>
 
     <select id="getById" parameterType="Integer"
             resultType="cn.edu.nju.software.storymapping.map.entity.Workspace">
-
 		select *
 		from
 		work_space where id= #{id}
@@ -46,4 +44,7 @@
 		select * from work_space where user_id= #{id}
 	</select>
 
+    <select id="getWorkspaceCount" resultType="integer">
+		select count(*) from work_space where user_id = #{userId} and id = #{workspaceId}
+	</select>
 </mapper>

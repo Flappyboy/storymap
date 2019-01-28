@@ -37,4 +37,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         workspaceMapper.insert(workspace);
     }
 
+    public int getWorkspaceCount(Integer userId, Integer workspaceId) {
+        return workspaceMapper.getWorkspaceCount(userId, workspaceId);
+    }
+
 }

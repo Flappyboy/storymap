@@ -96,6 +96,7 @@ public class RegisterController {
         StoryMap storyMap = new StoryMap();
         storyMap.setWorkSpaceId(workspace.getId());
         storyMap.setUserId(userId);
+        storyMap.setName("storymap");
         storyMapService.createStoryMap(storyMap);
         //StoryMap中需要创建一个activity
         ActivityCard activityCard = new ActivityCard();

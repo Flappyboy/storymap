@@ -2,13 +2,17 @@ package cn.edu.nju.software.storymapping.map.controller;
 
 import cn.edu.nju.software.storymapping.map.controller.mockdto.*;
 import cn.edu.nju.software.storymapping.map.entity.*;
+import cn.edu.nju.software.storymapping.map.service.ActivityCardService;
 import cn.edu.nju.software.storymapping.map.service.StoryMapService;
+import cn.edu.nju.software.storymapping.map.service.WorkspaceService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
+import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -16,6 +20,10 @@ import java.util.List;
 public class StoryMapController {
     @Autowired
     private StoryMapService storyMapService;
+    @Autowired
+    private ActivityCardService activityCardService;
+    @Autowired
+    private WorkspaceService workspaceService;
 
     @PutMapping("/storymap")
     public Response updateStroyMap(StoryMapDto dto) {
@@ -33,11 +41,33 @@ public class StoryMapController {
         return storyMap;
     }
 
+    @PostMapping("/storymap")
+    public Response createStoryMap(StoryMapDto storyMapDto) {
+        User user = UserUtil.currentUser();
+        StoryMap storyMap = new StoryMap();
+        storyMap.setUserId(user.getId());
+        if (storyMapDto.getWorkSpaceId() == null)
+            return Response.createDefaultResponse().fail("创建失败！workspace不能为null");
+        storyMap.setWorkSpaceId(storyMapDto.getWorkSpaceId());
+        storyMap.setName(storyMapDto.getTitle());
+        storyMapService.createStoryMap(storyMap);
+        storyMapDto.setId(storyMap.getId().longValue());
+        //StoryMap中需要创建一个activity
+        ActivityCard activityCard = new ActivityCard();
+        activityCard.setCreateTime(new Date());
+        activityCard.setCreatorId(user.getId());
+        activityCard.setStoryMapId(storyMap.getId());
+        activityCard.setOrder("0");
+        activityCardService.addActivity(activityCard);
+        return Response.createDefaultResponse().success(storyMapDto);
+    }
+
+
     @GetMapping("/storymap/{id}")
     public Response getStoryMapById(@PathVariable("id") int id) {
         //验证是否有权限查看该storymap
 
-        if (storyMapService.getAuthorityForStorymap(UserUtil.currentUser().getId(), id) != null) {
+        if (storyMapService.getAuthorityForStorymap(UserUtil.currentUser().getId(), id) == null) {
             return Response.createDefaultResponse().fail("没有权限访问！");
         }
         StoryMap storyMap = storyMapService.getStoryMapById(id);
@@ -98,17 +128,25 @@ public class StoryMapController {
     @GetMapping("/storymap/workspace/{workspaceId}")
     public Response getStoryMapByWorkSpaceId(@PathVariable("workspaceId") int workspaceId) {
         //验证是否有查看workspace的权限
+        //workspace和user一一对应
+        User user = UserUtil.currentUser();
+        int workspaceCount = workspaceService.getWorkspaceCount(user.getId(), workspaceId);
+        if (workspaceCount == 0)
+            return Response.createDefaultResponse().fail("没有权限访问当前workspace");
         List<StoryMap> storyMapList = storyMapService.getStoryMapByWorkSpaceId(workspaceId);
         List<StoryMapDto> storyMapDtoList = new ArrayList<>();
         for (StoryMap storyMap : storyMapList) {
-            if (storyMapService.getAuthorityForStorymap(UserUtil.currentUser().getId(), storyMap.getId()) != null)
-                storyMapDtoList.add(transferToStoryMapDto(storyMap));
+            storyMapDtoList.add(transferToStoryMapDto(storyMap));
         }
-        if (storyMapDtoList.size() == 0)
-            return Response.createDefaultResponse().fail("该工作空间中的storymap没有访问权限");
-
         WorkspaceDto workspaceDto = new WorkspaceDto(new Integer(workspaceId).longValue(), null, storyMapDtoList);
         return Response.createDefaultResponse().success(workspaceDto);
+    }
+
+    @DeleteMapping("/storymap/{id}")
+    public Response deleteStorymapById(@PathVariable("id") Integer id) {
+
+        storyMapService.deleteStoryMapById(id);
+        return Response.createDefaultResponse().success("删除成功");
     }
 
 }

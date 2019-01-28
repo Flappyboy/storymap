@@ -3,6 +3,7 @@ package cn.edu.nju.software.storymapping;
 import java.util.Date;
 import java.util.List;
 
+import cn.edu.nju.software.storymapping.map.dao.WorkspaceMapper;
 import cn.edu.nju.software.storymapping.map.service.*;
 import cn.edu.nju.software.storymapping.system.dao.UserMapper;
 import cn.edu.nju.software.storymapping.system.entity.User;
@@ -26,26 +27,12 @@ import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 public class StorymappingApplicationTests {
 
     @Autowired
-    ActivityCardService activityCardService;
-
-    @Autowired
-    SubTaskCardService subTaskCardService;
-
-    @Autowired
-    TaskCardService taskCardService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    StoryMapMapper storyMapMapper;
-
-    @Autowired
-    RoleService roleService;
+    public WorkspaceMapper workspaceMapper;
 
     @Test
     public void contextLoads() {
-        System.out.println(storyMapMapper.getAuthorityForStorymap(1, 1));
+        System.out.println(workspaceMapper.getWorkspaceCount(1, 1));
+
     }
 
 

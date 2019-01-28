@@ -13,4 +13,6 @@ public interface WorkspaceService {
 
     public void CreateWorkSapce(Workspace workspace);
 
+    public int getWorkspaceCount(Integer userId, Integer workspaceId);
+
 }

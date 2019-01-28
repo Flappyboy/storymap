@@ -45,7 +45,7 @@
         update story_map
         <trim prefix="set" suffixOverrides=",">
             <if test="name!=null">name=#{name},</if>
-            <if test="work_space_id!=null">work_space_id=#{workSpaceId},</if>
+            <if test="workSpaceId!=null">work_space_id=#{workSpaceId},</if>
             <if test="userId!=null">user_id=#{userId},</if>
             <if test="description!=null">description=#{description}</if>
         </trim>
