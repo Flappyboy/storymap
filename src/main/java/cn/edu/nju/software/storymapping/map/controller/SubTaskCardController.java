@@ -56,7 +56,7 @@ public class SubTaskCardController {
             subTaskCard.setId(dto.getId().intValue());
         else
             subTaskCard.setCreateTime(new Date());
-        subTaskCard.setCreatorId(UserUtil.currentUser().getId());
+        subTaskCard.setCreatorId(UserUtil.currentUserId());
         if (dto.getTaskId() != null)
             subTaskCard.setTaskId(dto.getTaskId().intValue());
         subTaskCard.setName(dto.getTitle());

@@ -54,7 +54,7 @@ public class ReleaseController {
             release.setId(dto.getId().intValue());
         else release.setCreateTime(new Date());
         release.setCreateTime(new Date());
-        release.setCreatorId(UserUtil.currentUser().getId());
+        release.setCreatorId(UserUtil.currentUserId());
         release.setStoryMapId(dto.getStoryMapId());
         release.setOrder(dto.getOrder() + "");
         release.setName(dto.getTitle());

@@ -3,6 +3,7 @@ package cn.edu.nju.software.storymapping.system.controller;
 import cn.edu.nju.software.storymapping.map.entity.Workspace;
 import cn.edu.nju.software.storymapping.map.service.WorkspaceService;
 import cn.edu.nju.software.storymapping.system.entity.User;
+import cn.edu.nju.software.storymapping.system.service.UserService;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,9 @@ import java.util.List;
 public class TemplateController {
     @Autowired
     WorkspaceService workspaceService;
+
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView defaultPage() {
@@ -67,7 +71,7 @@ public class TemplateController {
     }
 
     private void setModel(ModelAndView modelAndView) {
-        User user = UserUtil.currentUser();
+        User user = userService.currentUser();
         if (user != null) {
             List<Workspace> workspaceList = workspaceService.getWorkSpaceById(user.getId());
             modelAndView.addObject("username", user.getUsername());

@@ -55,7 +55,7 @@ public class TaskCardController {
         else taskCard.setCreateTime(new Date());
         taskCard.setName(dto.getTitle());
         taskCard.setCreateTime(new Date());
-        taskCard.setCreatorId(UserUtil.currentUser().getId());
+        taskCard.setCreatorId(UserUtil.currentUserId());
         taskCard.setActivityId(dto.getActivityId());
         taskCard.setOrder(dto.getOrder() + "");
         return taskCard;

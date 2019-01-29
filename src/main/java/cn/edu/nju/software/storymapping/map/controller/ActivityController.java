@@ -61,7 +61,7 @@ public class ActivityController {
 
 		activityCard.setOrder(dto.getOrder() + "");
 		activityCard.setName(dto.getTitle());
-		activityCard.setCreatorId(UserUtil.currentUser().getId());
+		activityCard.setCreatorId(UserUtil.currentUserId());
 		activityCard.setStoryMapId(dto.getStoryMapId());
 		return activityCard;
 	}

@@ -5,7 +5,9 @@ import cn.edu.nju.software.storymapping.map.entity.Release;
 import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.system.entity.User;
+import cn.edu.nju.software.storymapping.system.service.UserService;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,9 +19,12 @@ import java.util.Random;
 @RequestMapping(value = "/mock")
 public class MockController {
 
+    @Autowired
+    UserService userService;
+
     @GetMapping(value = "/user")
     public User getUser() {
-        User user = UserUtil.currentUser();
+        User user = userService.currentUser();
         return user;
     }
 
