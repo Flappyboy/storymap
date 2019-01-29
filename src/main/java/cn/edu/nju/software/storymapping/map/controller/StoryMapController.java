@@ -82,7 +82,7 @@ public class StoryMapController {
 
         for (ActivityCard activityCard : activityCardList) {
             List<Role> roleActivityList = activityCard.getRoleList();
-            List<RoleDto> roleActvityDtoList = new ArrayList<RoleDto>();
+            List<RoleDto> roleActvityDtoList = new ArrayList<>();
             for (Role role : roleActivityList) {
                 RoleDto roleDto = new RoleDto(role.getId().longValue(), role.getName(), role.getStoryMapId(), role.getImageId());
                 roleActvityDtoList.add(roleDto);
@@ -133,7 +133,7 @@ public class StoryMapController {
         for (StoryMap storyMap : storyMapList) {
             storyMapDtoList.add(transferToStoryMapDto(storyMap));
         }
-        WorkspaceDto workspaceDto = new WorkspaceDto(new Integer(workspaceId).longValue(),null, null, storyMapDtoList);
+        WorkspaceDto workspaceDto = new WorkspaceDto((long)workspaceId,null, null, storyMapDtoList);
         return Response.createDefaultResponse().success(workspaceDto);
     }
 
