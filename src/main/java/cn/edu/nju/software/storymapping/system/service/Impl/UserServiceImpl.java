@@ -5,17 +5,19 @@ import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.system.entity.UserExample;
 import cn.edu.nju.software.storymapping.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    PasswordEncoder encoder;
     @Autowired
     UserMapper userMapper;
 
     @Override
     public User queryByUsername(String username) {
         User user = userMapper.selectUser(username);
-        System.out.println(user);
         return user;
 
     }
@@ -28,7 +30,21 @@ public class UserServiceImpl implements UserService {
     }
 
     public int insertUser(User user) {
+        //插入user的时候需要初始化一个workspace
+        String password = user.getPassword();
+        String encodePassword = encoder.encode(password);
+        user.setPassword(encodePassword);
         int result = userMapper.insertUser(user);
         return result;
+    }
+
+    @Override
+    public void update(User user) {
+        if (user.getPassword() != null) {
+            //加密
+            String encodePassword = encoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
+        }
+        userMapper.updateUser(user);
     }
 }

@@ -1,7 +1,13 @@
 package cn.edu.nju.software.storymapping;
 
+import java.util.Date;
 import java.util.List;
 
+import cn.edu.nju.software.storymapping.map.dao.WorkspaceMapper;
+import cn.edu.nju.software.storymapping.map.service.*;
+import cn.edu.nju.software.storymapping.system.dao.UserMapper;
+import cn.edu.nju.software.storymapping.system.entity.User;
+import cn.edu.nju.software.storymapping.system.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import cn.edu.nju.software.storymapping.map.dao.ReleaseMapper;
 import cn.edu.nju.software.storymapping.map.dao.StoryMapMapper;
+import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
 import cn.edu.nju.software.storymapping.map.entity.Release;
+import cn.edu.nju.software.storymapping.map.entity.Role;
 import cn.edu.nju.software.storymapping.map.entity.StoryMap;
 import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 
@@ -18,27 +26,14 @@ import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 @SpringBootTest
 public class StorymappingApplicationTests {
 
-	@Autowired
-	private StoryMapMapper storyMapMapper;
+    @Autowired
+    public WorkspaceMapper workspaceMapper;
 
-	@Autowired
-	private ReleaseMapper releaseMapper;
+    @Test
+    public void contextLoads() {
+        System.out.println(workspaceMapper.getWorkspaceCount(1, 1));
 
-	@Test
-	public void contextLoads() {
-		System.out.println("-------------------start--------------");
-		StoryMap sm = storyMapMapper.getById(1);
-		List<Release> listR = sm.getReleaseList();
-		System.out.println(listR.size());
-		for (Release release : listR) {
-			List<SubTaskCard> listS=release.getSubTaskCardList();
-			for (SubTaskCard subTaskCard : listS) {
-				System.out.println(subTaskCard.toString());
-			}
-			System.out.println();
-		}
+    }
 
-		System.out.println("-------------------end--------------");
 
-	}
 }

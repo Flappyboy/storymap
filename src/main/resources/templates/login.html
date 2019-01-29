@@ -8,13 +8,16 @@
     <link rel="stylesheet" th:href="@{/css/applogin.css}">
 </head>
 <body>
+<a href="https://github.com/Flappyboy/storymap/tree/master"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_red_aa0000.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 <div class="login-block">
-    <p th:if="${loginError}" class="error">用户名或密码错误</p>
+
     <div class="container">
         <div class="row">
             <div class="col-md-4 login-sec">
+                <p th:if="${loginError}" class="error">用户名或密码错误</p>
+                <a class="btn-tourist" onclick="location='/touristsmode/story-map/story-map.html?tourists=true'">Tourist</a>
                 <h2 class="text-center">Login Now</h2>
-                <form class="login-form" th:action="@{/login}" method="post">
+                <form class="login-form" id="form-test" th:action="@{/login}" method="post">
                     <div class="form-group">
                         <label for="username" class="text-uppercase">Username</label>
                         <input type="text" id="username" name="username" value="admin" autofocus="autofocus" class="form-control" placeholder="">
@@ -25,20 +28,20 @@
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input">
+                            <input type="checkbox" class="form-check-input" name="remember-me"/>
                             <small>Remember Me</small>
                         </label>
-                        <input type="submit" class="btn btn-login float-right" value="Login" />
+                        <input type="submit" id="btn-test" class="btn btn-login float-right" value="Login" />
+                        <a class="btn btn-register" onclick="location='/register'">Register</a>
                     </div>
                 </form>
             </div>
             <div class="col-md-8 banner-sec">
                 <div class="carousel-item active">
-                    <img class="img-fluid" th:src="@{/img/app-login.jpg}" alt="login">
                     <div class="carousel-caption d-none d-md-block">
                         <div class="banner-text">
                             <h2>Introduction</h2>
-                            <p>This is ...from 413.</p>
+                            <p>This is StoryMapping from 413.</p>
                         </div>
                     </div>
                 </div>
@@ -47,4 +50,44 @@
     </div>
 </div>
 </body>
+<script>
+    $(function () {
+        $("#form-test").bootstrapValidator({
+            live: 'enabled',//验证时机，enabled是内容有变化就验证（默认），disabled和submitted是提交再验证
+            excluded: [':disabled', ':hidden', ':not(:visible)'],//排除无需验证的控件，比如被禁用的或者被隐藏的
+            submitButtons: '#btn-test',//指定提交按钮，如果验证失败则变成disabled，但我没试成功，反而加了这句话非submit按钮也会提交到action指定页面
+            message: '通用的验证失败消息',//好像从来没出现过
+            feedbackIcons: {//根据验证结果显示的各种图标
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                password: {
+                    validators: {
+                        notEmpty: {//检测非空
+                            message: '请输入密码'
+                        },
+                    }
+                },
+                username: {
+                    validators: {
+                        notEmpty: {//检测非空,radio也可用
+                            message: '请输入用户名'
+                        },
+                        stringLength: {//检测长度
+                            min: 3,
+                            max: 10,
+                            message: '长度必须在3-10之间'
+                        },
+                        regexp: {//正则验证
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '所输入的字符不符要求'
+                        },
+                    }
+                }
+            }
+        });
+    });
+</script>
 </html>

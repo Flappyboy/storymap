@@ -6,6 +6,15 @@
     <meta charset="UTF-8">
     <title>Story Map</title>
     <script th:src="@{/lib/js/jqueryui/jquery-ui.js}"></script>
+    <script th:src="@{/lib/js/jqueryplugin/jquery.mousewheel.js}"></script>
+
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var CONTEXT_PATH = /*[[@{/}]]*/;
+        /*]]>*/
+    </script>
+
 
     <script th:src="@{/js/story-map.js}"></script>
     <link th:href="@{/css/story-map-cp.css}" rel="stylesheet"/>
@@ -13,124 +22,55 @@
     <link th:href="@{/css/story-map.css}" rel="stylesheet"/>
 </head>
 <body>
-<div id="wrapper" class="board-zoom-28 wrapper-pinned">
+<div id="operate">
+
+    <br>
+    <div type="margin=5px;">
+        <center>
+            <h1 id="go-back" class="btn btn-default" onclick="history.go(-1)">
+                <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i>
+                Go Back
+            </h1>
+        </center>
+    </div>
+
+    <br>
+    <!--<br>-->
+    <!--<div type="margin=5px;">-->
+        <!--<center>-->
+            <!--<h1 id="title" class="btn btn-default" onclick="refresh()">-->
+                <!--<i class="fa fa-spinner fa-spin"></i>-->
+                <!--Loading....-->
+            <!--</h1>-->
+        <!--</center>-->
+    <!--</div>-->
+    <!--<br>-->
+    <!--<br>-->
+    <div id="add-release" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
+        <button type="button" class="btn btn-primary"  onclick="addRelease()">Add Release</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <h6><span id="status" class="label label-info"></span></h6>
+    <br>
+    <div id="messagebox">
+
+    </div>
+
+    <br>
+
+</div>
+<div id="right-content" class="board-zoom-21 wrapper-pinned">
     <div id="main" class="main-pinned">
-        <!--<div id="board-boundaries" class="board-boundaries-pinned">-->
-        <div>
-            <div id="board">
-                <div id="board-head">
-                    <ul id="board-activities">
-                        <li class="board-activity">
-                            <div class="personas-wrapper">
-
-                            </div>
-                            <div class="board-activity-card board-card-color-blue">
-                                <span class="board-card-title-text">activity1</span>
-                                <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                <textarea type="text" style="display:none" class="board-card-title-editor"
-                                          data-editmode="false"></textarea>
-                            </div>
-                            <div class="board-tasks-outer">
-                                <ul class="board-tasks">
-                                    <li class="board-task board-task-card board-card-color-yellow">
-                                        <span class="board-card-title-text">activity1-task1</span>
-                                        <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                        <textarea type="text" style="display:none" class="board-card-title-editor"
-                                                  data-editmode="false"></textarea>
-                                    </li>
-                                    <li class="board-task board-task-card board-card-color-yellow">
-                                        <span class="board-card-title-text">activity1-task2</span>
-                                        <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                        <textarea type="text" style="display:none" class="board-card-title-editor"
-                                                  data-editmode="false"></textarea>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="board-activity">
-                            <div class="personas-wrapper">
-
-                            </div>
-                            <div class="board-activity-card board-card-color-blue">
-                                <span class="board-card-title-text">activity2</span>
-                                <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                <textarea type="text" style="display:none" class="board-card-title-editor"
-                                          data-editmode="false"></textarea>
-                            </div>
-                            <div class="board-tasks-outer">
-                                <ul class="board-tasks">
-                                    <li class="board-task board-task-card board-card-color-yellow">
-                                        <span class="board-card-title-text">activity2-task1</span>
-                                        <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                        <textarea type="text" style="display:none" class="board-card-title-editor"
-                                                  data-editmode="false"></textarea>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div id="board-body-container">
-                    <div id="board-body">
-                        <span class="board-lines"></span>
-                        <div id="board-sortable-releases">
-                            <div class="release-with-subtasks">
-                                <div class="board-release"></div>
-                                <div>
-                                    <ul class="board-subtasks-activities data-release-content">
-                                        <li class="board-activity">
-                                            <ul class="board-tasks">
-                                                <li class="board-task">
-                                                    <ul class="board-subtasks">
-                                                        <li class="board-subtask-card board-card-color-blue">
-                                                            <span class="board-card-title-text">activity1-task1-subtask1</span>
-                                                            <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                                            <textarea type="text" style="display:none"
-                                                                      class="board-card-title-editor"
-                                                                      data-editmode="false"></textarea>
-                                                        </li>
-                                                        <li class="board-subtask-card board-card-color-blue">
-                                                            <span class="board-card-title-text">activity1-task1-subtask2</span>
-                                                            <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                                            <textarea type="text" style="display:none"
-                                                                      class="board-card-title-editor"
-                                                                      data-editmode="false"></textarea>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="board-task">
-                                                    <ul class="board-subtasks">
-                                                        <li class="board-subtask-card board-card-color-blue">
-                                                            <span class="board-card-title-text">activity1-task2-subtask1</span>
-                                                            <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                                            <textarea type="text" style="display:none"
-                                                                      class="board-card-title-editor"
-                                                                      data-editmode="false"></textarea>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="board-activity">
-                                            <ul class="board-tasks">
-                                                <li class="board-task">
-                                                    <ul class="board-subtasks">
-                                                        <li class="board-subtask-card board-card-color-blue">
-                                                            <span class="board-card-title-text">activity2-task1-subtask1</span>
-                                                            <span class="board-card-empty-title" style="display: none;">Empty card</span>
-                                                            <textarea type="text" style="display:none"
-                                                                      class="board-card-title-editor"
-                                                                      data-editmode="false"></textarea>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div id="board">
+            <div id="board-head">
+                <ul id="board-activities">
+                </ul>
+            </div>
+            <div id="board-body">
+                <span class="board-lines"></span>
+                <div id="board-sortable-releases">
                 </div>
             </div>
         </div>

@@ -1,18 +1,22 @@
 package cn.edu.nju.software.storymapping.map.dao;
 
 import java.util.List;
+
 import cn.edu.nju.software.storymapping.map.entity.Workspace;
+import org.apache.ibatis.annotations.Param;
 
 public interface WorkspaceMapper {
-	public void insert(Workspace Workspace);
+    public void insert(Workspace workspace);
 
-	public void delete(int id);
-	
-	public void update(Workspace Workspace);
-	
-	public Workspace getById(int id);
+    public void delete(Integer id);
 
-	public List<Workspace> listAll();
+    public void update(Workspace workspace);
 
-	public List<Workspace> listByUserId(int id);
+    public Workspace getById(Integer id);
+
+    public List<Workspace> listAll();
+
+    public List<Workspace> listByUserId(Integer id);
+
+    public Integer getWorkspaceCount(@Param("userId") Integer userId, @Param("workspaceId") Integer workspaceId);
 }

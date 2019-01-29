@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/includebase">
+</head>
+<head>
+    <meta charset="UTF-8">
+    <title>Register page</title>
+    <link rel="stylesheet" th:href="@{/css/appregister.css}">
+    <link rel="stylesheet" th:href="@{/lib/css/toastr.css}">
+    <script th:src="@{/lib/js/toastr.js}"></script>
+</head>
+<body>
+<div class="register-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 register-sec">
+                <h2 class="text-center">Register Now</h2>
+                <p class="error" th:text="${error}"></p>
+                <form class="register-form" id="form-test" th:action="@{/register}"  method="post">
+                    <div class="form-group">
+                        <label for="username" class="text-uppercase">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="请输入姓名" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-uppercase">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-uppercase">PasswordConfirm</label>
+                        <input id="passwordConfirm" type="password" name="passwordConfirm" class="form-control" placeholder="请输入确认密码" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="text-uppercase">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="请输入邮箱" />
+                    </div>
+                    <div class="form-group">
+                    <label for="phone" class="text-uppercase">Phone</label>
+                    <input type="phone"id="phone" name="phone" class="form-control" placeholder="" />
+                    </div>
+                    <div class="form-check">
+                        <button id="btn-test" type="submit" class="btn btn-register">Register</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8 banner-sec">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    $(function () {
+        $("#form-test").bootstrapValidator({
+            live: 'enabled',//验证时机，enabled是内容有变化就验证（默认），disabled和submitted是提交再验证
+            excluded: [':disabled', ':hidden', ':not(:visible)'],//排除无需验证的控件，比如被禁用的或者被隐藏的
+            submitButtons: '#btn-test',//指定提交按钮，如果验证失败则变成disabled，但我没试成功，反而加了这句话非submit按钮也会提交到action指定页面
+            message: '通用的验证失败消息',//好像从来没出现过
+            feedbackIcons: {//根据验证结果显示的各种图标
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                email: {
+                    validators: {
+                        emailAddress: {//验证email地址
+                            message: '不是正确的email地址'
+                        },
+                        notEmpty: {//检测非空
+                            message: '请输入邮箱'
+                        },
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {//检测非空
+                            message: '请输入密码'
+                        },
+                    }
+                },
+               passwordConfirm: {
+                    validators: {
+                        notEmpty: {//检测非空
+                            message: '请输入确认密码'
+                        },
+                        identical: {//与指定控件内容比较是否相同，比如两次密码不一致
+                            field: 'password',//指定控件name
+                            message: '两次输入的密码不同'
+                        },
+                    }
+                },
+                username: {
+                    validators: {
+                        notEmpty: {//检测非空,radio也可用
+                            message: '请输入用户名'
+                        },
+                        stringLength: {//检测长度
+                            min: 3,
+                            max: 10,
+                            message: '长度必须在3-10之间'
+                        },
+                        regexp: {//正则验证
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '所输入的字符不符要求'
+                        },
+                    }
+                }
+            }
+        });
+    });
+</script>
+</html>

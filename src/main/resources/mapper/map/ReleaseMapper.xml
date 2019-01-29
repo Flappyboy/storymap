@@ -8,48 +8,68 @@
 		<result column="creator_id" property="creatorId" />
 		<result column="create_time" property="createTime" />
 		<result column="story_map_id" property="storyMapId" />
-		<result column="order" property="order" />	
+		<result column="order" property="order" />
 		<result column="name" property="name" />
-		<collection property="subTaskCardList" column="id" 
-			select="cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper.getSubTaskCardListByReleaseId" />		
+		<collection property="subTaskCardList" column="id"
+			select="cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper.getSubTaskCardListByReleaseId" />
 	</resultMap>
-	
+
 	<insert id="insert" parameterType="cn.edu.nju.software.storymapping.map.entity.Release"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into `release`(description,creator_id,create_time,story_map_id,`order`,name)
+		insert into
+		`release`(description,creator_id,create_time,story_map_id,`order`,name)
 		values
 		(#{description},#{creatorId},#{createTime},#{storyMapId},#{order},#{name})
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
 	</insert>
 
-	<delete id="delete" parameterType="_int">
+	<delete id="delete" parameterType="Integer">
 		delete from `release` where
 		id=#{id}
 	</delete>
 
 	<update id="update" parameterType="cn.edu.nju.software.storymapping.map.entity.Release">
-		update `release` set
-		name=#{name},
-		description=#{description},
-		creator_id=#{creatorId},
-		create_time=#{createTime},
-		story_map_id=#{storyMapId},
-		`order`=#{order} where id=#{id}
+		update `release`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="description!=null">description=#{description},</if>
+			<if test="creatorId!=null">creator_id=#{creatorId},</if>
+			<if test="createTime!=null">create_time=#{createTime},</if>
+			<if test="storyMapId!=null">story_map_id=#{storyMapId},</if>
+			<if test="`order`!=null">`order`=#{order}</if>
+		</trim>
+		where id=#{id}
 	</update>
 
-	<select id="getById" parameterType="_int"
-		resultMap="ReleaseMap">
+	<select id="getById" parameterType="Integer" resultMap="ReleaseMap">
 		select *
 		from
 		`release` where id= #{id}
 	</select>
 
 	<select id="listAll" resultType="cn.edu.nju.software.storymapping.map.entity.Release">
-		select * from `release`
+		select * from `release` order by
+		`order`
 	</select>
 
-	<select id="listByStoryMapId" parameterType="_int"
-		resultMap="ReleaseMap">
-		select * from `release` where story_map_id= #{id}
+	<select id="listByStoryMapId" parameterType="Integer" resultMap="ReleaseMap">
+		select * from `release` where story_map_id= #{id} order by `order`
+	</select>
+	<update id="updateOrder">
+		update `release` set
+		`order` = #{order}
+		where id =
+		#{id}
+	</update>
+	<select id="getStoryMapId" resultType="integer">
+		select story_map_id from
+		`release` where id = #{releaseId}
+	</select>
+	<select id="getReleaseOrder" resultType="string">
+		select `order` from
+		`release` where id = #{releaseId}
 	</select>
 
 </mapper>

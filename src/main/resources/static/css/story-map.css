@@ -1,3 +1,170 @@
 ol, ul {
     list-style: none;
 }
+#title{
+    min-width: 70%;
+    min-height: 33px;
+}
+#messagebox .label{
+    border-radius:0px;
+}
+#status {
+    border-radius: 0em;
+}
+#add-release .btn{
+    border-radius:0px;
+}
+/*#wrapper {*/
+    /*position: unset;*/
+    /*!*top: 60px;*!*/
+    /*!*bottom: 0;*!*/
+    /*!*right: 0;*!*/
+    /*!*left: 0;*!*/
+    /*!*margin: 0;*!*/
+    /*!*overflow: auto;*!*/
+    /*height: 100%;*/
+/*}*/
+#board{
+    position: relative;
+    left: 8%;
+    top: 5%;
+}
+#right-content {
+    /*margin-top: 4%;*/
+    /*width: 91%;*/
+    height: 100%;
+    /*float: left;*/
+}
+#main{
+    margin-left: 0px;
+    height: 100%;
+}
+
+#operate {
+    cursor: default;
+    overflow: hidden;
+    height: 100%;
+    width: 9%;
+    min-width: 100px;
+    maxwidth: 170px;
+    float: left;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #41404b;
+}
+.dropdown-menu{
+    padding: 1px 6px;
+    margin: 2px 0 0;
+     min-width: 40px;
+}
+.board-card-block-bottom {
+    /*background: orange;*/
+    position: absolute;
+    width: 80%;
+    height: 23%;
+    bottom: 1px;
+    right: 10%;
+}
+
+.board-card-next-bottom {
+    background: -webkit-linear-gradient(top, rgba(236, 234, 223, 0), rgba(236, 234, 223, 1)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(bottom, rgba(236, 234, 223, 0), rgba(236, 234, 223, 1)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(bottom, rgba(236, 234, 223, 0), rgba(236, 234, 223, 1)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to bottom, rgba(236, 234, 223, 0), rgba(236, 234, 223, 1)); /* 标准的语法（必须放在最后） */
+
+    position: absolute;
+    width: 100%;
+    height: 23%;
+    bottom: 1px;
+    right: 0;
+    text-align: center;
+
+    padding: 7% 42% 0% 42%;
+}
+
+.board-card-next-bottom img {
+    width: 100%;
+    height: 100%;
+}
+
+.board-card-next-right {
+    position: absolute;
+    width: 15%;
+    height: 40%;
+    top: 30%;
+    right: 1px;
+    padding: 5% 1% 5% 7%;
+}
+
+.board-card-next-right img {
+    width: 100%;
+    height: 100%;
+}
+
+.board-card-block-right {
+    /*background: lightblue;*/
+    position: absolute;
+    width: 15%;
+    height: 40%;
+    top: 30%;
+    right: 1px;
+}
+
+.board-card-close {
+    /*background: red;*/
+    position: absolute;
+    width: 14%;
+    top: 1px;
+    right: 1px;
+}
+
+.board-card-block-close {
+    position: absolute;
+    width: 14%;
+    height: 18%;
+    top: 1px;
+    right: 1px;
+}
+
+.board-card-close img {
+    width: 100%;
+    height: 100%;
+}
+
+.board-light-blue {
+    margin-left: 1.5%;
+    margin-top: 1.6%;
+    border-radius: 5px;
+    box-shadow: rgb(11, 234, 235) 0px 0px 18px inset;
+}
+
+.board-light-yellow {
+    margin-left: 1.5%;
+    margin-top: 1.6%;
+    border-radius: 5px;
+    box-shadow: rgb(255, 251, 17) 0px 0px 18px inset;
+}
+
+.board-light-green {
+    margin-left: 1.5%;
+    margin-top: 1.6%;
+    border-radius: 5px;
+    box-shadow: rgb(83, 253, 1) 0px 0px 18px inset;
+}
+.board-release-del:before{
+    content: "\2716";
+    opacity: 0;
+    margin-left: 5px;
+}
+.board-release-del:hover:before{
+    content: "\2716";
+    opacity: 1;
+}
+
+.board-release-del{
+    width: 20px;
+}

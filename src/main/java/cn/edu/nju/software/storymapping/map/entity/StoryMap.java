@@ -3,7 +3,8 @@ package cn.edu.nju.software.storymapping.map.entity;
 import java.util.List;
 
 public class StoryMap {
-
+    public static final String AUTHORITY_READ_WRITE = "read_write";
+    public static final String AUTHORITY_READ_ONLY = "read_only";
     private Integer id;
     private String name;
     private Integer workSpaceId;
@@ -14,13 +15,13 @@ public class StoryMap {
     private List<Release> releaseList;
 
     @Override
-	public String toString() {
-		return "StoryMap [id=" + id + ", name=" + name + ", workSpaceId=" + workSpaceId + ", userId=" + userId
-				+ ", description=" + description + ", roleList=" + roleList + ", activityCardList=" + activityCardList
-				+ ", releaseList=" + releaseList + "]";
-	}
+    public String toString() {
+        return "StoryMap [id=" + id + ", name=" + name + ", workSpaceId=" + workSpaceId + ", userId=" + userId
+                + ", description=" + description + ", roleList=" + roleList + ", activityCardList=" + activityCardList
+                + ", releaseList=" + releaseList + "]";
+    }
 
-	public List<Role> getRoleList() {
+    public List<Role> getRoleList() {
         return roleList;
     }
 

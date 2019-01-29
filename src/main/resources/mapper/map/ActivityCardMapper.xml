@@ -2,33 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.storymapping.map.dao.ActivityCardMapper">
 
-    <insert id="addActivity" parameterType="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
-        insert into activity_card
-        (description,creator_id,create_time,color,story_map_id,`order`,`name`)
-        values
-        (#{description},#{creatorId},#{createTime},#{color},#{storyMapId},#{order},#{name})
-    </insert>
-    <update id="updateActivity" parameterType="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
-        update activity_card set
-        description = #{description},
-        creator_id = #{creatorId},
-        create_time = #{createTime},
-        color = #{color},
-        story_map_id = #{storyMapId},
-        `order` = #{order},
-        `name` = #{name} where id = #{id}
-    </update>
-    <delete id="deleteActivity">
-        delete from activity_card where id = #{id}
-    </delete>
-    <resultMap id="getActivityCardByStoryMapId" type="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
-        <id property="id" column="id"/>
-        <collection property="taskCardList" ofType="cn.edu.nju.software.storymapping.map.entity.TaskCard" column="id"
-                    select="cn.edu.nju.software.storymapping.map.dao.TaskCardMapper.getTaskCardByActivityId"></collection>
-    </resultMap>
-    <select id="getActivityCardByStoryMapId" resultMap="getActivityCardByStoryMapId">
-      select * from activity_card where story_map_id=#{storyMapId}
-    </select>
-
+	<insert id="addActivity"
+		parameterType="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
+		insert into activity_card
+		(description,creator_id,create_time,color,story_map_id,`order`,`name`)
+		values
+		(#{description},#{creatorId},#{createTime},#{color},#{storyMapId},#{order},#{name})
+		<selectKey resultType="Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+	</insert>
+	<update id="updateActivity"
+		parameterType="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
+		update activity_card
+		<trim prefix="set" suffixOverrides=",">
+			<if test="description!=null">description = #{description},</if>
+			<if test="creatorId!=null">creator_id = #{creatorId},</if>
+			<if test="createTime!=null">create_time = #{createTime},</if>
+			<if test="color!=null">color = #{color},</if>
+			<if test="storyMapId!=null">story_map_id = #{storyMapId},</if>
+			<if test="`order`!=null">`order` = #{order},</if>
+			<if test="name!=null">`name` = #{name}</if>
+		</trim>
+		where id = #{id}
+	</update>
+	<delete id="deleteActivity">
+		delete from activity_card where id = #{id}
+	</delete>
+	<resultMap id="getActivityCardByStoryMapId"
+		type="cn.edu.nju.software.storymapping.map.entity.ActivityCard">
+		<id property="id" column="id" />
+		<collection property="taskCardList"
+			ofType="cn.edu.nju.software.storymapping.map.entity.TaskCard" column="id"
+			select="cn.edu.nju.software.storymapping.map.dao.TaskCardMapper.getTaskCardByActivityId"></collection>
+		<collection property="roleList"
+			ofType="cn.edu.nju.software.storymapping.map.entity.Role" column="id"
+			select="cn.edu.nju.software.storymapping.map.dao.RoleMapper.getRoleByActivityId"></collection>
+	</resultMap>
+	<select id="getActivityCardByStoryMapId" resultMap="getActivityCardByStoryMapId">
+		select * from activity_card where story_map_id=#{storyMapId} order by
+		`order`
+	</select>
+	<update id="updateOrder">
+		update activity_card
+		set `order`=#{order}
+		where id = #{id}
+	</update>
+	<select id="getStoryMapId" resultType="integer">
+		select story_map_id from activity_card where id = #{activityId}
+	</select>
+	<select id="getActivityOrder" resultType="string">
+		select `order` from activity_card where id = #{activityId}
+	</select>
 
 </mapper>

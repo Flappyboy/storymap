@@ -2,30 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper">
     <update id="updateSubTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        update sub_task_card set
-        description = #{description},
-        creator_id = #{creatorId},
-        create_time = #{createTime},
-        color = #{color},
-        task_id = #{taskId},
-        `order` = #{order},
-        release_id = #{releaseId},
-        `name` = #{name},
-        status = #{status} where id = #{id}        
+        update sub_task_card
+        <trim prefix="set" suffixOverrides=",">
+            <if test="description!=null">description = #{description},</if>
+            <if test="creatorId!=null">creator_id = #{creatorId},</if>
+            <if test="createTime!=null">create_time = #{createTime},</if>
+            <if test="color!=null">color = #{color},</if>
+            <if test="taskId!=null">task_id = #{taskId},</if>
+            <if test="`order`!=null">`order` = #{order},</if>
+            <if test="releaseId!=null">release_id = #{releaseId},</if>
+            <if test="name!=null">`name` = #{name},</if>
+            <if test="status!=null">status = #{status},</if>
+        </trim>
+        where id = #{id}
     </update>
     <insert id="addSubTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        insert  into sub_task_card
+        insert into sub_task_card
         (description,creator_id,create_time,color,task_id,`order`,release_id,`name`,status)
         values
         (#{description},#{creatorId},#{createTime},#{color},#{taskId},#{order},#{releaseId},#{name},#{status})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
     </insert>
     <delete id="deleteSubTaskCard">
         delete from sub_task_card where id = #{id}
     </delete>
-    <select id="getSubTaskCardListByTaskId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        select * from sub_task_card where task_id = #{taskCardId}
+    <select id="getSubTaskCardListByTaskIdAndReleaseId"
+            resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where task_id = #{taskCardId} and release_id = #{releaseId} order by `order`
+    </select>
+    <select id="getSubTaskCardListByTaskId"
+            resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where task_id = #{taskCardId} order by `order`
     </select>
     <select id="getSubTaskCardListByReleaseId" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
-        select * from sub_task_card where release_id = #{releaseId}
+        select * from sub_task_card where release_id = #{releaseId} order by `order`
     </select>
+    <update id="updateOrder">
+        update sub_task_card set
+        `order` = #{order}
+        where id = #{subTaskCardId}
+    </update>
+    <select id="getTaskCardId" resultType="integer">
+        select task_id from sub_task_card where id =#{subTaskCardId}
+    </select>
+    <select id="getSubTaskCardOrder" resultType="string">
+        select `order` from sub_task_card where id = #{subTaskCardId}
+    </select>
+    <select id="getSubTaskCardById" resultType="cn.edu.nju.software.storymapping.map.entity.SubTaskCard">
+        select * from sub_task_card where id = #{subtaskCardId}
+    </select>
+
 </mapper>

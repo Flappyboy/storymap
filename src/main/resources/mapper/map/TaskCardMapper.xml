@@ -2,20 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.edu.nju.software.storymapping.map.dao.TaskCardMapper">
     <update id="updateTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.TaskCard">
-        update task_card set
-        description = #{description},
-        creator_id = #{creatorId},
-        create_time = #{createTime},
-        color = #{color},
-        activity_id = #{activityId}
-        order = #{order},
-        name = #{name} where id = #{id}
+
+        update task_card
+        <trim prefix="set" suffixOverrides=",">
+            <if test="description!=null">description = #{description},</if>
+            <if test="creatorId!=null">creator_id = #{creatorId},</if>
+            <if test="createTime!=null">create_time = #{createTime},</if>
+            <if test="color!=null">color = #{color},</if>
+            <if test="activityId!=null">activity_id = #{activityId},</if>
+            <if test="`order`!=null">`order` = #{order},</if>
+            <if test="name!=null">`name` = #{name},</if>
+        </trim>
+        where id = #{id}
     </update>
     <insert id="addTaskCard" parameterType="cn.edu.nju.software.storymapping.map.entity.TaskCard">
         insert into task_card
-        (description,creator_id,create_time,color,activity_id,order,name)
+        (description,creator_id,create_time,color,activity_id,`order`,`name`)
         values
         (#{description},#{creatorId},#{createTime},#{color},#{activityId},#{order},#{name})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
     </insert>
     <delete id="deleteTaskCard">
         delete from task_card where id = #{id}
@@ -29,6 +36,17 @@
     </resultMap>
 
     <select id="getTaskCardByActivityId" resultMap="getTaskCardByActivityIdResultMap">
-        select * from task_card where activity_id = #{activityId}
+        select * from task_card where activity_id = #{activityId} order by `order`
+    </select>
+    <update id="updateOrder">
+        update task_card set
+        `order` = #{order}
+        where id = #{taskCardId}
+    </update>
+    <select id="getActivityCardId" resultType="integer">
+        select activity_id from task_card where id = #{taskCardId}
+    </select>
+    <select id="getTaskOrder" resultType="string">
+        select `order` from task_card where id = #{taskId}
     </select>
 </mapper>
