@@ -11,6 +11,13 @@ var apiBase = CONTEXT_PATH + 'api';
 
 
 $(function (){
+        $("#pro").click(function () {
+            $("#userInfo").load('/template/user-Info.html', function () {
+                $('#myModal').on('hide.bs.modal', function () {//模态框关闭时触发,刷新父页面
+                    window.location.reload()
+                })
+            });
+        })
         $.ajax({
                 url: apiBase + '/storymap/workspace/'+WORKSPACE_ID,
                 type: "GET",

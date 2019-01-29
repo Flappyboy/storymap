@@ -50,10 +50,14 @@ public class UserController {
 
     @PostMapping("/update")
     public String update(User user) {
-        User currentUser = UserUtil.currentUser();
+        User currentUser = userService.currentUser();
         user.setId(currentUser.getId());
         user.setUsername(currentUser.getUsername());
         userService.update(user);
+        currentUser.setDescription(user.getDescription());
+        currentUser.setEmail(user.getEmail());
+        currentUser.setPhone(user.getPhone());
+        currentUser.setImageId(user.getImageId());
         return "redirect:/";
     }
 }

@@ -43,9 +43,8 @@ public class StoryMapController {
 
     @PostMapping("/storymap")
     public Response createStoryMap(StoryMapDto storyMapDto) {
-        User user = UserUtil.currentUser();
         StoryMap storyMap = new StoryMap();
-        storyMap.setUserId(user.getId());
+        storyMap.setUserId(UserUtil.currentUserId());
         if (storyMapDto.getWorkSpaceId() == null)
             return Response.createDefaultResponse().fail("创建失败！workspace不能为null");
         storyMap.setWorkSpaceId(storyMapDto.getWorkSpaceId());
@@ -61,7 +60,7 @@ public class StoryMapController {
     public Response getStoryMapById(@PathVariable("id") int id) {
         //验证是否有权限查看该storymap
 
-        if (storyMapService.getAuthorityForStorymap(UserUtil.currentUser().getId(), id) == null) {
+        if (storyMapService.getAuthorityForStorymap(UserUtil.currentUserId(), id) == null) {
             return Response.createDefaultResponse().fail("没有权限访问！");
         }
         StoryMap storyMap = storyMapService.getStoryMapById(id);
@@ -124,8 +123,7 @@ public class StoryMapController {
     public Response getStoryMapByWorkSpaceId(@PathVariable("workspaceId") int workspaceId) {
         //验证是否有查看workspace的权限
         //workspace和user一一对应
-        User user = UserUtil.currentUser();
-        int workspaceCount = workspaceService.getWorkspaceCount(user.getId(), workspaceId);
+        int workspaceCount = workspaceService.getWorkspaceCount(UserUtil.currentUserId(), workspaceId);
         if (workspaceCount == 0)
             return Response.createDefaultResponse().fail("没有权限访问当前workspace");
         List<StoryMap> storyMapList = storyMapService.getStoryMapByWorkSpaceId(workspaceId);

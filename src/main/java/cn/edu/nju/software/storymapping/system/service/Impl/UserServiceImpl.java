@@ -4,6 +4,7 @@ import cn.edu.nju.software.storymapping.system.dao.UserMapper;
 import cn.edu.nju.software.storymapping.system.entity.User;
 import cn.edu.nju.software.storymapping.system.entity.UserExample;
 import cn.edu.nju.software.storymapping.system.service.UserService;
+import cn.edu.nju.software.storymapping.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(encodePassword);
         }
         userMapper.updateUser(user);
+    }
+
+    @Override
+    public User currentUser() {
+        return queryByUsername(UserUtil.currentUserName());
     }
 }

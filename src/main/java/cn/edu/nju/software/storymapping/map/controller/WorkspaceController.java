@@ -45,8 +45,7 @@ public class WorkspaceController {
     @PostMapping("/workspace")
     public Response createWorkspace(WorkspaceDto workspaceDto) {
         Workspace workspace = new Workspace();
-        User user = UserUtil.currentUser();
-        workspace.setUserId(user.getId());
+        workspace.setUserId(UserUtil.currentUserId());
         workspace.setName(workspaceDto.getTitle());
         workspace.setCreateTime(new Date());
         workspace.setDescription(workspaceDto.getDesc());
