@@ -50,15 +50,9 @@ public class StoryMapController {
             return Response.createDefaultResponse().fail("创建失败！workspace不能为null");
         storyMap.setWorkSpaceId(storyMapDto.getWorkSpaceId());
         storyMap.setName(storyMapDto.getTitle());
+        storyMap.setDescription(storyMapDto.getDesc());
         storyMapService.createStoryMap(storyMap);
         storyMapDto.setId(storyMap.getId().longValue());
-        //StoryMap中需要创建一个activity
-        ActivityCard activityCard = new ActivityCard();
-        activityCard.setCreateTime(new Date());
-        activityCard.setCreatorId(user.getId());
-        activityCard.setStoryMapId(storyMap.getId());
-        activityCard.setOrder("0");
-        activityCardService.addActivity(activityCard);
         return Response.createDefaultResponse().success(storyMapDto);
     }
 
@@ -122,6 +116,7 @@ public class StoryMapController {
         }
         StoryMapDto storyMapDto = new StoryMapDto(new Long(storyMap.getId()), storyMap.getName(), activityDtoList,
                 releaseDtoList, roleDtoList, storyMap.getWorkSpaceId());
+        storyMapDto.setDesc(storyMap.getDescription());
         return storyMapDto;
     }
 

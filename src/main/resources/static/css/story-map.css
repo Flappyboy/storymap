@@ -5,6 +5,15 @@ ol, ul {
     min-width: 70%;
     min-height: 33px;
 }
+#messagebox .label{
+    border-radius:0px;
+}
+#status {
+    border-radius: 0em;
+}
+#add-release .btn{
+    border-radius:0px;
+}
 /*#wrapper {*/
     /*position: unset;*/
     /*!*top: 60px;*!*/

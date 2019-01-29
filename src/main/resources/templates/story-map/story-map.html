@@ -27,16 +27,27 @@
     <br>
     <div type="margin=5px;">
         <center>
-            <h1 id="title" class="btn btn-default" onclick="refresh()">
-                <i class="fa fa-spinner fa-spin"></i>
-                Loading....
+            <h1 id="go-back" class="btn btn-default" onclick="history.go(-1)">
+                <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i>
+                Go Back
             </h1>
         </center>
     </div>
+
     <br>
-    <br>
-    <div class="btn-group-vertical" type="margin=5px;" role="group" aria-label="...">
-        <button type="button" class="btn btn-primary" onclick="addRelease()">添加Release</button>
+    <!--<br>-->
+    <!--<div type="margin=5px;">-->
+        <!--<center>-->
+            <!--<h1 id="title" class="btn btn-default" onclick="refresh()">-->
+                <!--<i class="fa fa-spinner fa-spin"></i>-->
+                <!--Loading....-->
+            <!--</h1>-->
+        <!--</center>-->
+    <!--</div>-->
+    <!--<br>-->
+    <!--<br>-->
+    <div id="add-release" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
+        <button type="button" class="btn btn-primary"  onclick="addRelease()">添加Release</button>
     </div>
     <br>
     <br>

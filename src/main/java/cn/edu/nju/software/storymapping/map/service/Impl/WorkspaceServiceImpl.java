@@ -24,12 +24,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Autowired
     private StoryMapService storyMapService;
 
-    @Autowired
-    private ActivityCardService activityCardService;
-
-    @Autowired
-    private ReleaseService releaseService;
-
     //根据id来删除workspace
     public void deleteWorkSpaceById(Integer id) {
         workspaceMapper.delete(id);
@@ -57,25 +51,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         storyMap.setWorkSpaceId(workspace.getId());
         storyMap.setUserId(workspace.getUserId());
         storyMap.setName("storymap");
+        storyMap.setDescription("Default Storymap");
         storyMapService.createStoryMap(storyMap);
-        //StoryMap中需要创建一个activity
-        ActivityCard activityCard = new ActivityCard();
-        activityCard.setName("Default Activity Card \nYou can add a task by clicking below\nAnd Click here to edit me!");
-        activityCard.setCreateTime(new Date());
-        activityCard.setCreatorId(workspace.getUserId());
-        activityCard.setStoryMapId(storyMap.getId());
-        activityCard.setOrder("0");
-        System.out.println(activityCard);
-        activityCardService.addActivity(activityCard);
-        System.out.println(activityCard);
 
-        Release release = new Release();
-        release.setCreateTime(new Date());
-        release.setCreatorId(workspace.getUserId());
-        release.setName("Release 1");
-        release.setOrder("0");
-        release.setStoryMapId(storyMap.getId());
-        releaseService.addRelease(release);
     }
 
     @Override

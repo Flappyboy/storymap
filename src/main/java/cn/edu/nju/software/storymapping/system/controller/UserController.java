@@ -52,7 +52,8 @@ public class UserController {
     public String update(User user) {
         User currentUser = UserUtil.currentUser();
         user.setId(currentUser.getId());
+        user.setUsername(currentUser.getUsername());
         userService.update(user);
-        return "redirect:/template/workspaces.html";
+        return "redirect:/";
     }
 }

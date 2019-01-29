@@ -14,11 +14,13 @@ $(document).ready(function () {
 function newWorkspace(){
     if(!$('#workspace-name').val())
         return;
+    if(!$('#workspace-desc').val())
+        return;
     $('#new-workspace-btn-text').hide();
     $('#new-workspace-loading').show();
     var postdata = {
         title: $('#workspace-name').val(),
-        desc: $('#workspace-desc').val()?$('#workspace-desc').val():' ',
+        desc: $('#workspace-desc').val(),
     };
     $.ajax({
             url: CONTEXT_PATH+'api/workspace',
@@ -37,7 +39,7 @@ function newWorkspace(){
                         newSpaceDom.append('<p class="list-group-item-text" >'+newSpace.desc+'</p>');
                         newSpaceDom.append('<a class="storymap-skip" href="'+CONTEXT_PATH+'template/storymap.html?workspaceId='+newSpace.id+'"></a>');
                         newSpaceDom.append('<i id="'+newSpace.id+'" class="fa fa-times storymap-close" aria-hidden="true" onclick="delWorkspace(this)"></i>');
-                        $('#last-workspcase').before(newSpaceDom);
+                        $('#last-workspcace').before(newSpaceDom);
                     }
                 }
             },
@@ -48,6 +50,9 @@ function newWorkspace(){
     }).always(function () {
         $('#new-workspace-btn-text').show();
         $('#new-workspace-loading').hide();
+        $('#myModal').modal('hide');
+       $('#workspace-name').val('');
+       $('#workspace-desc').val('');
     })
 }
 

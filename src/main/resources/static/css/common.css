@@ -29,3 +29,21 @@
     width: 90%;
     height: 100%;
 }
+
+.account-li{
+    text-align: center;
+    cursor: pointer;
+    padding: 8px 0px;
+}
+.account-li:hover{
+    background-color: #f1f1f1;
+}
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 0px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+.dropdown-menu {
+    padding: 0px 0;
+}

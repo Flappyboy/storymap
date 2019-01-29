@@ -52,20 +52,7 @@ public class WorkspaceController {
         workspace.setDescription(workspaceDto.getDesc());
         workspaceService.createWorkSpace(workspace);
         workspaceDto.setId(workspace.getId().longValue());
-//        //在workspace里面需要创建一个storyMap
-//        StoryMap storyMap = new StoryMap();
-//        storyMap.setWorkSpaceId(workspace.getId());
-//        storyMap.setUserId(user.getId());
-//        storyMap.setName("storymap");
-//        storyMapService.createStoryMap(storyMap);
-//        //StoryMap中需要创建一个activity
-//        ActivityCard activityCard = new ActivityCard();
-//        activityCard.setCreateTime(new Date());
-//        activityCard.setCreatorId(user.getId());
-//        activityCard.setStoryMapId(storyMap.getId());
-//        activityCard.setOrder("0");
-//        activityCardService.addActivity(activityCard);
-          return Response.createDefaultResponse().success(workspaceDto);
+        return Response.createDefaultResponse().success(workspaceDto);
     }
 
 }
