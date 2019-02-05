@@ -13,7 +13,6 @@ server:
       timeout: 1440m
 
 mybatis:
-
   mapper-locations: classpath:mapper/map/*Mapper.xml,classpath:mapper/system/*Mapper.xml
   #type-aliases-package: cn.edu.nju.software.storymapping.system.entity
   configuration:
@@ -27,7 +26,9 @@ logging:
       example:
         mapper: debug
 
-#启用内容版本策略 md5
-spring.resources.chain.strategy.content.enabled: true
-#应用于版本策略的模式的逗号分隔列表 默认/**
-spring.resources.chain.strategy.content.paths: /**
+
+spring.resources.chain.strategy.content:
+  #启用内容版本策略 md5
+  enabled: true
+  #应用于版本策略的模式的逗号分隔列表 默认/**
+  paths: /css/**,/img/**,/js/**
