@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./asynchronous.js"></script>
+    <script>
+        var asyn = new AsynExec({
+            start: function () {
+                console.log("start");
+            },
+            end: function () {
+                console.log("end");
+            },
+            delayEnd: function () {
+                console.log("delay end!");
+            },
+            intervalTime: 500,
+        });
+
+        var count = 0;
+        setInterval(function () {
+            console.log("second interval");
+            if(count<4) {
+                asyn.pushFunc(function (callback) {
+                    console.log("func count: %s", count++);
+                    callback();
+                })
+            }
+        }, 200)
+    </script>
+</head>
+<body>
+
+</body>
+</html>

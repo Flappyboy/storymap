@@ -302,32 +302,12 @@ var storyMap = {
         },
     ],
 };
-
-var dao;
+var asynModel;
+var asyn;
 $(function () {
     console.log(TOURISTS_MODE)
     if (TOURISTS_MODE) {
         init(storyMap);
-        dao = new StoryMapAsynDao({
-            storymap: storyMap,
-            valid: false,
-            start: function () {
-                console.log("start");
-                $('#status').stop(true,true);
-                $('#status').text('保存中。。。');
-                $('#status').show();
-            },
-            end: function () {
-                console.log("end");
-            },
-            delayEnd: function () {
-                console.log("delay end!");
-                $('#status').stop(true,true);
-                $('#status').text('保存中成功');
-                $('#status').show();
-                $('#status').delay(500).fadeOut(400);
-            },
-        });
         return;
     }
     if (STORY_MAP_ID === null)
@@ -345,25 +325,18 @@ $(function () {
                     }
                 }
                 init(storyMap);
-                dao = new StoryMapAsynDao({
-                    storymap: storyMap,
-                    valid: true,
+                asynModel = storyMap;
+                asyn = new AsynExec({
                     start: function () {
                         console.log("start");
-                        $('#status').stop(true,true);
-                        $('#status').text('保存中。。。');
-                        $('#status').show();
                     },
                     end: function () {
                         console.log("end");
                     },
                     delayEnd: function () {
                         console.log("delay end!");
-                        $('#status').stop(true,true);
-                        $('#status').text('保存中成功');
-                        $('#status').show();
-                        $('#status').delay(500).fadeOut(400);
                     },
+                    intervalTime: 500,
                 });
             }
         }
@@ -396,7 +369,7 @@ function init(storyMap) {
     );
     $("#right-content").bind("mousewheel",
         function (event, delta, deltaX, deltaY) {
-            // console.log(delta, deltaX, deltaY);
+            console.log(delta, deltaX, deltaY);
             if (delta < 0) {
                 if (zoom > 1) {
                     zoom--;
@@ -411,7 +384,7 @@ function init(storyMap) {
                 }
             }
 
-            // console.log(zoomList)
+            console.log(zoomList)
             return false;
         });
 
@@ -557,12 +530,12 @@ function newBoardActivityCard(activity) {
     };
     var closeCallback = function (e) {
         var activityIndex = e.parents('.board-activity').prevAll().length;
-        // var id = e.parents('.board-activity').attr(CART_ID_ATTR_NAME);
-        // if (id == undefined) {
-        //     addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
-        //     return;
-        // }
-        requestDelActivity(activityIndex);
+        var id = e.parents('.board-activity').attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
+        requestDelActivity(id, activityIndex);
 
         delActivityFromReleases(activityIndex);
         e.parents('.board-activity').remove();
@@ -658,11 +631,11 @@ function newBoardTaskCard(task, activityDom, insertIndex) {
         addTaskToReleases(activityIndex, taskIndex + 1, task);
     };
     var closeCallback = function (e) {
-        // var id = e.parent().attr(CART_ID_ATTR_NAME);
-        // if (id == undefined) {
-        //     addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
-        //     return;
-        // }
+        var id = e.parent().attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
         var taskIndex = e.parent().prevAll().length;
         var activityIndex = e.parents('.board-activity').prevAll().length;
         console.log('taskIndex ' + taskIndex);
@@ -670,7 +643,7 @@ function newBoardTaskCard(task, activityDom, insertIndex) {
         delTaskToReleases(activityIndex, taskIndex);
 
 
-        requestDelTask(activityIndex, taskIndex);
+        requestDelTask(id, activityIndex, taskIndex);
 
         e.parent().remove();
     };
@@ -726,14 +699,14 @@ function newReleaseDel(release) {
     var element = $('<span class="board-release-del"></span>');
     element.click(function () {
         var e = $(this).parents('.release-with-subtasks');
-        // var id = e.attr(CART_ID_ATTR_NAME);
-        // if (id == undefined) {
-        //     addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
-        //     return;
-        // }
+        var id = e.attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
         var delIndex = e.prevAll().length;
         e.remove();
-        requestDelRelease(delIndex);
+        requestDelRelease(id, delIndex);
     });
     return element;
 }
@@ -832,17 +805,17 @@ function newBoardSubTasks(subtasks) {
 
 function newBoardSubtaskCard(subtask, activityDom, taskDom, releaseDom, insertIndex) {
     var closeCallBack = function (e) {
-        // var id = e.parent().attr(CART_ID_ATTR_NAME);
-        // if (id == undefined) {
-        //     addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
-        //     return;
-        // }
+        var id = e.parent().attr(CART_ID_ATTR_NAME);
+        if (id == undefined) {
+            addMessage(MESSAGE_WAIT_DELETE_COMPLETE, MESSAGE_WAIT_DELETE_COMPLETE_TYPE, MESSAGE_WAIT_DELETE_COMPLETE_LEVEL);
+            return;
+        }
         var activityIndex = e.parents('.board-activity').prevAll().length;
         var taskIndex = e.parents('.board-task').prevAll().length;
         var delIndex = e.parent().prevAll().length;
         var releaseIndex = e.parents('.release-with-subtasks').prevAll().length;
 
-        requestDelSubtask(activityIndex, taskIndex, releaseIndex, delIndex);
+        requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex);
         e.parent().remove();
     };
     var nextBottomCallBack = function (e) {
@@ -1087,125 +1060,319 @@ function newMessage(msg, type, level) {
     return h;
 }
 
-function requestDelActivity(delIndex) {
-    dao.delActivity(delIndex);
+function requestBaseDel(api, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if (postdata == null)
+            return;
+        postdata.storyMapId = STORY_MAP_ID;
+        $.ajax({
+                url: apiBase + api + '/' + postdata.id,
+                data: postdata,
+                type: "DELETE",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        console.log(data);
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.error(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
 }
 
-function requestDelTask(activityIndex, delIndex) {
-    dao.delTask(activityIndex, delIndex);
+function requestDelActivity(id, delIndex) {
+    storyMap.activities.splice(delIndex, 0);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities.splice(delIndex, 1);
+    }
+    console.log('del activity card id: ' + id + ' index:' + delIndex);
+    requestBaseDel('/activity', function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
-function requestDelSubtask( activityIndex, taskIndex, releaseIndex, delIndex) {
-    dao.delSubtask(activityIndex, taskIndex, releaseIndex, delIndex);
+function requestDelTask(id, activityIndex, delIndex) {
+    storyMap.activities[activityIndex].tasks.splice(delIndex, 0);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities[activityIndex].tasks.splice(delIndex, 0);
+    }
+    console.log('del task card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex);
+    requestBaseDel('/task', function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
+}
+
+function requestDelSubtask(id, activityIndex, taskIndex, releaseIndex, delIndex) {
+    console.log('del subtask card id: ' + id + ' index:' + delIndex + ' aIndex:' + activityIndex + ' tIndex:' + taskIndex + ' rIndex:' + releaseIndex);
+    requestBaseDel('/subtask', function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
 }
 
 function requestDelRelease(id, delIndex) {
-    dao.delRelease(delIndex);
+    storyMap.releases.splice(delIndex, 0);
+    console.log('del subtask card id: ' + id + ' index:' + delIndex);
+    requestBaseDel('/release', function () {
+        var postdata = {
+            id: id
+        };
+        return postdata;
+    });
+}
+
+function requestBaseAdd(api, e, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if (postdata == null)
+            return;
+        postdata.storyMapId = STORY_MAP_ID;
+        $.ajax({
+                url: apiBase + api,
+                data: postdata,
+                type: "POST",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        if (data.status == 0) {
+                            result = data.result;
+                            e.attr(CART_ID_ATTR_NAME, result.id);
+                        }
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.error(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
 }
 
 function requestAddActivity(item, insertIndex, e) {
-    dao.addActivity(insertIndex, item);
+    storyMap.activities.splice(insertIndex, 0, item);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities.splice(insertIndex, 0, item);
+    }
+    console.log('insert activity card index:' + insertIndex);
+
+    requestBaseAdd('/activity', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+        };
+        return postdata;
+    });
 }
 
 function requestAddTask(item, activityDom, insertIndex, e) {
     var activityIndex = activityDom.prevAll().length;
-    dao.addTask(activityIndex, insertIndex, item);
+    storyMap.activities[activityIndex].tasks.splice(insertIndex, 0, item);
+    for (var i = 0; i < storyMap.releases.length; i++) {
+        storyMap.releases[i].activities[activityIndex].tasks.splice(insertIndex, 0, item);
+    }
+    console.log('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
+    requestBaseAdd('/task', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+            activityId: activityDom.attr(CART_ID_ATTR_NAME),
+        };
+        if (postdata.activityId == undefined) {
+            console.error('insert task card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME));
+        }
+        return postdata;
+    });
 }
 
 function requestAddSubtask(item, activityDom, taskDom, releaseDom, insertIndex, e) {
-    var activityIndex = activityDom.prevAll().length;
-    var taskIndex = taskDom.prevAll().length;
-    var releaseIndex = releaseDom.prevAll().length;
-    dao.addSubtask(activityIndex,taskIndex, releaseIndex, insertIndex, item);
+    console.log('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
+    var postdata = {
+        title: item.title,
+        order: insertIndex,
+    };
+    requestBaseAdd('/subtask', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+            activityId: activityDom.attr(CART_ID_ATTR_NAME),
+            taskId: taskDom.attr(CART_ID_ATTR_NAME),
+            releaseId: releaseDom.attr(CART_ID_ATTR_NAME),
+        };
+        if (postdata.activityId == undefined || postdata.taskId == undefined || postdata.releaseId == undefined) {
+            console.error('insert subtask card index:' + insertIndex + ' aID:' + activityDom.attr(CART_ID_ATTR_NAME) + ' tID:' + taskDom.attr(CART_ID_ATTR_NAME) + ' rID:' + releaseDom.attr(CART_ID_ATTR_NAME));
+            return null;
+        }
+        return postdata;
+    });
 }
 
 function requestAddRelease(item, insertIndex, e) {
-    dao.addRelease(insertIndex, item);
+    var postdata = {
+        title: item.title,
+        order: insertIndex,
+    };
+    requestBaseAdd('/release', e, function () {
+        var postdata = {
+            title: item.title,
+            order: insertIndex,
+        };
+        return postdata;
+    });
+}
+
+function requestBaseChangeTitle(api, e, dataCallback) {
+    var func = function (callback) {
+        var postdata = dataCallback();
+        if (postdata == null)
+            return;
+        postdata.storyMapId = STORY_MAP_ID;
+        $.ajax({
+                url: apiBase + api,
+                data: postdata,
+                type: "PUT",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        if (data.status == 0) {
+                            result = data.result;
+                            console.log(result);
+                        }
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.error(e);
+        }).always(callback);
+    };
+    funcQueue.push(func);
 }
 
 function requestChangeTitleActivity(dom, value, index) {
-    dao.modifyActivityTitle(index, value);
+    console.log('change title activity card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    requestBaseChangeTitle('/activity', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleTask(dom, value, index) {
-    var activityDom = dom.parents('.board-activity');
-    var activityIndex = activityDom.prevAll().length;
-    dao.modifyTaskTitle(activityIndex, index, value);
+    console.log('change title task card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    requestBaseChangeTitle('/task', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleSubtask(dom, value, index) {
-    var activityIndex = dom.parents('.board-activity').prevAll().length;
-    var taskIndex = dom.parents('.board-task').prevAll().length;
-    var releaseDom = dom.parents('.release-with-subtasks');
-    var releaseIndex = releaseDom.prevAll().length;
-    dao.modifySubtaskTitle(activityIndex, taskIndex, releaseIndex, index, value);
+    console.log('change title subtask card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    console.log('change value ' + value);
+    requestBaseChangeTitle('/subtask', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
 function requestChangeTitleRelease(dom, value, index) {
-    dao.modifyReleaseTitle(index, value);
+    console.log('change title release card index:' + index + ' ID:' + dom.attr(CART_ID_ATTR_NAME));
+    requestBaseChangeTitle('/release', dom, function () {
+        var postdata = {
+            id: dom.attr(CART_ID_ATTR_NAME),
+            title: value,
+        };
+        return postdata;
+    });
 }
 
-// var minInterval = 600;
-// var interval = 0;
-// var mapStatus = '';
-// var preStatus = mapStatus;
+var minInterval = 600;
+var interval = 0;
+var mapStatus = '';
+var preStatus = mapStatus;
 
 function changeStatus(status) {
     mapStatus = status;
 }
 
-// var funcQueue = [];
-// var isRequest = false;
+var funcQueue = [];
+var isRequest = false;
 
-// self.setInterval(function () {
-//     if (!isRequest) {
-//         if (funcQueue.length > 0) {
-//             isRequest = true;
-//             changeStatus('保存中。。。')
-//             var func = funcQueue.shift();
-//             var callback = function () {
-//                 isRequest = false;
-//             };
-//             try {
-//                 if (!TOURISTS_MODE) {
-//                     func(callback);
-//                 }else{
-//                     callback();
-//                 }
-//             } catch (e) {
-//                 isRequest = false;
-//                 console.error(e);
-//             }
-//         } else {
-//             if (!isRequest) {
-//                 if (mapStatus != '')
-//                     changeStatus('保存成功');
-//             }
-//         }
-//     }
-//     if (!TOURISTS_MODE) {
-//         if (interval <= 0) {
-//             if (mapStatus != preStatus) {
-//                 preStatus = mapStatus;
-//
-//                 if (mapStatus == '') {
-//                     console.log('fadeout');
-//                     $('#status').fadeOut(400);
-//                 } else {
-//                     $('#status').show();
-//                     $('#status').text(mapStatus);
-//                 }
-//                 if (mapStatus != '保存中。。。')
-//                     mapStatus = '';
-//                 interval = minInterval;
-//             } else {
-//                 mapStatus = '';
-//             }
-//         }
-//
-//         interval -= 200;
-//     }
-// }, 200);
+self.setInterval(function () {
+    if (!isRequest) {
+        if (funcQueue.length > 0) {
+            isRequest = true;
+            changeStatus('保存中。。。')
+            var func = funcQueue.shift();
+            var callback = function () {
+                isRequest = false;
+            };
+            try {
+                if (!TOURISTS_MODE) {
+                    func(callback);
+                }else{
+                    callback();
+                }
+            } catch (e) {
+                isRequest = false;
+                console.error(e);
+            }
+        } else {
+            if (!isRequest) {
+                if (mapStatus != '')
+                    changeStatus('保存成功');
+            }
+        }
+    }
+    if (!TOURISTS_MODE) {
+        if (interval <= 0) {
+            if (mapStatus != preStatus) {
+                preStatus = mapStatus;
+
+                if (mapStatus == '') {
+                    console.log('fadeout');
+                    $('#status').fadeOut(400);
+                } else {
+                    $('#status').show();
+                    $('#status').text(mapStatus);
+                }
+                if (mapStatus != '保存中。。。')
+                    mapStatus = '';
+                interval = minInterval;
+            } else {
+                mapStatus = '';
+            }
+        }
+
+        interval -= 200;
+    }
+}, 200);
 
 var MESSAGE_WAIT_DELETE_COMPLETE = '请等待上一操作保存完成。。。。。';
 var MESSAGE_WAIT_DELETE_COMPLETE_TYPE = MSG_TYPE_DANGER;
