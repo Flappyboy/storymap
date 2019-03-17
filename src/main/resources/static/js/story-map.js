@@ -1099,7 +1099,7 @@ function requestDelSubtask( activityIndex, taskIndex, releaseIndex, delIndex) {
     dao.delSubtask(activityIndex, taskIndex, releaseIndex, delIndex);
 }
 
-function requestDelRelease(id, delIndex) {
+function requestDelRelease(delIndex) {
     dao.delRelease(delIndex);
 }
 
