@@ -261,3 +261,67 @@ StoryMapAsynDao.prototype.delSubtask = function (activity_i, task_i, release_i, 
         this._storymapModel.delSubtask(activity_i, task_i, release_i, subtask_i);
     });
 }
+
+StoryMapAsynDao.prototype._baseMove = function (api, dataAcqFunc, resultCallback) {
+    if (!this._valid) return;
+
+    dataAcqFunc = dataAcqFunc.bind(this);
+    resultCallback = resultCallback.bind(this);
+    var func = function (callback) {
+        var data = dataAcqFunc();
+        data.storyMapId = this._storymapModel.getStoryMapId();
+        $.ajax({
+                url: apiBase + api,
+                data: data,
+                type: "POST",
+                headers: headers,
+                success: function (data, status) {
+                    console.log('data: ' + data + ' status: ' + status);
+                    if (status == "success") {
+                        if (data.status == 0) {
+                            var result = data.result;
+                            resultCallback(result);
+                        }
+                    }
+                },
+                dataType: "json"
+            }
+        ).fail(function (e) {
+            console.error(e);
+        }).always(callback);
+    };
+    this._asyn.pushFunc(func.bind(this));
+}
+StoryMapAsynDao.prototype.moveTask = function (activity_i, task_i, target_activity_i, target_task_i) {
+    var data;
+    this._baseMove('/task/move', function () {
+        data = {
+            id: this._storymapModel.getTask(activity_i, task_i).id
+        };
+        data.order = target_task_i;
+        data.activityId = this._storymapModel.getActivity(target_activity_i).id;
+        return data;
+    },function (result) {
+        this._storymapModel.moveTask(activity_i, task_i, target_activity_i, target_task_i);
+        // this._storymapModel.modifyTask(activity_i, task_i,'id',result.id);
+    })
+}
+StoryMapAsynDao.prototype.moveSubtask = function (activity_i, task_i, release_i, subtask_i,
+                                                 target_activity_i, target_task_i, target_release_i, target_subtask_i) {
+    var data;
+    this._baseMove('/subtask/move', function () {
+        data = {
+            id: this._storymapModel.getSubtask(activity_i, task_i, release_i, subtask_i).id
+        };
+        data.order = target_subtask_i;
+        data.activityId = this._storymapModel.getActivity(target_activity_i).id;
+        data.taskId = this._storymapModel.getTask(target_activity_i, target_task_i).id;
+        data.releaseId = this._storymapModel.getRelease(target_release_i).id;
+        return data;
+    },function (result) {
+        data.id = result.id;
+        this._storymapModel.moveSubtask(activity_i, task_i, release_i, subtask_i,
+            target_activity_i, target_task_i, target_release_i, target_subtask_i, data.id);
+        // this._storymapModel.modifySubtask(activity_i, task_i, release_i, subtask_i,'id',result.id);
+    })
+}

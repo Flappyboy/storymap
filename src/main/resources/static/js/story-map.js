@@ -427,6 +427,18 @@ function init(storyMap) {
         boardSortableReleases.append(newReleaseWithSubstasks(release));
     });
 }
+function exportImg(){
+    html2canvas(document.getElementById("board")).then(function(canvas) {
+        var imgURL=canvas.toDataURL("image/png");
+        $('#down_qr').attr('download',imgURL);
+        $('#down_qr').attr('href',imgURL);
+        document.getElementById('down_qr').click();
+    });
+    // html2canvas(document.getElementById("board")).then(function(canvas) {
+    //     var imgURL = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    //     window.open(imgURL);
+    // });
+}
 
 function addRelease() {
     console.log('add release');
@@ -588,14 +600,71 @@ function newBoardTasksOuter(tasks) {
     return element;
 }
 
+var move_task_pos = null;
+function taskMoveStart(event, ui){
+    move_task_pos = getPositionForTask(ui.item);
+    console.log("start: ");
+    console.log(move_task_pos);
+}
+function taskMoveStop(event, ui){
+    var result_pos = getPositionForTask(ui.item);
+    console.log("stop: ");
+    console.log(result_pos);
+    if(result_pos.activityIndex === move_task_pos.activityIndex &&
+        result_pos.taskIndex === move_task_pos.taskIndex ){
+        console.log("no move task");
+    }else{
+        console.log("move task");
+        var releases = boardSortableReleases.children();
+
+        for (var i = 1; i <= releases.length; i++) {
+            var release = boardSortableReleases.children(':nth-child(' + i + ')');
+            var boardTasks = release.find('.board-subtasks-activities').children(':nth-child(' + (move_task_pos.activityIndex + 1) + ')').children();
+            var task = boardTasks.children(':nth-child(' + (move_task_pos.taskIndex + 1) + ')');
+
+            var targetBoardTasks = release.find('.board-subtasks-activities').children(':nth-child(' + (result_pos.activityIndex + 1) + ')').children();
+            if(result_pos.activityIndex != move_task_pos.activityIndex) {
+                if (result_pos.taskIndex == 0) {
+                    targetBoardTasks.prepend(task);
+                } else {
+                    var targetTask = targetBoardTasks.children(':nth-child(' + (result_pos.taskIndex) + ')');
+                    targetTask.after(task);
+                }
+            }else{
+                if (result_pos.taskIndex == 0) {
+                    targetBoardTasks.prepend(task);
+                } else {
+                    if(result_pos.taskIndex < move_task_pos.taskIndex) {
+                        var targetTask = targetBoardTasks.children(':nth-child(' + (result_pos.taskIndex) + ')');
+                        targetTask.after(task);
+                    }else{
+                        var targetTask = targetBoardTasks.children(':nth-child(' + (result_pos.taskIndex + 1) + ')');
+                        targetTask.after(task);
+                    }
+                }
+            }
+        }
+
+        requestMoveTask(move_task_pos, result_pos);
+    }
+}
+function getPositionForTask(e){
+    return {
+        taskIndex: e.prevAll().length,
+        activityIndex: e.parents('.board-activity').prevAll().length
+    }
+}
+
 function newBoardTasks(tasks) {
     var element = $('<ul class="board-tasks ui-sortable"></ul>');
-    if (TOURISTS_MODE) {
-        element.sortable({
-            connectWith: ".board-tasks",
-            distance: 5,
-        });
-    }
+    // if (TOURISTS_MODE) {
+    element.sortable({
+        connectWith: ".board-tasks",
+        distance: 5,
+        start: taskMoveStart,
+        stop: taskMoveStop
+    });
+    // }
     // element.sortable({
     //     connectWith: ".ui-sortable",
     //     distance: 5,
@@ -780,14 +849,41 @@ function newBoardSubTaskTask(task) {
     return element;
 }
 
+var move_subtask_pos = null;
+function subtaskMoveStart(event, ui){
+    move_subtask_pos = getPositionForSubTask(ui.item);
+}
+function subtaskMoveStop(event, ui){
+    var result_pos = getPositionForSubTask(ui.item);
+    if(result_pos.activityIndex === move_subtask_pos.activityIndex &&
+        result_pos.taskIndex === move_subtask_pos.taskIndex &&
+        result_pos.subtaskIndex === move_subtask_pos.subtaskIndex &&
+        result_pos.releaseIndex === move_subtask_pos.releaseIndex ){
+        console.log("no move");
+    }else{
+        console.log("move");
+        requestMoveSubtask(move_subtask_pos, result_pos);
+    }
+}
+function getPositionForSubTask(e){
+    return {
+        activityIndex: e.parents('.board-activity').prevAll().length,
+        taskIndex: e.parents('.board-task').prevAll().length,
+        subtaskIndex: e.prevAll().length,
+        releaseIndex: e.parents('.release-with-subtasks').prevAll().length,
+    }
+}
+
 function newBoardSubTasks(subtasks) {
     var element = $('<ul class="board-subtasks ui-sortable"></ul>');
-    if (TOURISTS_MODE) {
+    // if (TOURISTS_MODE) {
         element.sortable({
             connectWith: ".board-subtasks",
             distance: 5,
+            start: subtaskMoveStart,
+            stop: subtaskMoveStop,
         });
-    }
+    // }
     // element.sortable({
     //     connectWith: ".ui-sortable",
     //     distance: 5,
@@ -1141,8 +1237,13 @@ function requestChangeTitleSubtask(dom, value, index) {
     dao.modifySubtaskTitle(activityIndex, taskIndex, releaseIndex, index, value);
 }
 
-function requestChangeTitleRelease(dom, value, index) {
-    dao.modifyReleaseTitle(index, value);
+function requestMoveTask(oldPos, newPos) {
+    dao.moveTask(oldPos.activityIndex, oldPos.taskIndex, newPos.activityIndex, newPos.taskIndex);
+}
+
+function requestMoveSubtask(oldPos, newPos){
+    dao.moveSubtask(oldPos.activityIndex, oldPos.taskIndex, oldPos.releaseIndex, oldPos.subtaskIndex,
+        newPos.activityIndex, newPos.taskIndex, newPos.releaseIndex, newPos.subtaskIndex);
 }
 
 // var minInterval = 600;

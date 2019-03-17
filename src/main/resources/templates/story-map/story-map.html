@@ -8,6 +8,7 @@
     <script th:src="@{/lib/js/jqueryui/jquery-ui.js}"></script>
     <script th:src="@{/lib/js/jqueryplugin/jquery.mousewheel.js}"></script>
 
+    <script th:src="@{/lib/js/other/html2canvas.min.js}"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -52,6 +53,9 @@
     <div id="add-release" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
         <button type="button" class="btn btn-primary"  onclick="addRelease()">Add Release</button>
     </div>
+    <div id="export" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
+        <button type="button" class="btn btn-primary"  onclick="exportImg()">Export PNG</button>
+    </div>
     <br>
     <br>
     <br>
@@ -79,5 +83,6 @@
         </div>
     </div>
 </div>
+<a id="down_qr" href="#" style="display: none"></a>
 </body>
 </html>

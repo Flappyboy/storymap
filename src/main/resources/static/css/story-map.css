@@ -28,6 +28,7 @@ ol, ul {
     position: relative;
     left: 8%;
     top: 5%;
+    width: max-content;
 }
 #right-content {
     /*margin-top: 4%;*/

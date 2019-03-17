@@ -82,6 +82,7 @@ StoryMapModel.prototype.addRelease = function (release_i, model) {
     this.storymap.releases.splice(release_i, 0, model);
 }
 StoryMapModel.prototype.addSubtask = function (activity_i, task_i, release_i, subtask_i, model) {
+    model.releaseId = this.getRelease(release_i).id;
     var subtaskIndex = this.getSubtaskIndex(activity_i, task_i, release_i, subtask_i);
     if (subtaskIndex < 0){
         this.getTask(activity_i, task_i).subtasks.push(model);
@@ -114,3 +115,27 @@ StoryMapModel.prototype.modifyRelease = function (release_i, attr, value) {
 StoryMapModel.prototype.modifySubtask = function (activity_i, task_i, release_i, subtask_i, attr, value) {
     this.getSubtask(activity_i, task_i, release_i, subtask_i)[attr] = value;
 }
+
+StoryMapModel.prototype.moveActivity = function (activity_i, target_i) {
+    var model = this.getActivity(activity_i);
+    this.delActivity(activity_i);
+    this.storymap.activities.splice(target_i, 0, model);
+}
+StoryMapModel.prototype.moveTask = function (activity_i, task_i, target_activity_i, target_task_i) {
+    var model = this.getTask(activity_i, task_i);
+    this.delTask(activity_i, task_i);
+    this.getActivity(target_activity_i).tasks.splice(target_task_i, 0, model);
+}
+StoryMapModel.prototype.moveRelease = function (release_i, model) {
+
+}
+StoryMapModel.prototype.moveSubtask = function (activity_i, task_i, release_i, subtask_i,
+                                                target_activity_i, target_task_i, target_release_i, target_subtask_i,
+                                                newId) {
+    var model = this.getSubtask(activity_i, task_i, release_i, subtask_i);
+    model.id = newId;
+    this.delSubtask(activity_i, task_i, release_i, subtask_i);
+
+    this.addSubtask(target_activity_i, target_task_i, target_release_i, target_subtask_i, model);
+}
+
