@@ -15,4 +15,6 @@ public interface TaskCardService {
 
     public String getTaskOrder(Integer taskId);
 
+    public boolean move(TaskCard taskCard);
+
 }

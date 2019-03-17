@@ -13,6 +13,10 @@ spring:
           enabled: true
           #应用于版本策略的模式的逗号分隔列表 默认/**
           paths: /css/**,/img/**,/js/**
+  redis:
+    host: data.leechain.top
+    port: 6379
+    password: dev
 
 server:
   port: 8090

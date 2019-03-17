@@ -14,4 +14,6 @@ public interface ActivityCardService {
     public List<ActivityCard> getActivityCardByStoryMapId(Integer storyMapId);
 
     public String getActivityOrder(Integer activityId);
+
+
 }

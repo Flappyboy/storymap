@@ -21,4 +21,7 @@ public interface TaskCardMapper {
 
     public String getTaskOrder(Integer taskId);
 
+    public Integer getActivityIdByTaskCardId(Integer taskCardId);
+
+
 }
