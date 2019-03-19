@@ -427,7 +427,37 @@ function init(storyMap) {
         boardSortableReleases.append(newReleaseWithSubstasks(release));
     });
 }
+var select = [];
+function selectCard(card) {
+    card.addClass("selected-card");
+    select.push(card);
+}
+function unselectCards(){
+    select.forEach(function(card){
+        card.removeClass("selected-card")
+    })
+}
+function triggerEvent(event){
+    unselectCards();
+}
+function searchCard(){
+    triggerEvent();
+    var value = $("#search-card").val();
+    console.log(value);
+    var textSpans = $(".board-card-title-text");
+    for (var i = 0; i <= textSpans.length; i++) {
+        var textSpan = $(textSpans[i]);
+        if(textSpan){
+            var t = textSpan.text();
+
+            if(t.indexOf(value)!=-1){
+                selectCard(textSpan.parent());
+            }
+        }
+    }
+}
 function exportImg(){
+    triggerEvent("exportImg");
     html2canvas(document.getElementById("board")).then(function(canvas) {
         var imgURL=canvas.toDataURL("image/png");
         $('#down_qr').attr('download',imgURL);
@@ -441,6 +471,7 @@ function exportImg(){
 }
 
 function addRelease() {
+    triggerEvent("addRelease");
     console.log('add release');
     var activitiesDom = boardActivities.children();
     var activities = [];
@@ -469,6 +500,7 @@ function addRelease() {
  * @param activityIndex 要添加的activity index 0-n
  */
 function addActivityToReleases(activityIndex, activity) {
+    triggerEvent();
     var releases = boardSortableReleases.children();
     if (!activity) {
         activity = {
@@ -487,6 +519,7 @@ function addActivityToReleases(activityIndex, activity) {
 }
 
 function delActivityFromReleases(activityIndex) {
+    triggerEvent();
     var releases = boardSortableReleases.children();
     for (var i = 1; i <= releases.length; i++) {
         var release = boardSortableReleases.children(':nth-child(' + i + ')');
@@ -501,6 +534,7 @@ function delActivityFromReleases(activityIndex) {
  * @param taskIndex 最终要添加的task的index 0-m
  */
 function addTaskToReleases(activityIndex, taskIndex, task) {
+    triggerEvent();
     var releases = boardSortableReleases.children();
     if (!task) {
         task = {
@@ -520,6 +554,7 @@ function addTaskToReleases(activityIndex, taskIndex, task) {
 }
 
 function delTaskToReleases(activityIndex, taskIndex) {
+    triggerEvent();
     var releases = boardSortableReleases.children();
     for (var i = 1; i <= releases.length; i++) {
         var release = boardSortableReleases.children(':nth-child(' + i + ')');
@@ -602,6 +637,7 @@ function newBoardTasksOuter(tasks) {
 
 var move_task_pos = null;
 function taskMoveStart(event, ui){
+    triggerEvent();
     move_task_pos = getPositionForTask(ui.item);
     console.log("start: ");
     console.log(move_task_pos);
@@ -851,6 +887,7 @@ function newBoardSubTaskTask(task) {
 
 var move_subtask_pos = null;
 function subtaskMoveStart(event, ui){
+    triggerEvent();
     move_subtask_pos = getPositionForSubTask(ui.item);
 }
 function subtaskMoveStop(event, ui){
@@ -1067,6 +1104,7 @@ function newBoardCardClose() {
 function newCardTitleText(title) {
     var element = $('<span class="board-card-title-text">' + (title ? title : '') + '</span>');
     element.click(function () {
+        triggerEvent("edit");
         var textarea = $(this).siblings("textarea");
         textarea.val($(this).text());
         $(this).hide();
@@ -1083,6 +1121,7 @@ function newCardTitleText(title) {
 function newCardEmptyTitle() {
     var element = $('<span class="board-card-empty-title">Empty card</span>');
     element.click(function () {
+        triggerEvent("edit");
         var textarea = $(this).siblings("textarea");
         $(this).hide();
         textarea.show();

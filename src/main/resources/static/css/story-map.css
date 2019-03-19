@@ -169,3 +169,14 @@ ol, ul {
 .board-release-del{
     width: 20px;
 }
+
+.storymap-flat{
+    border-radius: 0px;
+}
+.selected-card
+{
+    margin-left: 1.5%;
+    margin-top: 1.6%;
+    border-radius: 5px;
+    box-shadow: rgba(218, 0, 255, 0.71) 0px 0px 18px;
+}
