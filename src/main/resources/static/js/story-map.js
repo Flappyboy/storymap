@@ -443,6 +443,10 @@ function triggerEvent(event){
 function searchCard(){
     triggerEvent();
     var value = $("#search-card").val();
+    if (value.replace(/(^s*)|(s*$)/g, "").length ==0 || value==" ")
+    {
+        return;
+    }
     console.log(value);
     var textSpans = $(".board-card-title-text");
     for (var i = 0; i <= textSpans.length; i++) {
