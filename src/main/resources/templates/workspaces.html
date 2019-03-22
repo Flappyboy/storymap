@@ -35,16 +35,19 @@
     </div>
 </nav>
 <div class="list-group">
+
     <span th:each="m : ${workspaceList}" class="list-group-item active" style="display: inline-block;">
         <h4 th:text="${m.name}" class="list-group-item-heading"/>
         <p th:text="${m.description}" class="list-group-item-text"/>
         <a class="storymap-skip" th:href='@{/template/storymap.html(workspaceId=${m.id})}'></a>
         <i th:id="${m.id}" class="fa fa-times storymap-close" aria-hidden="true" onclick="delWorkspace(this)"></i>
     </span>
+    <span id="arrow" class="arrow"></span>
     <span id="last-workspcace" class="list-group-item" style="color: #b0c4de;display: block; text-align: center; line-height: 138px; cursor: pointer;" data-toggle="modal" data-target="#myModal">
         <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
     </span>
 </div>
+
 <form style="display: none" action="/logout" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <input id="logout_btn" type="submit" value="Logout"/>
