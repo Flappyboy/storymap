@@ -11,10 +11,6 @@ $(document).ready(function () {
     })
 });
 
-$(document).ready(function (){
-    document.getElementById("arrow").innerHTML='<img src="/img/arrow-gui.png" height="118" width="200" />';
-});
-
 function newWorkspace(){
     if(!$('#workspace-name').val())
         return;
