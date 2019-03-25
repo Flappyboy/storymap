@@ -1,7 +1,6 @@
 package cn.edu.nju.software.storymapping.map.dao;
 
 import cn.edu.nju.software.storymapping.map.entity.TaskCard;
-import org.apache.catalina.LifecycleState;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

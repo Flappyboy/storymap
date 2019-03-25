@@ -2,6 +2,14 @@ if (!CONTEXT_PATH) {
     var CONTEXT_PATH = "\/";
 }
 $(document).ready(function () {
+    console.log(workSpaceInitLength);
+    if(workSpaceInitLength==1){
+        $("#arrow").show();
+        $("#mess").show();
+    }else{
+        $("#arrow").hide();
+        $("#mess").hide();
+    }
     $("#pro").click(function () {
         $("#userInfo").load('/template/user-Info.html', function () {
             $('#myModal').on('hide.bs.modal', function () {//模态框关闭时触发,刷新父页面
@@ -22,6 +30,8 @@ function newWorkspace(){
         title: $('#workspace-name').val(),
         desc: $('#workspace-desc').val(),
     };
+    $("#arrow").hide();
+    $("#mess").hide();
     $.ajax({
             url: CONTEXT_PATH+'api/workspace',
             data: postdata,
@@ -51,8 +61,8 @@ function newWorkspace(){
         $('#new-workspace-btn-text').show();
         $('#new-workspace-loading').hide();
         $('#myModal').modal('hide');
-       $('#workspace-name').val('');
-       $('#workspace-desc').val('');
+        $('#workspace-name').val('');
+        $('#workspace-desc').val('');
     })
 }
 

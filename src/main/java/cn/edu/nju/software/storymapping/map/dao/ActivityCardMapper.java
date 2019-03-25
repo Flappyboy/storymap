@@ -1,9 +1,7 @@
 package cn.edu.nju.software.storymapping.map.dao;
 
 import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
