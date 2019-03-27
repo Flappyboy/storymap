@@ -28,9 +28,5 @@ public class WebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocket
         NettyConfig.group.writeAndFlush(twx);
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
-    }
+
 }

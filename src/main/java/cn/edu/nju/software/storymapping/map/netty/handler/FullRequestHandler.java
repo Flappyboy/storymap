@@ -64,9 +64,5 @@ public class FullRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         ctx.channel().attr(Attributes.HAND_SHAKE).set(handshaker);
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
-    }
+
 }
