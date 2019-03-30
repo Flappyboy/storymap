@@ -28,6 +28,13 @@ $(function (){
                     if (status == "success") {
                         if (data.status == 0) {
                             var maps = data.result.storyMaps;
+                            if(maps.length==1){
+                                $("#arrow").show();
+                                $("#mess").show();
+                            }else{
+                                $("#arrow").hide();
+                                $("#mess").hide();
+                            }
                             for (var i = 0; i < maps.length; i++) {
                                 console.log(maps[i]);
                                 var mapDom = $('<span class="list-group-item active" style="display: inline-block;"></span>');
@@ -35,7 +42,7 @@ $(function (){
                                 mapDom.append('<p  class="list-group-item-text" >'+maps[i].desc+'</p>');
                                 mapDom.append('<a class="storymap-skip" href="'+CONTEXT_PATH+'template/story-map/story-map.html?id='+maps[i].id+'"></a>');
                                 mapDom.append('<i id="'+maps[i].id+'" class="fa fa-times storymap-close" aria-hidden="true" onclick="delStorymap(this)"></i>');
-                                $('#last-storymap').before(mapDom);
+                                $('#last-flag').before(mapDom);
                             }
                         }
                     }
@@ -70,6 +77,8 @@ function newStorymap(){
         title: $('#new-name').val(),
         desc: $('#new-desc').val(),
     };
+    $("#arrow").hide();
+    $("#mess").hide();
     $.ajax({
             url: CONTEXT_PATH+'api/storymap',
             data: postdata,
@@ -87,7 +96,7 @@ function newStorymap(){
                         mapDom.append('<p  class="list-group-item-text" >'+newSpace.desc+'</p>');
                         mapDom.append('<a class="storymap-skip" href="'+CONTEXT_PATH+'template/story-map/story-map.html?id='+newSpace.id+'"></a>');
                         mapDom.append('<i id="'+newSpace.id+'" class="fa fa-times storymap-close" aria-hidden="true" onclick="delStorymap(this)"></i>');
-                        $('#last-storymap').before(mapDom);
+                        $('#last-flag').before(mapDom);
                     }
                 }
             },

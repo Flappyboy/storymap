@@ -1,6 +1,7 @@
 package cn.edu.nju.software.storymapping.map.service.Impl;
 
 import cn.edu.nju.software.storymapping.map.dao.SubTaskCardMapper;
+import cn.edu.nju.software.storymapping.map.entity.ActivityCard;
 import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 import cn.edu.nju.software.storymapping.map.utils.ReorderUtil;
 import org.omg.CORBA.INTERNAL;
@@ -75,4 +76,23 @@ public class SubTaskCardServiceImpl implements SubTaskCardService {
         String order = subTaskCardMapper.getSubTaskCardOrder(subTaskCardId);
         return order;
     }
+
+    @Override
+    public boolean moveSideways(SubTaskCard subTaskCard) {
+        //将原来的位置删除
+        Integer id = subTaskCard.getId();
+        SubTaskCard task = getSubTaskCardById(id);
+        deleteSubTaskCardBySubTaskCardID(id);
+        //在新的位置上添加
+        subTaskCard.setId(null);
+        subTaskCard.setName(task.getName());
+        addSubTaskCard(subTaskCard);
+        return true;
+    }
+
+    public SubTaskCard getSubTaskCardById(Integer id) {
+        return subTaskCardMapper.getSubTaskCardById(id);
+    }
+
+
 }

@@ -28,6 +28,7 @@ ol, ul {
     position: relative;
     left: 8%;
     top: 5%;
+    width: max-content;
 }
 #right-content {
     /*margin-top: 4%;*/
@@ -167,4 +168,15 @@ ol, ul {
 
 .board-release-del{
     width: 20px;
+}
+
+.storymap-flat{
+    border-radius: 0px;
+}
+.selected-card
+{
+    margin-left: 1.5%;
+    margin-top: 1.6%;
+    border-radius: 5px;
+    box-shadow: rgb(152, 0, 255) 0px 0px 18px;
 }

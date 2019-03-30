@@ -20,7 +20,7 @@ public class TaskCardController {
     public Response addTask(TaskDto dto) {
         if (dto == null)
             return Response.createDefaultResponse().fail("dto为null");
-        if (dto.getActivityId() == null||dto.getOrder() == null)
+        if (dto.getActivityId() == null || dto.getOrder() == null)
             return Response.createDefaultResponse().fail("ActivityId或order为null");
         TaskCard taskCard = wrapTaskDto(dto);
         taskCardService.createTaskCard(taskCard);
@@ -45,6 +45,18 @@ public class TaskCardController {
     public Response deleteTaskCard(@PathVariable Integer id) {
         taskCardService.deleteById(id);
         return Response.createDefaultResponse().success(null);
+    }
+
+    //仅仅修改了属于哪个Activity
+    @PostMapping("/task/move")
+    public Response move(TaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getId() == null)
+            return Response.createDefaultResponse().fail("dto中id为null");
+        TaskCard taskCard = wrapTaskDto(dto);
+        taskCardService.move(taskCard);
+        return Response.createDefaultResponse().success(dto);
     }
 
     public TaskCard wrapTaskDto(TaskDto dto) {

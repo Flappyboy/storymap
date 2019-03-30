@@ -28,6 +28,7 @@ public class TaskCardServiceImpl implements TaskCardService {
         return taskCardMapper.getTaskOrder(taskId);
     }
 
+
     //更新taskcard
     public void updateTaskCard(TaskCard taskCard) {
         taskCardMapper.updateTaskCard(taskCard);
@@ -59,5 +60,39 @@ public class TaskCardServiceImpl implements TaskCardService {
         }
         taskCardMapper.addTaskCard(taskCard);
     }
+
+    @Override
+    public boolean move(TaskCard taskCard) {
+        //获取获取id，获取最新移动到的位置的id
+        Integer id = taskCard.getId();
+        Integer activityCardId = taskCardMapper.getActivityCardId(id);
+        Integer newActivityId = taskCard.getActivityId();
+        List<TaskCard> newNeedToUpdate = getTaskCardByActivityId(newActivityId);
+        List<TaskCard> originNeedToUpdate = getTaskCardByActivityId(activityCardId);
+        if (activityCardId.equals(newActivityId)) {
+            for (int i = 0; i < originNeedToUpdate.size(); i++) {
+                if (originNeedToUpdate.get(i).getId().equals(id))
+                    originNeedToUpdate.remove(i);
+            }
+
+        }
+        //更新activityCardId
+        taskCardMapper.updateTaskCard(taskCard);
+        //将原来activityCardId下的task重排序
+        originNeedToUpdate = ReorderUtil.reOrderAfterDelete(originNeedToUpdate);
+        for (TaskCard card : originNeedToUpdate) {
+            taskCardMapper.updateTaskCard(card);
+        }
+        if (activityCardId.equals(newActivityId)) {
+            newNeedToUpdate = getTaskCardByActivityId(newActivityId);
+        }
+        newNeedToUpdate = ReorderUtil.reOrderBeforeInsert(newNeedToUpdate, taskCard.getOrder(), id);
+        for (TaskCard card : newNeedToUpdate) {
+            taskCardMapper.updateTaskCard(card);
+        }
+        return true;
+
+    }
+
 
 }

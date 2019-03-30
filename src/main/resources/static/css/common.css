@@ -1,7 +1,26 @@
 .navbar {
     border-radius: 0px;
 }
+.mess{
+    position:relative;
+    left: -104px;
+    top: 54px;
+    font-weight: bold;
+    font-size: 150%;
+}
+.gui{
+    /*position:relative;*/
+    /*width:100px;*/
+    /*height:100px;*/
+}
+.arrow{
+    position:relative;
+    top: 42px;
+}
 
+.list-group-item-text{
+    display: inline-flex;
+}
 .list-group-item:last-child {
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;

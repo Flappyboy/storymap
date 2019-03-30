@@ -8,6 +8,7 @@
     <script th:src="@{/lib/js/jqueryui/jquery-ui.js}"></script>
     <script th:src="@{/lib/js/jqueryplugin/jquery.mousewheel.js}"></script>
 
+    <script th:src="@{/lib/js/other/html2canvas.min.js}"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -16,6 +17,9 @@
     </script>
 
 
+    <script th:src="@{/js/story-map-model.js}"></script>
+    <script th:src="@{/js/asynchronous.js}"></script>
+    <script th:src="@{/js/story-map-asyn-dao.js}"></script>
     <script th:src="@{/js/story-map.js}"></script>
     <link th:href="@{/css/story-map-cp.css}" rel="stylesheet"/>
     <link th:href="@{/css/story-map-cp2.css}" rel="stylesheet"/>
@@ -47,7 +51,22 @@
     <!--<br>-->
     <!--<br>-->
     <div id="add-release" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
-        <button type="button" class="btn btn-primary"  onclick="addRelease()">Add Release</button>
+        <button type="button" class="storymap-flat btn btn-primary"  onclick="addRelease()">Add Release</button>
+    </div>
+    <br>
+    <br>
+    <div id="export" class="btn-group-vertical" style="min-width: 75%;"  role="group" aria-label="...">
+        <button type="button" class="storymap-flat btn btn-primary"  onclick="exportImg()">Export PNG</button>
+    </div>
+    <br>
+    <br>
+    <div class="btn-group-vertical" style="min-width: 80%;"  role="group" aria-label="...">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="storymap-flat btn btn-default" type="button" onclick="searchCard()">Go!</button>
+            </span>
+            <input id="search-card" type="text" class="storymap-flat form-control" placeholder="Search for...">
+        </div>
     </div>
     <br>
     <br>
@@ -76,5 +95,6 @@
         </div>
     </div>
 </div>
+<a id="down_qr" href="#" style="display: none"></a>
 </body>
 </html>

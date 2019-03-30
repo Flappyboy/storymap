@@ -5,7 +5,6 @@ import cn.edu.nju.software.storymapping.map.entity.SubTaskCard;
 import cn.edu.nju.software.storymapping.map.service.SubTaskCardService;
 import cn.edu.nju.software.storymapping.system.dto.Response;
 import cn.edu.nju.software.storymapping.utils.UserUtil;
-import net.bytebuddy.build.Plugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,11 +43,24 @@ public class SubTaskCardController {
         return Response.createDefaultResponse().success(dto);
     }
 
+    @PostMapping("/subtask/move")
+    public Response move(SubtaskDto dto) {
+        if (dto == null)
+            return Response.createDefaultResponse().fail("dto为null");
+        if (dto.getId() == null)
+            return Response.createDefaultResponse().fail("dto中Id为null");
+        SubTaskCard subTaskCard = wrapSubTaskDto(dto);
+        subTaskCardService.moveSideways(subTaskCard);
+        dto.setId(subTaskCard.getId().longValue());
+        return Response.createDefaultResponse().success(dto);
+    }
+
     @DeleteMapping("/subtask/{id}")
     public Response deleteSubTask(@PathVariable Integer id) {
         subTaskCardService.deleteSubTaskCardBySubTaskCardID(id);
         return Response.createDefaultResponse().success(null);
     }
+
 
     public SubTaskCard wrapSubTaskDto(SubtaskDto dto) {
         SubTaskCard subTaskCard = new SubTaskCard();
@@ -65,4 +77,6 @@ public class SubTaskCardController {
             subTaskCard.setReleaseId(dto.getReleaseId().intValue());
         return subTaskCard;
     }
+
+
 }

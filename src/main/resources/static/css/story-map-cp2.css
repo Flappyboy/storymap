@@ -1,21 +1,21 @@
 @charset "UTF-8";
-@import "//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext";
+/*@import "//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext";*/
 
 /*@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);*/
-@font-face {
-    font-family: 'Metrize-Icons';
-    src: url('/app/css/icons/fonts/metrize/Metrize-Icons.eot');
-    src: url('/app/css/icons/fonts/metrize/Metrize-Icons.eot?#iefix') format('embedded-opentype'), url('/app/css/icons/fonts/metrize/Metrize-Icons.ttf') format('truetype'), url('/app/css/icons/fonts/metrize/Metrize-Icons.svg#Metrize-Icons') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'FontAwesome';
-    src: url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.eot?v=4.2.0');
-    src: url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'), url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.ttf?v=4.2.0') format('truetype'), url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
+/*@font-face {*/
+    /*font-family: 'Metrize-Icons';*/
+    /*src: url('/app/css/icons/fonts/metrize/Metrize-Icons.eot');*/
+    /*src: url('/app/css/icons/fonts/metrize/Metrize-Icons.eot?#iefix') format('embedded-opentype'), url('/app/css/icons/fonts/metrize/Metrize-Icons.ttf') format('truetype'), url('/app/css/icons/fonts/metrize/Metrize-Icons.svg#Metrize-Icons') format('svg');*/
+    /*font-weight: normal;*/
+    /*font-style: normal;*/
+/*}*/
+/*@font-face {*/
+    /*font-family: 'FontAwesome';*/
+    /*src: url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.eot?v=4.2.0');*/
+    /*src: url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'), url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.ttf?v=4.2.0') format('truetype'), url('/app/css/icons/fonts/font-awesome-4.2.0/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');*/
+    /*font-weight: normal;*/
+    /*font-style: normal;*/
+/*}*/
 /*@btnLightTextColor: #bbb;
 @btnLightHoverColor: #777;*/
 html,

@@ -38,11 +38,20 @@
     </div>
 </nav>
 <div class="list-group">
-<span id="last-storymap" class="list-group-item"
-      style="display: none;color: #b0c4de; text-align: center; line-height: 138px; cursor: pointer;"
-      data-toggle="modal" data-target="#myModal">
-        <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
-</span>
+    <span id="last-flag"></span>
+    <span class="gui">
+    <span id="arrow" class="arrow" style="display: none">
+    <img th:src="@{/img/arrow-gui.png}" height="118" width="200" />
+        <span id="mess" class="mess" style="display: none">
+    <span >click here!</span>
+    </span>
+    </span>
+    </span>
+    <span id="last-storymap" class="list-group-item"
+          style="display: none;color: #b0c4de; text-align: center; line-height: 138px; cursor: pointer;"
+          data-toggle="modal" data-target="#myModal">
+            <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
+    </span>
     <span id="loading-storymap" class="list-group-item"
           style="color: #b0c4de;display: block; text-align: center; line-height: 138px; cursor: pointer;"
           data-toggle="modal" data-target="#myModal">
